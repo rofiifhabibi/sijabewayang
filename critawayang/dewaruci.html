@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dewa Ruci - Crita Wayang</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Chonburi&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @font-face {
+            font-family: 'nyk Ngayogyan Jejeg';
+            src: local('nyk Ngayogyan Jejeg'),
+                url('../fontnyk/nyk Ngayogyan Jejeg.ttf') format('truetype');
+        }
+
+        body {
+            font-family: sans-serif;
+            background-color: rgb(22, 22, 22);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Styles untuk Language Switcher */
+        .language-switcher {
+            position: relative;
+            display: inline-block;
+        }
+
+        .language-btn {
+            background: transparent;
+            border: 1px solid orange;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.3125rem;
+            cursor: pointer;
+            font-family: "Chonburi", serif;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .language-btn:hover {
+            background-color: rgba(255, 165, 0, 0.1);
+        }
+
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: rgb(35, 35, 35);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.3125rem;
+            margin-top: 0.5rem;
+            min-width: 180px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            z-index: 1001;
+            display: none;
+        }
+
+        .language-dropdown.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .language-option {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: white;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.1s ease-in;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+        }
+
+        .language-option[data-lang="id"] {
+            font-family: "Chonburi", serif;
+        }
+
+        .language-option[data-lang="jv"] {
+            font-family: "Chonburi", serif;
+        }
+
+        .language-option[data-lang="jv_script"] {
+            font-family: "nyk Ngayogyan Jejeg", sans-serif;
+        }
+
+        .language-option:last-child {
+            border-bottom: none;
+        }
+
+        .language-option:hover {
+            background-color: rgb(45, 45, 45);
+            color: orange;
+            padding-left: 1.25rem;
+        }
+
+        .language-arrow {
+            font-size: 0.75rem;
+            transition: transform 0.2s ease;
+        }
+
+        .language-arrow.open {
+            transform: rotate(180deg);
+        }
+
+        #containernavbar {
+            display: flex;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+            flex-direction: row;
+            align-items: center;
+            width: 100%;
+            height: 5rem;
+            background-color: rgba(22, 22, 22, 0.95);
+            backdrop-filter: blur(10px);
+            justify-content: space-between;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        #logo {
+            font-size: 1.875rem;
+            font-family: "nyk Ngayogyan Jejeg", sans-serif;
+            color: #FFFFFF;
+            cursor: pointer;
+        }
+
+        .burger-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 0.35rem;
+        }
+
+        .burger-menu span {
+            width: 1.75rem;
+            height: 0.2rem;
+            background-color: #ee792b;
+            border-radius: 0.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .burger-menu.active span:nth-child(1) {
+            transform: rotate(45deg) translate(0.5rem, 0.5rem);
+        }
+
+        .burger-menu.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .burger-menu.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(0.5rem, -0.5rem);
+        }
+
+        #navbar {
+            width: 40%;
+            height: 2.5rem;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        .btnavbar {
+            font-family: "Chonburi", serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        #btactivenavbar {
+            padding-left: 0.625rem;
+            padding-right: 0.625rem;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            text-decoration: none;
+            color: rgb(0, 0, 0);
+            background-color: orange;
+            border-radius: 0.3125rem;
+            font-size: 0.9375rem;
+        }
+
+        .btinactivenavbar {
+            padding-left: 0.625rem;
+            padding-right: 0.625rem;
+            font-size: 0.9375rem;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+            border-radius: 0.3125rem;
+            transition: 0.1s ease-in;
+        }
+
+        .btinactivenavbar:hover {
+            background-color: rgb(35, 35, 35);
+            color: orange;
+            transition: 0.1s ease-in;
+        }
+
+        .dropdown-arrow {
+            font-size: 0.75rem;
+            transition: transform 0.2s ease;
+        }
+
+        .dropdown-arrow.open {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: rgb(35, 35, 35);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.3125rem;
+            margin-top: 0.5rem;
+            min-width: 180px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .dropdown-menu.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: white;
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: all 0.1s ease-in;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item.active {
+            background-color: orange;
+            color: black;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgb(45, 45, 45);
+            color: orange;
+            padding-left: 1.25rem;
+        }
+
+        #containercerita {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 6rem 2rem 2rem;
+            min-height: 100vh;
+        }
+
+        .story-header {
+            background: rgba(35, 35, 35, 0.8);
+            border-radius: 0;
+            padding: 3rem 2rem 2rem;
+            color: white;
+            position: relative;
+            border-bottom: 2px solid orange;
+            margin-bottom: 0;
+        }
+
+        .story-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-family: "EB Garamond", serif;
+            font-weight: 700;
+            background-image: linear-gradient(to right, #CC9900 0%, #FFCC66 50%, #FFD700 85%, #FFEB3B 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .story-header p {
+            font-size: 1.1rem;
+            color: rgb(180, 180, 180);
+            font-family: "EB Garamond", serif;
+        }
+
+        .story-content {
+            background: rgba(35, 35, 35, 0.8);
+            border-radius: 0;
+            padding: 3rem;
+            max-height: 70vh;
+            overflow-y: auto;
+            margin-bottom: 2rem;
+        }
+
+        .story-content::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .story-content::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .story-content::-webkit-scrollbar-thumb {
+            background: orange;
+            border-radius: 5px;
+        }
+
+        .story-section h2 {
+            color: orange;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-family: "EB Garamond", serif;
+            font-weight: 700;
+            padding-bottom: 0.5rem;
+        }
+
+        .story-section h3 {
+            font-family: "Chonburi", serif;
+            font-size: 1.3rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            background-image: linear-gradient(to right, #CC9900, #FFD700);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .story-section p {
+            color: rgb(180, 180, 180);
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            text-align: justify;
+            font-family: sans-serif;
+        }
+
+        .highlight-box {
+            background: rgba(255, 165, 0, 0.1);
+            border-left: 3px solid orange;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0.3125rem;
+        }
+
+        .highlight-box h4 {
+            color: orange;
+            margin-bottom: 0.8rem;
+            font-family: "EB Garamond", serif;
+            font-size: 1.2rem;
+        }
+
+        .highlight-box p {
+            color: rgb(200, 200, 200);
+            margin-bottom: 0;
+        }
+
+        /* Mode Aksara Jawa - HANYA untuk aksara jawa saja */
+        .aksara-jawa-mode .story-header h1,
+        .aksara-jawa-mode .story-section h2,
+        .aksara-jawa-mode .story-section h3,
+        .aksara-jawa-mode .highlight-box h4,
+        .aksara-jawa-mode .btnavbar,
+        .aksara-jawa-mode #btactivenavbar,
+        .aksara-jawa-mode .btinactivenavbar,
+        .aksara-jawa-mode .dropdown-item,
+        .aksara-jawa-mode .language-btn,
+        .aksara-jawa-mode #logo {
+            font-family: 'nyk Ngayogyan Jejeg', sans-serif !important;
+        }
+
+        /* Untuk teks panjang biar mudah dibaca */
+        .aksara-jawa-mode .story-section p,
+        .aksara-jawa-mode .highlight-box p,
+        .aksara-jawa-mode .story-header p {
+            font-family: 'nyk Ngayogyan Jejeg', sans-serif !important;
+            line-height: 1.8;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            #containernavbar {
+                padding-left: 1rem;
+                padding-right: 1rem;
+                height: 4rem;
+                flex-wrap: wrap;
+            }
+
+            #logo {
+                font-size: 1.5rem;
+            }
+
+            .burger-menu {
+                display: flex;
+                order: 3;
+            }
+
+            .nav-left {
+                order: 1;
+                flex: 1;
+            }
+
+            .nav-right {
+                order: 2;
+                width: auto;
+                flex-direction: row;
+                gap: 0.5rem;
+            }
+
+            .language-switcher {
+                width: auto;
+                margin-top: 0;
+            }
+
+            .language-btn {
+                width: auto;
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+                min-width: 120px;
+            }
+
+            .language-dropdown {
+                position: absolute;
+                top: 100%;
+                right: 0;
+                width: 180px;
+                margin-top: 0.5rem;
+                transform: none;
+                max-height: none;
+                background-color: rgb(35, 35, 35);
+            }
+
+            .language-dropdown.active {
+                max-height: none;
+            }
+
+            #navbar {
+                position: fixed;
+                top: 4rem;
+                right: -100%;
+                width: 100%;
+                height: calc(100vh - 4rem);
+                background-color: rgba(22, 22, 22, 0.98);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: stretch;
+                padding: 1.5rem 1rem;
+                gap: 0.75rem;
+                transition: right 0.3s ease;
+                overflow-y: auto;
+                order: 4;
+            }
+
+            #navbar.active {
+                right: 0;
+            }
+
+            .btnavbar {
+                width: 100%;
+                height: auto;
+                display: flex;
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            #btactivenavbar,
+            .btinactivenavbar {
+                width: 100%;
+                height: 2.5rem;
+                font-size: 1rem;
+            }
+
+            .dropdown-menu {
+                position: static;
+                margin-top: 0;
+                width: 100%;
+                margin-left: 0;
+                transform: none;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease, opacity 0.2s ease;
+                background-color: transparent;
+            }
+
+            .dropdown-menu.active {
+                display: block;
+                max-height: 300px;
+                margin-top: 0.5rem;
+            }
+
+            .dropdown-item {
+                padding: 0.75rem 1rem;
+                font-size: 0.95rem;
+            }
+
+            #containercerita {
+                padding: 5rem 1rem 1rem;
+            }
+
+            .story-header {
+                padding: 2rem 1rem;
+            }
+
+            .story-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .story-header p {
+                font-size: 1rem;
+            }
+
+            .story-content {
+                padding: 1.5rem;
+                max-height: 60vh;
+            }
+
+            .story-section h2 {
+                font-size: 1.5rem;
+            }
+
+            .story-section h3 {
+                font-size: 1.1rem;
+            }
+
+            .story-section p {
+                font-size: 0.95rem;
+            }
+        }
+
+        /* Media Query khusus untuk perangkat dengan lebar sangat kecil (Android portrait) */
+        @media (max-width: 480px) {
+            #containercerita {
+                padding: 5rem 0.75rem 1rem;
+            }
+
+            .story-content {
+                max-height: 55vh;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="containernavbar">
+        <div class="nav-left">
+            <div id="logo">ꦱꦶꦗꦧꦺ</div>
+        </div>
+
+        <div class="nav-right">
+            <!-- Language Switcher -->
+            <div class="language-switcher">
+                <button class="language-btn" id="languageBtn">
+                    <span id="currentLanguage">Bahasa Indonesia</span>
+                    <span class="language-arrow">▼</span>
+                </button>
+                <div class="language-dropdown" id="languageDropdown">
+                    <button class="language-option" data-lang="id">Bahasa Indonesia</button>
+                    <button class="language-option" data-lang="jv">Basa Jawa</button>
+                    <button class="language-option" data-lang="jv_script">ꦲꦏ꧀ꦱꦫꦗꦮ</button>
+                </div>
+            </div>
+
+            <div class="burger-menu" id="burgerMenu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+
+        <div id="navbar">
+            <div class="btnavbar">
+                <a href="/sijabewayang/index.html" class="btinactivenavbar" data-i18n="beranda">Beranda</a>
+            </div>
+            <div class="btnavbar" id="critaWayangNav">
+                <a href="#" class="btinactivenavbar" id="critaWayangBtn">
+                    <span data-i18n="critaWayang">Crita Wayang</span>
+                    <span class="dropdown-arrow">▼</span>
+                </a>
+                <div class="dropdown-menu" id="critaWayangDropdown">
+                    <a href="/sijabewayang/" class="dropdown-item" data-i18n="mahabharata">Mahabharata</a>
+                    <a href="/sijabewayang//critawayang/ramayana.html" class="dropdown-item"
+                        data-i18n="ramayana">Ramayana</a>
+                    <a href="/sijabewayang//critawayang/dewaruci.html" class="dropdown-item active"
+                        data-i18n="dewaruci">Dewa
+                        Ruci</a>
+                </div>
+            </div>
+            <div class="btnavbar" id="tokohWayangNav">
+                <a href="#" class="btinactivenavbar" id="tokohWayangBtn">
+                    <span data-i18n="tokohWayang">Tokoh Wayang</span>
+                    <span class="dropdown-arrow">▼</span>
+                </a>
+                <div class="dropdown-menu" id="tokohWayangDropdown">
+                    <a href="../tokohwayang/mahabharata.html" class="dropdown-item"
+                        data-i18n="mahabharata">Mahabharata</a>
+                    <a href="../tokohwayang/ramayana.html" class="dropdown-item" data-i18n="ramayana">Ramayana</a>
+                    <a href="../tokohwayang/dewaruci.html" class="dropdown-item" data-i18n="dewaruci">Dewa Ruci</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="containercerita">
+        <div class="story-header">
+            <h1 data-i18n="judulHalaman">Dewa Ruci</h1>
+            <p data-i18n="subJudul">Kisah perjalanan spiritual Bima mencari air kehidupan</p>
+        </div>
+
+        <div class="story-content">
+            <div class="story-section">
+                <h2 data-i18n="judulCerita">Dewa Ruci</h2>
+                <p data-i18n="deskripsiCerita"><em>Kisah perjalanan spiritual Bima mencari air kehidupan</em></p>
+
+                <h3 data-i18n="subJudul1">Latar Belakang dan Misi Pencarian</h3>
+                <p data-i18n="paragraf1">
+                    Kisah Dewa Ruci merupakan salah satu cerita wayang yang sarat dengan makna filosofis dan spiritual.
+                    Cerita ini terjadi setelah perang Bharatayuddha, ketika Bima merasa bahwa meski telah memenangkan
+                    perang, dirinya masih belum mencapai pencerahan spiritual yang sejati.
+                </p>
+
+                <p data-i18n="paragraf2">
+                    Bima, yang dikenal sebagai kesatria Pandawa dengan kekuatan fisik luar biasa, merasa ada kekosongan
+                    dalam jiwanya. Dia mendatangi gurunya, Resi Durna, untuk meminta petunjuk mencapai pencerahan
+                    sejati. Namun Durna yang masih menyimpan dendam karena kematian putranya, Aswatama, dalam perang
+                    Bharatayuddha, memberikan tugas yang mustahil.
+                </p>
+
+                <h3 data-i18n="subJudul2">Tugas dari Resi Durna</h3>
+                <p data-i18n="paragraf3">
+                    Durna menyuruh Bima untuk mencari "tirta perwitasari" (air kehidupan) yang konon dapat memberikan
+                    pencerahan spiritual. Air ini dikatakan berada di puncak gunung Candramuka, tempat yang sangat
+                    berbahaya dan mustahil dicapai manusia biasa. Sebenarnya, ini adalah jebakan Durna untuk
+                    menyingkirkan Bima.
+                </p>
+
+                <p data-i18n="paragraf4">
+                    Durna menggambarkan perjalanan yang sangat berbahaya: Bima harus melewati hutan belantara yang
+                    dihuni
+                    makhluk gaib, menyebrangi samudra yang penuh badai, mendaki tebing terjal, dan akhirnya menyelam ke
+                    dasar telaga di puncak gunung untuk mengambil air kehidupan.
+                </p>
+
+                <p data-i18n="paragraf5">
+                    Meski tahu bahaya yang mengancam, Bima menerima tugas ini dengan ikhlas. Dia bertekad untuk
+                    menemukan
+                    makna sejati kehidupan, bukan sekadar air fisik.
+                </p>
+
+                <h3 data-i18n="subJudul3">Perjalanan Menuju Gunung Candramuka</h3>
+                <p data-i18n="paragraf6">
+                    Bima memulai perjalanan dengan berjalan kaki menuju gunung Candramuka. Dalam perjalanan, dia
+                    menghadapi berbagai rintangan fisik dan mental. Pertama, dia harus melewati Hutan Krendawahana yang
+                    gelap dan menyeramkan, dihuni oleh makhluk-makhluk halus dan binatang buas.
+                </p>
+
+                <p data-i18n="paragraf7">
+                    Di hutan ini, Bima bertemu dengan raksasa yang mencoba menghalanginya. Namun dengan kesaktiannya,
+                    Bima berhasil melewati semua rintangan. Yang lebih sulit adalah godaan-godaan batin yang muncul:
+                    keraguan, ketakutan, dan keinginan untuk menyerah.
+                </p>
+
+                <p data-i18n="paragraf8">
+                    Setelah berhari-hari berjalan, Bima tiba di kaki gunung Candramuka. Gunung ini menjulang tinggi
+                    dengan puncak yang tersembunyi di balik awan. Pendakiannya sangat sulit, tebing-tebing terjal dan
+                    jurang dalam menguji ketahanan fisik dan mental Bima.
+                </p>
+
+                <h3 data-i18n="subJudul4">Penyelaman ke Dasar Telaga</h3>
+                <p data-i18n="paragraf9">
+                    Sesampainya di puncak gunung, Bima menemukan telaga yang jernih namun sangat dalam. Sesuai petunjuk
+                    Durna, Bima harus menyelam ke dasar telaga untuk mengambil air kehidupan. Namun yang tidak diketahui
+                    Bima, di dasar telaga ini hidup naga raksasa yang menjaga telaga.
+                </p>
+
+                <p data-i18n="paragraf10">
+                    Bima mengambil napas dalam-dalam dan menyelam. Semakin dalam dia menyelam, semakin gelap dan dingin
+                    airnya. Tekanan air semakin kuat, namun Bima terus melanjutkan. Tiba-tiba, muncul naga raksasa yang
+                    menyerangnya. Pertarungan sengit terjadi di dasar telaga.
+                </p>
+
+                <p data-i18n="paragraf11">
+                    Setelah berhasil mengalahkan naga penjaga, Bima terus menyelam lebih dalam. Anehnya, semakin dalam
+                    dia menyelam, semakin terang justru pemandangannya. Dia memasuki sebuah ruangan bawah air yang
+                    bercahaya.
+                </p>
+
+                <h3 data-i18n="subJudul5">Pertemuan dengan Dewa Ruci</h3>
+                <p data-i18n="paragraf12">
+                    Di ruangan bercahaya itu, Bima bertemu dengan sosok kecil yang bercahaya. Sosok itu memperkenalkan
+                    diri sebagai Dewa Ruci. Yang mengejutkan, wajah Dewa Ruci persis seperti wajah Bima sendiri, hanya
+                    dalam ukuran yang sangat kecil.
+                </p>
+
+                <p data-i18n="paragraf13">
+                    Dewa Ruci menjelaskan bahwa dirinya adalah representasi dari jiwa Bima yang sejati. "Aku adalah
+                    engkau, dan engkau adalah aku," kata Dewa Ruci. "Yang kau cari selama ini bukanlah air kehidupan
+                    fisik, tetapi pencerahan batin."
+                </p>
+
+                <p data-i18n="paragraf14">
+                    Dewa Ruci kemudian membawa Bima masuk ke dalam telinganya sendiri. Di dalam, Bima melihat alam
+                    semesta yang luas dengan segala keindahannya. Dia menyadari bahwa kebenaran sejati ada dalam dirinya
+                    sendiri.
+                </p>
+
+                <h3 data-i18n="subJudul6">Ajaran-Ajaran Spiritual Dewa Ruci</h3>
+                <p data-i18n="paragraf15">
+                    Dewa Ruci mengajarkan Bima tentang hakikat kehidupan dan manusia:
+                </p>
+
+                <p data-i18n="paragraf16">
+                    <strong data-i18n="ajaran1">Tentang Jati Diri:</strong> "Manusia sejati adalah yang telah mengenal
+                    dirinya sendiri.
+                    Dirimu yang sejati bukanlah tubuh fisik ini, tetapi jiwa yang abadi."
+                </p>
+
+                <p data-i18n="paragraf17">
+                    <strong data-i18n="ajaran2">Tentang Pencarian Kebenaran:</strong> "Kebenaran tidak berada di luar
+                    dirimu. Semua yang kau
+                    cari - kedamaian, kebahagiaan, pencerahan - sudah ada dalam dirimu sendiri."
+                </p>
+
+                <p data-i18n="paragraf18">
+                    <strong data-i18n="ajaran3">Tentang Sangkan Paraning Dumadi:</strong> "Manusia harus mengetahui asal
+                    usulnya dan tujuan
+                    akhirnya. Dari mana datangnya, untuk apa hidup, dan akan kemudian setelah mati."
+                </p>
+
+                <p data-i18n="paragraf19">
+                    <strong data-i18n="ajaran4">Tentang Manunggaling Kawula Gusti:</strong> "Puncak spiritual adalah
+                    ketika hamba bersatu
+                    dengan Tuhannya, ketika kesadaran individu melebur dalam kesadaran kosmis."
+                </p>
+
+                <h3 data-i18n="subJudul7">Makna Simbolis dalam Cerita</h3>
+                <p data-i18n="paragraf20">
+                    Kisah Dewa Ruci penuh dengan simbolisme filosofis yang dalam:
+                </p>
+
+                <p data-i18n="paragraf21">
+                    <strong data-i18n="simbol1">Gunung Candramuka:</strong> Melambangkan perjalanan spiritual yang
+                    tinggi dan penuh
+                    tantangan.
+                </p>
+
+                <p data-i18n="paragraf22">
+                    <strong data-i18n="simbol2">Penyelaman ke Dasar Telaga:</strong> Simbol dari penyelaman ke dalam
+                    diri sendiri, menembus
+                    kedalaman jiwa.
+                </p>
+
+                <p data-i18n="paragraf23">
+                    <strong data-i18n="simbol3">Naga Penjaga:</strong> Melambangkan hawa nafsu dan ego yang harus
+                    ditaklukkan sebelum
+                    mencapai pencerahan.
+                </p>
+
+                <p data-i18n="paragraf24">
+                    <strong data-i18n="simbol4">Dewa Ruci:</strong> Representasi dari suara hati nurani dan jiwa yang
+                    sejati.
+                </p>
+
+                <p data-i18n="paragraf25">
+                    <strong data-i18n="simbol5">Masuk ke Dalam Telinga:</strong> Simbol dari mendengarkan suara hati dan
+                    kebenaran batin.
+                </p>
+
+                <h3 data-i18n="subJudul8">Kembalinya Bima dengan Pencerahan</h3>
+                <p data-i18n="paragraf26">
+                    Setelah menerima ajaran dari Dewa Ruci, Bima kembali ke permukaan. Dia tidak membawa air kehidupan
+                    fisik, tetapi membawa pencerahan spiritual yang jauh lebih berharga. Wajahnya tampak berseri-seri
+                    dan sikapnya berubah menjadi lebih bijaksana.
+                </p>
+
+                <p data-i18n="paragraf27">
+                    Sesampainya di padepokan Durna, Bima melaporkan bahwa dia tidak menemukan air kehidupan seperti yang
+                    diminta. Namun dia menjelaskan bahwa dia telah menemukan sesuatu yang lebih berharga: pemahaman
+                    tentang jati diri dan hakikat kehidupan.
+                </p>
+
+                <p data-i18n="paragraf28">
+                    Durna terkejut melihat perubahan pada Bima. Meski awalnya berniat jahat, ternyata tugas yang
+                    diberikan justru membawa Bima pada pencerahan sejati. Bima pun memaafkan Durna dan mengucapkan
+                    terima kasih, karena berkat tugas itulah dia menemukan makna kehidupan yang sesungguhnya.
+                </p>
+
+                <h3 data-i18n="subJudul9">Warisan Spiritual Kisah Dewa Ruci</h3>
+                <p data-i18n="paragraf29">
+                    Kisah Dewa Ruci menjadi salah satu cerita wayang yang paling dalam maknanya. Cerita ini mengajarkan
+                    bahwa:
+                </p>
+
+                <p data-i18n="paragraf30">
+                    Pencarian spiritual yang sejati adalah pencarian ke dalam diri, bukan ke luar. Kebenaran dan
+                    pencerahan sudah ada dalam setiap manusia, hanya perlu disadari dan diaktualisasikan. Kekuatan fisik
+                    dan duniawi adalah sementara, sedangkan pencerahan spiritual adalah abadi.
+                </p>
+
+                <p data-i18n="paragraf31">
+                    Cerita ini juga mengajarkan tentang pentingnya ketekunan, keikhlasan, dan keberanian dalam mencari
+                    kebenaran. Bima yang awalnya hanya mengandalkan kekuatan fisik, akhirnya menemukan kekuatan
+                    spiritual yang jauh lebih besar.
+                </p>
+
+                <div class="highlight-box">
+                    <h4 data-i18n="relevansiJudul">Relevansi dalam Kehidupan Modern</h4>
+                    <p data-i18n="relevansiDeskripsi">
+                        Kisah Dewa Ruci tetap relevan hingga saat ini. Dalam dunia yang serba materialistik, cerita ini
+                        mengingatkan kita untuk tidak lupa melakukan introspeksi dan pencarian makna hidup. Seperti
+                        Bima, setiap manusia pada dasarnya sedang dalam perjalanan mencari "air kehidupan" - kebahagiaan
+                        dan makna sejati yang seringkali justru ada dalam diri sendiri.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data terjemahan untuk halaman Dewa Ruci - DIPERBAIKI
+        const translations = {
+            id: {
+                // Navbar
+                beranda: "Beranda",
+                critaWayang: "Crita Wayang",
+                tokohWayang: "Tokoh Wayang",
+                mahabharata: "Mahabharata",
+                ramayana: "Ramayana",
+                dewaruci: "Dewa Ruci",
+
+                // Header
+                judulHalaman: "Dewa Ruci",
+                subJudul: "Kisah perjalanan spiritual Bima mencari air kehidupan",
+
+                // Konten
+                judulCerita: "Dewa Ruci",
+                deskripsiCerita: "Kisah perjalanan spiritual Bima mencari air kehidupan",
+
+                // Subjudul
+                subJudul1: "Latar Belakang dan Misi Pencarian",
+                subJudul2: "Tugas dari Resi Durna",
+                subJudul3: "Perjalanan Menuju Gunung Candramuka",
+                subJudul4: "Penyelaman ke Dasar Telaga",
+                subJudul5: "Pertemuan dengan Dewa Ruci",
+                subJudul6: "Ajaran-Ajaran Spiritual Dewa Ruci",
+                subJudul7: "Makna Simbolis dalam Cerita",
+                subJudul8: "Kembalinya Bima dengan Pencerahan",
+                subJudul9: "Warisan Spiritual Kisah Dewa Ruci",
+
+                // Paragraf
+                paragraf1: "Kisah Dewa Ruci merupakan salah satu cerita wayang yang sarat dengan makna filosofis dan spiritual. Cerita ini terjadi setelah perang Bharatayuddha, ketika Bima merasa bahwa meski telah memenangkan perang, dirinya masih belum mencapai pencerahan spiritual yang sejati.",
+                paragraf2: "Bima, yang dikenal sebagai kesatria Pandawa dengan kekuatan fisik luar biasa, merasa ada kekosongan dalam jiwanya. Dia mendatangi gurunya, Resi Durna, untuk meminta petunjuk mencapai pencerahan sejati. Namun Durna yang masih menyimpan dendam karena kematian putranya, Aswatama, dalam perang Bharatayuddha, memberikan tugas yang mustahil.",
+                paragraf3: "Durna menyuruh Bima untuk mencari \"tirta perwitasari\" (air kehidupan) yang konon dapat memberikan pencerahan spiritual. Air ini dikatakan berada di puncak gunung Candramuka, tempat yang sangat berbahaya dan mustahil dicapai manusia biasa. Sebenarnya, ini adalah jebakan Durna untuk menyingkirkan Bima.",
+                paragraf4: "Durna menggambarkan perjalanan yang sangat berbahaya: Bima harus melewati hutan belantara yang dihuni makhluk gaib, menyebrangi samudra yang penuh badai, mendaki tebing terjal, dan akhirnya menyelam ke dasar telaga di puncak gunung untuk mengambil air kehidupan.",
+                paragraf5: "Meski tahu bahaya yang mengancam, Bima menerima tugas ini dengan ikhlas. Dia bertekad untuk menemukan makna sejati kehidupan, bukan sekadar air fisik.",
+                paragraf6: "Bima memulai perjalanan dengan berjalan kaki menuju gunung Candramuka. Dalam perjalanan, dia menghadapi berbagai rintangan fisik dan mental. Pertama, dia harus melewati Hutan Krendawahana yang gelap dan menyeramkan, dihuni oleh makhluk-makhluk halus dan binatang buas.",
+                paragraf7: "Di hutan ini, Bima bertemu dengan raksasa yang mencoba menghalanginya. Namun dengan kesaktiannya, Bima berhasil melewati semua rintangan. Yang lebih sulit adalah godaan-godaan batin yang muncul: keraguan, ketakutan, dan keinginan untuk menyerah.",
+                paragraf8: "Setelah berhari-hari berjalan, Bima tiba di kaki gunung Candramuka. Gunung ini menjulang tinggi dengan puncak yang tersembunyi di balik awan. Pendakiannya sangat sulit, tebing-tebing terjal dan jurang dalam menguji ketahanan fisik dan mental Bima.",
+                paragraf9: "Sesampainya di puncak gunung, Bima menemukan telaga yang jernih namun sangat dalam. Sesuai petunjuk Durna, Bima harus menyelam ke dasar telaga untuk mengambil air kehidupan. Namun yang tidak diketahui Bima, di dasar telaga ini hidup naga raksasa yang menjaga telaga.",
+                paragraf10: "Bima mengambil napas dalam-dalam dan menyelam. Semakin dalam dia menyelam, semakin gelap dan dingin airnya. Tekanan air semakin kuat, namun Bima terus melanjutkan. Tiba-tiba, muncul naga raksasa yang menyerangnya. Pertarungan sengit terjadi di dasar telaga.",
+                paragraf11: "Setelah berhasil mengalahkan naga penjaga, Bima terus menyelam lebih dalam. Anehnya, semakin dalam dia menyelam, semakin terang justru pemandangannya. Dia memasuki sebuah ruangan bawah air yang bercahaya.",
+                paragraf12: "Di ruangan bercahaya itu, Bima bertemu dengan sosok kecil yang bercahaya. Sosok itu memperkenalkan diri sebagai Dewa Ruci. Yang mengejutkan, wajah Dewa Ruci persis seperti wajah Bima sendiri, hanya dalam ukuran yang sangat kecil.",
+                paragraf13: "Dewa Ruci menjelaskan bahwa dirinya adalah representasi dari jiwa Bima yang sejati. \"Aku adalah engkau, dan engkau adalah aku,\" kata Dewa Ruci. \"Yang kau cari selama ini bukanlah air kehidupan fisik, tetapi pencerahan batin.\"",
+                paragraf14: "Dewa Ruci kemudian membawa Bima masuk ke dalam telinganya sendiri. Di dalam, Bima melihat alam semesta yang luas dengan segala keindahannya. Dia menyadari bahwa kebenaran sejati ada dalam dirinya sendiri.",
+                paragraf15: "Dewa Ruci mengajarkan Bima tentang hakikat kehidupan dan manusia:",
+                paragraf16: "Tentang Jati Diri: \"Manusia sejati adalah yang telah mengenal dirinya sendiri. Dirimu yang sejati bukanlah tubuh fisik ini, tetapi jiwa yang abadi.\"",
+                paragraf17: "Tentang Pencarian Kebenaran: \"Kebenaran tidak berada di luar dirimu. Semua yang kau cari - kedamaian, kebahagiaan, pencerahan - sudah ada dalam dirimu sendiri.\"",
+                paragraf18: "Tentang Sangkan Paraning Dumadi: \"Manusia harus mengetahui asal usulnya dan tujuan akhirnya. Dari mana datangnya, untuk apa hidup, dan akan kemudian setelah mati.\"",
+                paragraf19: "Tentang Manunggaling Kawula Gusti: \"Puncak spiritual adalah ketika hamba bersatu dengan Tuhannya, ketika kesadaran individu melebur dalam kesadaran kosmis.\"",
+                paragraf20: "Kisah Dewa Ruci penuh dengan simbolisme filosofis yang dalam:",
+                paragraf21: "Gunung Candramuka: Melambangkan perjalanan spiritual yang tinggi dan penuh tantangan.",
+                paragraf22: "Penyelaman ke Dasar Telaga: Simbol dari penyelaman ke dalam diri sendiri, menembus kedalaman jiwa.",
+                paragraf23: "Naga Penjaga: Melambangkan hawa nafsu dan ego yang harus ditaklukkan sebelum mencapai pencerahan.",
+                paragraf24: "Dewa Ruci: Representasi dari suara hati nurani dan jiwa yang sejati.",
+                paragraf25: "Masuk ke Dalam Telinga: Simbol dari mendengarkan suara hati dan kebenaran batin.",
+                paragraf26: "Setelah menerima ajaran dari Dewa Ruci, Bima kembali ke permukaan. Dia tidak membawa air kehidupan fisik, tetapi membawa pencerahan spiritual yang jauh lebih berharga. Wajahnya tampak berseri-seri dan sikapnya berubah menjadi lebih bijaksana.",
+                paragraf27: "Sesampainya di padepokan Durna, Bima melaporkan bahwa dia tidak menemukan air kehidupan seperti yang diminta. Namun dia menjelaskan bahwa dia telah menemukan sesuatu yang lebih berharga: pemahaman tentang jati diri dan hakikat kehidupan.",
+                paragraf28: "Durna terkejut melihat perubahan pada Bima. Meski awalnya berniat jahat, ternyata tugas yang diberikan justru membawa Bima pada pencerahan sejati. Bima pun memaafkan Durna dan mengucapkan terima kasih, karena berkat tugas itulah dia menemukan makna kehidupan yang sesungguhnya.",
+                paragraf29: "Kisah Dewa Ruci menjadi salah satu cerita wayang yang paling dalam maknanya. Cerita ini mengajarkan bahwa:",
+                paragraf30: "Pencarian spiritual yang sejati adalah pencarian ke dalam diri, bukan ke luar. Kebenaran dan pencerahan sudah ada dalam setiap manusia, hanya perlu disadari dan diaktualisasikan. Kekuatan fisik dan duniawi adalah sementara, sedangkan pencerahan spiritual adalah abadi.",
+                paragraf31: "Cerita ini juga mengajarkan tentang pentingnya ketekunan, keikhlasan, dan keberanian dalam mencari kebenaran. Bima yang awalnya hanya mengandalkan kekuatan fisik, akhirnya menemukan kekuatan spiritual yang jauh lebih besar.",
+
+                // Ajaran
+                ajaran1: "Tentang Jati Diri:",
+                ajaran2: "Tentang Pencarian Kebenaran:",
+                ajaran3: "Tentang Sangkan Paraning Dumadi:",
+                ajaran4: "Tentang Manunggaling Kawula Gusti:",
+
+                // Simbol
+                simbol1: "Gunung Candramuka:",
+                simbol2: "Penyelaman ke Dasar Telaga:",
+                simbol3: "Naga Penjaga:",
+                simbol4: "Dewa Ruci:",
+                simbol5: "Masuk ke Dalam Telinga:",
+
+                // Highlight Box
+                relevansiJudul: "Relevansi dalam Kehidupan Modern",
+                relevansiDeskripsi: "Kisah Dewa Ruci tetap relevan hingga saat ini. Dalam dunia yang serba materialistik, cerita ini mengingatkan kita untuk tidak lupa melakukan introspeksi dan pencarian makna hidup. Seperti Bima, setiap manusia pada dasarnya sedang dalam perjalanan mencari \"air kehidupan\" - kebahagiaan dan makna sejati yang seringkali justru ada dalam diri sendiri."
+            },
+
+            jv: {
+                // Navbar
+                beranda: "Beranda",
+                critaWayang: "Crita Wayang",
+                tokohWayang: "Tokoh Wayang",
+                mahabharata: "Mahabharata",
+                ramayana: "Ramayana",
+                dewaruci: "Dewa Ruci",
+
+                // Header
+                judulHalaman: "Dewa Ruci",
+                subJudul: "Kisah lelungan spiritual Bima golek banyu urip",
+
+                // Konten
+                judulCerita: "Dewa Ruci",
+                deskripsiCerita: "Kisah lelungan spiritual Bima golek banyu urip",
+
+                // Subjudul
+                subJudul1: "Latar Mburi lan Misi Panggolekan",
+                subJudul2: "Tugas saka Resi Durna",
+                subJudul3: "Lelungan Menyang Gunung Candramuka",
+                subJudul4: "Panyileman menyang Dhasar Telaga",
+                subJudul5: "Pategolan karo Dewa Ruci",
+                subJudul6: "Ajaran-Ajaran Spiritual Dewa Ruci",
+                subJudul7: "Makna Simbolis ing Crita",
+                subJudul8: "Baline Bima kanthi Pencerahan",
+                subJudul9: "Warisan Spiritual Kisah Dewa Ruci",
+
+                // Paragraf - DITERJEMAHKAN DALAM BAHASA JAWA HURUF LATIN
+                paragraf1: "Kisah Dewa Ruci minangka salah siji crita wayang sing kebak makna filosofis lan spiritual. Crita iki kedadeyan sawise perang Bharatayuddha, nalika Bima ngrasa yen sanadyan wis menang perang, dheweke isih durung nggayuh pencerahan spiritual sing sejati.",
+                paragraf2: "Bima, sing dikenal minangka kesatria Pandawa kanthi kekuwatan fisik sing luar biasa, ngrasa ana kekosongan ing jiwane. Dheweke ngunjungi gurune, Resi Durna, kanggo njaluk pitunjuk nggayuh pencerahan sejati. Nanging Durna sing isih nyimpen dendam amarga patine putrane, Aswatama, ing perang Bharatayuddha, menehi tugas sing mustahil.",
+                paragraf3: "Durna nyuruh Bima golek \"tirta perwitasari\" (banyu urip) sing konon bisa menehi pencerahan spiritual. Banyu iki dumunung ing pucuk gunung Candramuka, papan sing banget mbebayani lan mustahil digayuh manungsa biasa. Sebenere, iki minangka jebakan Durna kanggo nyingkiraké Bima.",
+                paragraf4: "Durna nggambaraké lelungan sing banget mbebayani: Bima kudu liwat alas belantara sing dadi panggoning makhluk gaib, nyabrang segara sing kebak badai, mendaki tebing sing curam, lan pungkasane nyelam menyang dhasar telaga ing pucuk gunung kanggo njupuk banyu urip.",
+                paragraf5: "Sanadyan ngerti bebaya sing ngancam, Bima nampa tugas iki kanthi ikhlas. Dheweke tekad kanggo nemokaké makna sejati urip, dudu mung banyu fisik.",
+                paragraf6: "Bima miwiti lelungan kanthi mlaku menyang gunung Candramuka. Ing lelungan, dheweke ngadhepi macem-macem rintangan fisik lan mental. Kapisan, dheweke kudu liwat Alas Krendawahana sing peteng lan medeni, dadi panggoning makhluk-makhluk alus lan kewan galak.",
+                paragraf7: "Ing alas iki, Bima ketemu karo raksasa sing nyoba ngalang-alangi. Nanging kanthi kesaktiane, Bima kasil ngluwasi kabeh rintangan. Sing luwih angel yaiku godaan-godaan batin sing muncul: rasa ragu, wedi, lan kepingin nyerah.",
+                paragraf8: "Sawise dina-dina mlaku, Bima tekan ing sikil gunung Candramuka. Gunung iki dhuwur banget kanthi pucuk sing didhelikake ing balik mega. Pendakiane angel banget, tebing-tebing curam lan jurang jero nguji ketahanan fisik lan mental Bima.",
+                paragraf9: "Sampuné ing pucuk gunung, Bima nemokaké telaga sing bening nanging banget jero. Miturut pitunjuk Durna, Bima kudu nyelam menyang dhasar telaga kanggo njupuk banyu urip. Nanging sing ora dingerteni Bima, ing dhasar telaga iki urip naga raksasa sing njaga telaga.",
+                paragraf10: "Bima njupuk ambegan jero lan nyelam. Tambah jero dheweke nyelam, tambah peteng lan adhem banyune. Tekanan banyu tambah kuwat, nanging Bima terus nerusake. Dumadakan, metu naga raksasa sing nyerang dheweke. Pertarungan sengit kadadeyan ing dhasar telaga.",
+                paragraf11: "Sawise kasil ngalahake naga penjaga, Bima terus nyelam luwih jero. Anehé, tambah jero dheweke nyelam, tambah padhang pemandangane. Dheweke mlebu kamar banyu sing padhang.",
+                paragraf12: "Ing kamar sing padhang iku, Bima ketemu karo wujud cilik sing padhang. Wujud iku nepangake awake minangka Dewa Ruci. Sing nggumunake, rai Dewa Ruci persis kaya rai Bima dhewe, mung ing ukuran sing cilik banget.",
+                paragraf13: "Dewa Ruci nerangake yen awake minangka perwakilan saka jiwa Bima sing sejati. \"Aku iki kowe, lan kowe iki aku,\" kandha Dewa Ruci. \"Sing digoleki sajrone iki dudu banyu urip fisik, nanging pencerahan batin.\"",
+                paragraf14: "Dewa Ruci banjur nggawa Bima mlebu ing kupinge dhewe. Ing njero, Bima ndeleng alam semesta sing amba kanthi kabeh kaendahane. Dheweke sadar yen kasunyatan sejati ana ing njero awake dhewe.",
+                paragraf15: "Dewa Ruci ngajarake Bima bab hakikat urip lan manungsa:",
+                paragraf16: "Bab Jati Diri: \"Manungsa sejati iku sing wis kenal awake dhewe. Awakmu sing sejati dudu awak fisik iki, nanging jiwa sing langgeng.\"",
+                paragraf17: "Bab Panggolekan Kasunyatan: \"Kasunyatan ora ana ing njaba awakmu. Kabeh sing digoleki - katentreman, kabungahan, pencerahan - wis ana ing njero awakmu dhewe.\"",
+                paragraf18: "Bab Sangkan Paraning Dumadi: \"Manungsa kudu ngerti asal usule lan tujuan pungkasane. Saka ngendi teka, kanggo apa urip, lan bakal mengko sawise mati.\"",
+                paragraf19: "Bab Manunggaling Kawula Gusti: \"Pucuk spiritual iku nalika kawula manunggal karo Gustine, nalika kesadaran individu nyawang ing kesadaran kosmis.\"",
+                paragraf20: "Kisah Dewa Ruci kebak simbolisme filosofis sing jero:",
+                paragraf21: "Gunung Candramuka: Nglambangake lelungan spiritual sing dhuwur lan kebak tantangan.",
+                paragraf22: "Panyileman menyang Dhasar Telaga: Simbol saka panyileman menyang njero awake dhewe, nembus kedalaman jiwa.",
+                paragraf23: "Naga Penjaga: Nglambangake hawa nafsu lan ego sing kudu dikalahake sadurunge nggayuh pencerahan.",
+                paragraf24: "Dewa Ruci: Perwakilan saka swara ati nurani lan jiwa sing sejati.",
+                paragraf25: "Mlebu ing Kuping: Simbol saka ngrungokake swara ati lan kasunyatan batin.",
+                paragraf26: "Sawise nampa ajaran saka Dewa Ruci, Bima bali menyang permukaan. Dheweke ora nggawa banyu urip fisik, nanging nggawa pencerahan spiritual sing luwih larang regane. Raie katon sumringah lan sikape owah dadi luwih wicaksana.",
+                paragraf27: "Sampuné ing padepokan Durna, Bima nglaporake yen dheweke ora nemokake banyu urip kaya sing dijaluk. Nanging dheweke nerangake yen dheweke wis nemokake sing luwih larang: pangerten bab jati diri lan hakikat urip.",
+                paragraf28: "Durna kaget ndeleng owah-owahan ing Bima. Sanadyan wiwitane duwe niat ala, ternyata tugas sing diwenehake malah nggawa Bima menyang pencerahan sejati. Bima banjur ngapura Durna lan matur nuwun, amarga saka tugas iku dheweke nemokake makna urip sing sajati.",
+                paragraf29: "Kisah Dewa Ruci dadi salah siji crita wayang sing paling jero maknane. Crita iki ngajarake yen:",
+                paragraf30: "Panggolekan spiritual sing sejati iku panggolekan menyang njero awake, dudu menyang njaba. Kasunyatan lan pencerahan wis ana ing saben manungsa, mung kudu disadari lan diaktualisasikake. Kekuwatan fisik lan donya iku sementara, déné pencerahan spiritual iku langgeng.",
+                paragraf31: "Crita iki uga ngajarake bab pentinge ketekunan, keikhlasan, lan kawani ing golek kasunyatan. Bima sing wiwitane mung ngandelake kekuwatan fisik, pungkasane nemokake kekuwatan spiritual sing luwih gedhe.",
+
+                // Ajaran
+                ajaran1: "Bab Jati Diri:",
+                ajaran2: "Bab Panggolekan Kasunyatan:",
+                ajaran3: "Bab Sangkan Paraning Dumadi:",
+                ajaran4: "Bab Manunggaling Kawula Gusti:",
+
+                // Simbol
+                simbol1: "Gunung Candramuka:",
+                simbol2: "Panyileman menyang Dhasar Telaga:",
+                simbol3: "Naga Penjaga:",
+                simbol4: "Dewa Ruci:",
+                simbol5: "Mlebu ing Kuping:",
+
+                // Highlight Box
+                relevansiJudul: "Relevansi ing Urip Modern",
+                relevansiDeskripsi: "Kisah Dewa Ruci isih relevan nganti saiki. Ing donya sing serba materialistik, crita iki ngingetake kita supaya ora lali nindakake introspeksi lan panggolekan makna urip. Kaya Bima, saben manungsa sajatine lagi ing lelungan golek \"banyu urip\" - kabungahan lan makna sejati sing asring mung ana ing njero awake dhewe."
+            },
+
+            jv_script: {
+                // Navbar
+                beranda: "ꦧꦼꦫꦤ꧀ꦢ",
+                critaWayang: "ꦕꦿꦶꦠꦮꦪꦁ",
+                tokohWayang: "ꦠꦺꦴꦏꦺꦴꦲ꧀ꦮꦪꦁ",
+                mahabharata: "ꦩꦲꦧꦿꦠ",
+                ramayana: "ꦫꦩꦪꦤ",
+                dewaruci: "ꦢꦺꦮꦫꦸꦕꦶ",
+
+                // Header
+                judulHalaman: "ꦢꦺꦮꦫꦸꦕꦶ",
+                subJudul: "ꦏꦶꦱꦃꦭꦼꦭꦸꦁꦔꦤ꧀ꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀ꦨꦶꦩꦒꦺꦴꦭꦼꦏ꧀ꦧꦚꦸꦈꦫꦶꦥ꧀",
+
+                // Konten
+                judulCerita: "ꦢꦺꦮꦫꦸꦕꦶ",
+                deskripsiCerita: "ꦏꦶꦱꦃꦭꦼꦭꦸꦁꦔꦤ꧀ꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀ꦨꦶꦩꦒꦺꦴꦭꦼꦏ꧀ꦧꦚꦸꦈꦫꦶꦥ꧀",
+
+                // Subjudul
+                subJudul1: "ꦭꦠꦂꦩ꧀ꦧꦸꦫꦶꦭꦤ꧀ꦩꦶꦱꦶꦥꦁꦒꦺꦴꦭꦼꦏ꧀",
+                subJudul2: "ꦠꦸꦒꦱ꧀ꦱꦏꦉꦱꦶꦢꦸꦂꦟ",
+                subJudul3: "ꦭꦼꦭꦸꦁꦔꦤ꧀ꦩꦼꦚꦁꦒꦸꦤꦸꦁꦕꦤ꧀ꦢꦿꦩꦸꦏ",
+                subJudul4: "ꦥꦚꦶꦭꦼꦩꦤ꧀ꦩꦼꦚꦁꦢꦱꦂꦠꦼꦭꦒ",
+                subJudul5: "ꦥꦠꦼꦒꦺꦴꦭꦤ꧀ꦏꦫꦺꦴꦢꦺꦮꦫꦸꦕꦶ",
+                subJudul6: "ꦲꦗꦫꦤ꧀ꦲꦗꦫꦤ꧀ꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀ꦢꦺꦮꦫꦸꦕꦶ",
+                subJudul7: "ꦩꦏ꧀ꦤꦱꦶꦩ꧀ꦧꦺꦴꦭꦶꦱ꧀ꦲꦶꦁꦕꦿꦶꦠ",
+                subJudul8: "ꦏꦼꦩ꧀ꦧꦭꦶꦤꦺꦨꦶꦩꦏꦤ꧀ꦛꦶꦥꦼꦤ꧀ꦕꦼꦫꦃꦤ꧀",
+                subJudul9: "ꦮꦫꦶꦱꦤ꧀ꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀ꦏꦶꦱꦃꦢꦺꦮꦫꦸꦕꦶ",
+
+                // Paragraf
+                paragraf1: "ꦏꦶꦱꦃꦢꦺꦮꦫꦸꦕꦶꦩꦶꦤꦔꦏꦱꦭꦃꦱꦶꦗꦶꦕꦿꦶꦠꦮꦪꦁꦪꦁꦏꦼꦧꦏ꧀ꦩꦏ꧀ꦤꦦ꦳ꦶꦭꦺꦴꦱꦺꦴꦥꦶꦱ꧀ꦭꦤ꧀ꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀ꦕꦿꦶꦠꦲꦶꦁꦏꦶꦏꦢꦢꦺꦲꦤ꧀ꦱꦺꦠꦼꦭꦤ꧀ꦥꦼꦫꦁꦨꦫꦠꦪꦸꦢ꧀ꦢꦤꦭꦶꦏꦨꦶꦩꦔꦿꦱꦲꦺꦪꦺꦤ꧀ꦱꦤꦢꦾꦤ꧀ꦮꦶꦱ꧀ꦩꦼꦤꦁꦥꦼꦫꦁꦢꦲꦺꦤꦺꦲꦶꦱꦶꦃꦢꦸꦂꦤꦺꦔꦒꦺꦪꦸꦃꦥꦼꦤ꧀ꦕꦼꦫꦃꦤ꧀ꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀ꦪꦁꦱꦼꦗꦠꦶ",
+                paragraf2: "ꦨꦶꦩꦪꦺꦁꦢꦶꦑꦼꦤꦭ꧀ꦩꦶꦤꦔꦏꦑꦼꦱꦠꦿꦶꦪꦦꦤ꧀ꦢꦮꦑꦤ꧀ꦛꦶꦏꦑꦑꦸꦮꦠꦤ꧀ꦦ꦳ꦶꦱꦶꦏ꧀ꦭꦸꦮꦂꦧꦶꦱꦩꦔꦿꦱꦲꦢꦏꦼꦏꦺꦴꦱꦺꦴꦁꦔꦤ꧀ꦲꦶꦁꦗꦶꦮꦤꦺꦢꦲꦺꦤꦺꦩꦼꦔꦸꦤ꧀ꦗꦸꦁꦒꦸꦭꦶꦤꦺꦒꦸꦫꦸꦤꦺꦉꦱꦶꦢꦸꦂꦟꦏꦁꦒꦺꦴꦤꦢꦭꦸꦏ꧀ꦥꦶꦠꦸꦚ꧀ꦗꦸꦏ꧀ꦔꦒꦺꦪꦸꦃꦥꦼꦤ꧀ꦕꦼꦫꦃꦤ꧀ꦱꦼꦗꦠꦶꦤꦔꦤ꧀ꦢꦸꦂꦟꦪꦺꦁꦲꦶꦱꦶꦃꦤꦾꦶꦩ꧀ꦥꦼꦤ꧀ꦢꦼꦤ꧀ꦢꦩ꧀ꦲꦩꦂꦒꦥꦠꦶꦤꦺꦥꦸꦠꦿꦤꦺꦲꦱ꧀ꦮꦠꦩꦲꦶꦁꦥꦼꦫꦁꦨꦫꦠꦪꦸꦢ꧀ꦢꦩꦼꦤꦺꦲꦶꦤꦠꦸꦒꦱ꧀ꦪꦁꦩꦸꦱ꧀ꦠꦲꦶꦭ꧀",
+                paragraf3: "ꦢꦸꦂꦟꦚꦸꦂꦨꦶꦩꦒꦺꦴꦭꦼꦏ꧀ꦠꦶꦂꦠꦥꦼꦂꦮꦶꦠꦱꦫꦶꦪꦺꦁꦏꦺꦴꦤꦺꦤ꧀ꦧꦶꦱꦩꦼꦤꦺꦲꦏꦼꦤ꧀ꦥꦼꦤ꧀ꦕꦼꦫꦃꦤ꧀ꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀ꦧꦚꦸꦲꦶꦤꦶꦢꦸꦤꦸꦁꦲꦶꦁꦥꦸꦕꦸꦏ꧀ꦒꦸꦤꦸꦁꦕꦤ꧀ꦢꦿꦩꦸꦏꦥꦥꦤ꧀ꦪꦺꦁꦱꦁꦏꦼꦠ꧀ꦩꦼꦧꦲꦪꦤꦶꦭꦤ꧀ꦩꦸꦱ꧀ꦠꦲꦶꦭ꧀ꦢꦶꦒꦺꦪꦸꦃꦩꦤꦸꦁꦱꦧꦶꦱꦱꦗꦠꦺꦴꦱꦶꦥꦸꦤ꧀ꦗꦼꦧꦁꦏꦢꦸꦂꦟꦏꦁꦒꦺꦴꦤꦲꦶꦁꦏꦶꦂꦏꦏꦺꦨꦶꦩ",
+                paragraf4: "ꦢꦸꦂꦟꦔꦒꦩ꧀ꦧꦂꦏꦼꦭꦼꦭꦸꦁꦔꦤ꧀ꦪꦁꦱꦁꦏꦼꦠ꧀ꦩꦼꦧꦲꦪꦤꦶꦨꦶꦩꦏꦸꦢꦸꦭꦶꦮꦠꦲꦭꦱ꧀ꦧꦼꦭꦤ꧀ꦠꦂꦪꦁꦢꦢꦶꦥꦁꦒꦺꦴꦤꦤ꧀ꦩꦏ꧀ꦭꦸꦏ꧀ꦒꦻꦧ꧀ꦤꦾꦧꦿꦁꦱꦼꦒꦫꦪꦁꦏꦼꦧꦏ꧀ꦧꦢꦱꦶꦩꦼꦤ꧀ꦢꦏꦶꦠꦼꦧꦶꦁꦠꦼꦗꦭ꧀ꦭꦤ꧀ꦥꦸꦁꦏꦱꦤꦺꦚ꧀ꦕꦼꦭꦩ꧀ꦩꦼꦚꦁꦢꦱꦂꦠꦼꦭꦒꦲꦶꦁꦥꦸꦕꦸꦏ꧀ꦒꦸꦤꦸꦁꦏꦁꦒꦺꦴꦤꦚ꧀ꦗꦸꦥꦸꦏ꧀ꦧꦚꦸꦈꦫꦶꦥ꧀",
+                paragraf5: "ꦩꦼꦱ꧀ꦏꦶꦔꦼꦂꦠꦶꦧꦲꦪꦪꦁꦔꦤ꧀ꦕꦩ꧀ꦨꦶꦩꦤꦼꦩ꧀ꦥꦠꦸꦒꦱ꧀ꦲꦶꦁꦏꦶꦏꦤ꧀ꦛꦶꦲꦶꦏ꧀ꦭꦱ꧀ꦢꦲꦺꦤꦺꦧꦼꦂꦠꦼꦏꦢ꧀ꦏꦁꦒꦺꦴꦤꦩꦺꦩꦺꦴꦏꦏ꧀ꦤꦺꦩꦏ꧀ꦤꦱꦼꦗꦠꦶꦏꦼꦲꦶꦢꦸꦥꦤ꧀ꦧꦸꦏꦤ꧀ꦱꦼꦏꦢꦂꦧꦚꦸꦦ꦳ꦶꦱꦶꦏ꧀",
+                paragraf6: "ꦨꦶꦩꦩꦶꦮꦶꦠꦶꦭꦼꦭꦸꦁꦔꦤ꧀ꦏꦤ꧀ꦛꦶꦩ꧀ꦭꦏꦸꦩꦼꦚꦁꦒꦸꦤꦸꦁꦕꦤ꧀ꦢꦿꦩꦸꦏꦲꦶꦁꦭꦼꦭꦸꦁꦔꦤ꧀ꦢꦲꦺꦤꦺꦔꦢꦼꦥꦶꦩꦕꦩ꧀ꦩꦕꦩ꧀ꦫꦶꦤ꧀ꦠꦁꦔꦤ꧀ꦦ꦳ꦶꦱꦶꦏ꧀ꦭꦤ꧀ꦩꦼꦤ꧀ꦠꦭ꧀ꦏꦥꦶꦱꦤ꧀ꦢꦲꦺꦤꦺꦏꦸꦢꦸꦭꦶꦮꦠꦲꦭꦱ꧀ꦏꦽꦤ꧀ꦢꦮꦲꦮꦤꦪꦁꦒꦼꦭꦥ꧀ꦭꦤ꧀ꦩꦼꦢꦼꦤꦶꦢꦢꦶꦥꦁꦒꦺꦴꦤꦤ꧀ꦩꦏ꧀ꦭꦸꦏ꧀ꦩꦏ꧀ꦭꦸꦏ꧀ꦲꦭꦸꦱ꧀ꦭꦤ꧀ꦏꦺꦮꦤ꧀ꦒꦭꦏ꧀",
+                paragraf7: "ꦢꦶꦲꦭꦱ꧀ꦲꦶꦁꦏꦶꦨꦶꦩꦧꦼꦂꦠꦼꦩꦸꦏꦫꦺꦴꦫꦏꦱꦯꦺꦴꦧꦤꦪꦭꦁꦥꦼꦂꦭꦤ꧀ꦤꦔꦤ꧀ꦢꦸꦂꦤ꧀ꦏꦤ꧀ꦛꦶꦏꦼꦱꦏ꧀ꦠꦶꦪꦤꦺꦨꦶꦩꦏꦱꦶꦭ꧀ꦔꦭꦸꦮꦱꦶꦏꦧꦺꦃꦫꦶꦤ꧀ꦠꦁꦔꦤ꧀ꦪꦁꦭꦸꦮꦶꦃꦲꦔꦼꦭ꧀ꦪꦲꦶꦏꦸꦒꦺꦴꦢꦲꦤ꧀ꦒꦺꦴꦢꦲꦤ꧀ꦧꦠꦶꦤ꧀ꦪꦁꦩꦸꦤ꧀ꦕꦸꦭ꧀ꦫꦒꦸꦏꦼꦠꦏꦸꦠꦤ꧀ꦏꦼꦲꦶꦁꦶꦤ꧀ꦔꦸꦱꦸꦂ",
+                paragraf8: "ꦱꦺꦠꦼꦭꦤ꧀ꦧꦼꦂꦲꦫꦶꦲꦫꦶꦩ꧀ꦭꦏꦸꦨꦶꦩꦠꦶꦧꦲꦶꦁꦱꦶꦏꦶꦭ꧀ꦒꦸꦤꦸꦁꦕꦤ꧀ꦢꦿꦩꦸꦏꦒꦸꦤꦸꦁꦲꦶꦁꦏꦶꦗꦸꦭꦁꦢꦸꦮꦂꦏꦤ꧀ꦛꦶꦥꦸꦕꦸꦏ꧀ꦪꦁꦠꦼꦂꦱꦼꦩ꧀ꦧꦸꦤꦾꦶꦏ꧀ꦢꦶꦧꦭꦶꦏ꧀ꦩꦼꦒꦥꦺꦤ꧀ꦢꦏꦶꦪꦤꦺꦱꦁꦏꦼꦠ꧀ꦱꦸꦭꦶꦠ꧀ꦠꦼꦧꦶꦁꦠꦼꦧꦶꦁꦠꦼꦗꦭ꧀ꦭꦤ꧀ꦗꦸꦫꦁꦗꦼꦫꦺꦴꦔꦸꦗꦶꦏꦼꦠꦲꦤꦤ꧀ꦦ꦳ꦶꦱꦶꦏ꧀ꦭꦤ꧀ꦩꦼꦤ꧀ꦠꦭ꧀ꦨꦶꦩ",
+                paragraf9: "ꦱꦼꦱꦩ꧀ꦥꦤꦺꦲꦶꦁꦥꦸꦕꦸꦏ꧀ꦒꦸꦤꦸꦁꦨꦶꦩꦤꦼꦩꦺꦴꦏꦏ꧀ꦤꦺꦠꦼꦭꦒꦪꦁꦗꦼꦂꦤꦶꦃꦔꦤ꧀ꦠꦺꦥꦶꦧꦁꦏꦼꦠ꧀ꦗꦼꦫꦺꦴꦱꦺꦱꦸꦪꦲꦏꦤ꧀ꦠꦸꦠꦸꦏ꧀ꦢꦸꦂꦟ꧀ꦨꦶꦩꦏꦸꦢꦸꦚ꧀ꦕꦼꦭꦩ꧀ꦩꦼꦚꦁꦢꦱꦂꦠꦼꦭꦒꦏꦁꦒꦺꦴꦤꦚ꧀ꦗꦸꦥꦸꦏ꧀ꦧꦚꦸꦈꦫꦶꦥ꧀ꦤꦔꦤ꧀ꦪꦁꦲꦺꦴꦫꦢꦶꦔꦼꦂꦠꦶꦨꦶꦩꦲꦶꦁꦢꦱꦂꦠꦼꦭꦒꦲꦶꦁꦏꦶꦈꦫꦶꦥꦤꦒꦫꦏꦱꦯꦻꦁꦚꦒꦠꦼꦭꦒ",
+                paragraf10: "ꦨꦶꦩꦚ꧀ꦗꦸꦥꦸꦏ꧀ꦲꦩ꧀ꦧꦺꦒꦤꦺꦗꦼꦫꦺꦴꦭꦤ꧀ꦚ꧀ꦕꦼꦭꦩ꧀ꦱꦼꦩꦏꦶꦤ꧀ꦗꦼꦫꦺꦴꦢꦲꦺꦤꦺꦚ꧀ꦕꦼꦭꦩ꧀ꦠꦩ꧀ꦧꦃꦗꦼꦫꦺꦴꦥꦼꦠꦼꦁꦭꦤ꧀ꦲꦢꦼꦩ꧀ꦧꦚꦸꦤꦺꦠꦼꦏꦤꦤ꧀ꦧꦚꦸꦠꦩ꧀ꦧꦃꦏꦸꦮꦠ꧀ꦤꦔꦤ꧀ꦨꦶꦩꦠꦼꦂꦸꦱ꧀ꦏꦼꦢꦢꦢꦢꦁꦩꦺꦠꦸꦭ꧀ꦤꦒꦫꦏꦯꦻꦁꦪꦁꦚꦺꦫꦁꦢꦲꦺꦤꦺꦥꦼꦂꦠꦫꦸꦁꦔꦤ꧀ꦱꦼꦔꦶꦏ꧀ꦏꦢꦢꦺꦲꦤ꧀ꦲꦶꦁꦢꦱꦂꦠꦼꦭꦒ",
+                paragraf11: "ꦱꦺꦠꦼꦭꦤ꧀ꦏꦱꦶꦭ꧀ꦔꦭꦃꦏꦺꦤꦒꦭꦥꦼꦤ꧀ꦗꦒꦨꦶꦩꦠꦼꦂꦸꦱ꧀ꦚ꧀ꦕꦼꦭꦩ꧀ꦭꦸꦮꦶꦃꦗꦼꦫꦺꦴꦲꦤꦺꦃꦲꦤꦺꦪꦤꦺꦲꦶꦁꦏꦶꦢꦲꦺꦤꦺꦚ꧀ꦕꦼꦭꦩ꧀ꦠꦩ꧀ꦧꦃꦭꦸꦮꦶꦃꦗꦼꦫꦺꦴꦠꦩ꧀ꦧꦃꦥꦢꦁꦥꦼꦩꦤ꧀ꦢꦔꦤꦺꦢꦲꦺꦤꦺꦩ꧀ꦭꦼꦧꦸꦏꦩꦂꦧꦚꦸꦪꦁꦧꦼꦂꦕꦲꦪ",
+                paragraf12: "ꦢꦶꦏꦩꦂꦧꦼꦂꦕꦲꦪꦲꦶꦏꦸꦨꦶꦩꦧꦼꦂꦠꦼꦩꦸꦏꦫꦺꦴꦮꦸꦗꦸꦢ꧀ꦕꦶꦭꦶꦏ꧀ꦪꦁꦧꦼꦂꦕꦲꦪꦮꦸꦗꦸꦢ꧀ꦲꦶꦏꦸꦤꦼꦥꦁꦏꦏꦺꦲꦮꦏꦼꦩꦶꦤꦔꦏꦢꦺꦮꦫꦸꦕꦶꦪꦁꦔꦔꦸꦩꦤꦏꦺꦫꦲꦶꦢꦺꦮꦫꦸꦕꦶꦥꦼꦂꦱꦶꦱꦏꦪꦫꦲꦶꦨꦶꦩꦢꦲꦺꦴꦩꦸꦁꦲꦶꦁꦏꦸꦏꦫꦤ꧀ꦪꦁꦕꦶꦭꦶꦏ꧀ꦧꦔꦼꦠ꧀",
+                paragraf13: "ꦢꦺꦮꦫꦸꦕꦶꦤꦼꦫꦁꦏꦏꦺꦪꦺꦤ꧀ꦲꦮꦏꦼꦩꦶꦤꦔꦏꦥꦼꦂꦮꦏꦶꦭꦤ꧀ꦱꦏꦗꦶꦮꦨꦶꦩꦪꦁꦱꦼꦗꦠꦶꦲꦏꦸꦲꦶꦁꦏꦺꦏꦺꦴꦮꦼꦭꦤ꧀ꦏꦺꦴꦮꦼꦲꦶꦁꦏꦸꦏꦁꦗꦢꦺꦮꦫꦸꦕꦶꦪꦁꦢꦶꦒꦺꦴꦭꦼꦏꦶꦱꦗꦼꦁꦔꦲꦶꦁꦏꦶꦢꦸꦢꦸꦧꦚꦸꦈꦫꦶꦥ꧀ꦦ꦳ꦶꦱꦶꦏ꧀ꦤꦔꦤ꧀ꦥꦼꦤ꧀ꦕꦼꦫꦃꦤ꧀ꦧꦠꦶꦤ꧀",
+                paragraf14: "ꦢꦺꦮꦫꦸꦕꦶꦧꦚ꧀ꦗꦸꦂꦔꦒꦮꦨꦶꦩꦩ꧀ꦭꦼꦧꦸꦲꦶꦁꦏꦸꦥꦶꦁꦤꦺꦢꦲꦺꦴꦢꦶꦤ꧀ꦗꦼꦫꦺꦴꦨꦶꦩꦤ꧀ꦢꦼꦭꦼꦁꦲꦭꦩ꧀ꦱꦺꦩꦺꦱ꧀ꦠꦪꦁꦭꦸꦮꦱ꧀ꦏꦤ꧀ꦛꦶꦏꦧꦺꦃꦏꦲꦼꦤ꧀ꦢꦃꦤꦺꦢꦲꦺꦤꦺꦱꦢꦂꦪꦺꦤ꧀ꦏꦧꦼꦤꦂꦱꦼꦗꦠꦶꦲꦢꦲꦶꦁꦤ꧀ꦗꦼꦫꦺꦴꦲꦮꦤꦺꦢꦲꦺꦴ",
+                paragraf15: "ꦢꦺꦮꦫꦸꦕꦶꦔꦗꦂꦏꦼꦨꦶꦩꦧꦧ꧀ꦲꦏꦶꦏꦠꦸꦫꦶꦥ꧀ꦭꦤ꧀ꦩꦤꦸꦁꦱ",
+                paragraf16: "ꦧꦧ꧀ꦗꦠꦶꦢꦶꦫꦶꦩꦤꦸꦁꦱꦱꦼꦗꦠꦶꦲꦶꦁꦏꦸꦮꦶꦱ꧀ꦏꦼꦤꦭ꧀ꦲꦮꦤꦺꦢꦲꦺꦴꦲꦮꦏ꧀ꦩꦸꦪꦁꦱꦼꦗꦠꦶꦢꦸꦢꦸꦲꦮꦏ꧀ꦦ꦳ꦶꦱꦶꦏ꧀ꦲꦶꦁꦏꦶꦤꦔꦤ꧀ꦗꦶꦮꦪꦁꦭꦁꦒꦼꦁ",
+                paragraf17: "ꦧꦧ꧀ꦥꦁꦒꦺꦴꦭꦼꦏ꧀ꦏꦱꦸꦚꦠꦤ꧀ꦏꦱꦸꦚꦠꦤ꧀ꦲꦺꦴꦫꦲꦢꦲꦶꦁꦤ꧀ꦗꦧꦲꦮꦏ꧀ꦩꦸꦏꦧꦺꦃꦪꦁꦢꦶꦒꦺꦴꦭꦼꦏꦶꦏꦠꦼꦤ꧀ꦝꦿꦩꦤ꧀ꦏꦧꦸꦔꦲꦤ꧀ꦥꦼꦤ꧀ꦕꦼꦫꦃꦤ꧀ꦮꦶꦱꦲꦢꦲꦶꦁꦤ꧀ꦗꦼꦫꦺꦴꦲꦮꦏ꧀ꦩꦸꦢꦲꦺꦴ",
+                paragraf18: "ꦧꦧ꧀ꦱꦁꦏꦤ꧀ꦥꦫꦤꦶꦁꦢꦸꦩꦢꦶꦩꦤꦸꦁꦱꦏꦸꦢꦸꦔꦼꦂꦠꦶꦲꦱꦭꦸꦱꦸꦭꦺꦭꦤ꧀ꦠꦸꦗꦸꦮꦤ꧀ꦥꦸꦁꦏꦱꦱꦤꦺꦱꦏꦔꦶꦢꦶꦠꦼꦏꦏꦁꦒꦺꦴꦤꦥꦥꦸꦫꦶꦥ꧀ꦭꦤ꧀ꦧꦏꦭ꧀ꦩꦼꦔ꧀ꦏꦺꦴꦱꦺꦠꦼꦭꦤ꧀ꦩꦠꦶ",
+                paragraf19: "ꦧꦧ꧀ꦩꦤꦸꦁꦔꦭꦶꦁꦏꦮꦸꦭꦒꦸꦱ꧀ꦠꦶꦥꦸꦕꦸꦏ꧀ꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀ꦲꦶꦁꦏꦸꦤꦭꦶꦏꦮꦸꦭꦩꦤꦸꦁꦒꦭ꧀ꦏꦫꦺꦴꦒꦸꦱ꧀ꦠꦶꦤꦺꦤꦭꦶꦏꦏꦼꦱꦢꦫꦤ꧀ꦲꦶꦤ꧀ꦢꦶꦮꦶꦢꦸꦩꦼꦭꦧꦸꦂꦲꦶꦁꦏꦼꦱꦢꦫꦤ꧀ꦏꦺꦴꦱ꧀ꦩꦶꦱ꧀",
+                paragraf20: "ꦏꦶꦱꦃꦢꦺꦮꦫꦸꦕꦶꦏꦼꦧꦏ꧀ꦱꦶꦩ꧀ꦧꦺꦴꦭꦶꦱ꧀ꦩꦺꦦ꦳ꦶꦭꦺꦴꦱꦺꦴꦥꦶꦱ꧀ꦪꦁꦗꦼꦫꦺꦴ",
+                paragraf21: "ꦒꦸꦤꦸꦁꦕꦤ꧀ꦢꦿꦩꦸꦏꦩꦼꦭꦩ꧀ꦧꦁꦏꦼꦭꦼꦭꦸꦁꦔꦤ꧀ꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀ꦪꦁꦢꦸꦮꦂꦭꦤ꧀ꦏꦼꦧꦏ꧀ꦠꦤ꧀ꦠꦁꦔꦤ꧀",
+                paragraf22: "ꦥꦚꦶꦭꦼꦩꦤ꧀ꦩꦼꦚꦁꦢꦱꦂꦠꦼꦭꦒꦱꦶꦩ꧀ꦧꦺꦴꦭ꧀ꦱꦏꦥꦚꦶꦭꦼꦩꦤ꧀ꦩꦼꦚꦁꦤ꧀ꦗꦼꦫꦺꦴꦲꦮꦤꦺꦢꦲꦺꦴꦤ꧀ꦠꦼꦩ꧀ꦧꦸꦱ꧀ꦏꦢꦭꦩꦤ꧀ꦗꦶꦮ",
+                paragraf23: "ꦤꦒꦥꦼꦤ꧀ꦗꦒꦩꦼꦭꦩ꧀ꦧꦁꦏꦼꦲꦮꦤꦥ꧀ꦱꦸꦭꦤ꧀ꦲꦒꦺꦴꦪꦁꦏꦸꦢꦸꦢꦶꦏꦭꦃꦏꦺꦱꦩꦼꦭꦤ꧀ꦔꦒꦺꦪꦸꦃꦥꦼꦤ꧀ꦕꦼꦫꦃꦤ꧀",
+                paragraf24: "ꦢꦺꦮꦫꦸꦕꦶꦥꦼꦂꦮꦏꦶꦭꦤ꧀ꦱꦏꦱꦸꦮꦫꦲꦠꦶꦤꦸꦂꦤꦶꦭꦤ꧀ꦗꦶꦮꦪꦁꦱꦼꦗꦠꦶ",
+                paragraf25: "ꦩ꧀ꦭꦼꦧꦸꦲꦶꦁꦏꦸꦥꦶꦁꦱꦶꦩ꧀ꦧꦺꦴꦭ꧀ꦱꦏꦩꦼꦤ꧀ꦢꦼꦁꦔꦂꦏꦤ꧀ꦱꦸꦮꦫꦲꦠꦶꦭꦤ꧀ꦏꦧꦼꦤꦂꦱꦤ꧀ꦧꦠꦶꦤ꧀",
+                paragraf26: "ꦱꦺꦠꦼꦭꦤ꧀ꦩꦼꦤꦼꦫꦶꦩꦲꦗꦫꦤ꧀ꦱꦏꦢꦺꦮꦫꦸꦕꦶꦨꦶꦩꦏꦼꦩ꧀ꦧꦭꦶꦏꦉꦥꦼꦂꦩꦸꦏꦢꦤ꧀ꦢꦲꦺꦤꦺꦲꦺꦴꦫꦔꦒꦮꦧꦚꦸꦈꦫꦶꦥ꧀ꦦ꦳ꦶꦱꦶꦏ꧀ꦤꦔꦤ꧀ꦔꦒꦮꦥꦼꦤ꧀ꦕꦼꦫꦃꦤ꧀ꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀ꦪꦁꦭꦧꦶꦃꦭꦂꦁꦒꦼꦂꦒꦤꦺꦮꦗꦃꦤꦺꦏꦠꦺꦴꦤ꧀ꦱꦸꦩꦿꦶꦁꦲꦃꦭꦤ꧀ꦱꦶꦏꦥꦺꦴꦮꦃꦧꦼꦂꦧꦃꦮꦶꦗꦱꦤ",
+                paragraf27: "ꦱꦺꦱꦩ꧀ꦥꦤꦺꦲꦶꦁꦥꦢꦼꦥꦺꦴꦏꦤ꧀ꦢꦸꦂꦟ꧀ꦨꦶꦩꦩꦼꦭꦥꦺꦴꦂꦏꦏꦺꦪꦺꦤ꧀ꦢꦲꦺꦤꦺꦲꦺꦴꦫꦤꦼꦩꦺꦴꦏꦏ꧀ꦤꦺꦧꦚꦸꦈꦫꦶꦥ꧀ꦏꦪꦱꦶꦁꦢꦶꦗꦭꦸꦏ꧀ꦤꦔꦤ꧀ꦢꦲꦺꦤꦺꦤꦼꦫꦁꦏꦺꦪꦺꦤ꧀ꦢꦲꦺꦤꦺꦮꦶꦱ꧀ꦤꦼꦩꦺꦴꦏꦏ꧀ꦤꦺꦪꦁꦭꦸꦮꦶꦃꦭꦂꦁꦒꦼꦂꦥꦔꦼꦂꦠꦼꦤ꧀ꦧꦧ꧀ꦗꦠꦶꦢꦶꦫꦶꦭꦤ꧀ꦲꦏꦶꦏꦠ꧀ꦈꦫꦶꦥ꧀",
+                paragraf28: "ꦢꦸꦂꦟꦠꦼꦂꦏꦕꦠ꧀ꦤ꧀ꦢꦼꦭꦼꦁꦲꦺꦴꦮꦃꦲꦺꦴꦮꦃꦲꦤ꧀ꦲꦶꦁꦨꦶꦩꦩꦼꦱ꧀ꦏꦶꦮꦶꦮꦶꦠꦤꦺꦢꦸꦮꦺꦤꦶꦠꦲꦭꦤꦶꦪꦠ꧀ꦠꦼꦂꦤꦪꦠꦸꦒꦱ꧀ꦪꦁꦢꦶꦮꦼꦤꦺꦲꦏꦺꦩꦭꦃꦤꦔꦒꦮꦨꦶꦩꦩꦼꦚꦁꦥꦼꦤ꧀ꦕꦼꦫꦃꦤ꧀ꦱꦼꦗꦠꦶꦨꦶꦩꦧꦚ꧀ꦗꦸꦂꦔꦥꦸꦫꦢꦸꦂꦟꦭꦤ꧀ꦩꦠꦸꦂꦤꦸꦮꦸꦤ꧀ꦲꦩꦂꦒꦱꦏꦠꦸꦒꦱ꧀ꦲꦶꦏꦸꦢꦲꦺꦤꦺꦩꦺꦩꦺꦴꦏꦏ꧀ꦤꦺꦩꦏ꧀ꦤꦈꦫꦶꦥ꧀ꦪꦁꦱꦼꦱꦸꦁꦒꦸꦃ",
+                paragraf29: "ꦏꦶꦱꦃꦢꦺꦮꦫꦸꦕꦶꦢꦢꦶꦱꦭꦃꦱꦶꦗꦶꦕꦿꦶꦠꦮꦪꦁꦪꦁꦥꦭꦶꦁꦗꦼꦫꦺꦴꦩꦏ꧀ꦤꦺꦕꦿꦶꦠꦲꦶꦁꦏꦶꦔꦗꦂꦏꦺꦪꦺꦤ꧀",
+                paragraf30: "ꦥꦁꦒꦺꦴꦭꦼꦏ꧀ꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀ꦪꦁꦱꦼꦗꦠꦶꦲꦶꦁꦏꦸꦥꦁꦒꦺꦴꦭꦼꦏ꧀ꦩꦼꦚꦁꦤ꧀ꦗꦼꦫꦺꦴꦲꦮꦤꦺꦢꦸꦢꦸꦩꦼꦚꦁꦤ꧀ꦗꦧꦏꦧꦼꦤꦂꦱꦤ꧀ꦭꦤ꧀ꦥꦼꦤ꧀ꦕꦼꦫꦃꦤ꧀ꦮꦶꦱꦲꦢꦲꦶꦁꦱꦧꦼꦤ꧀ꦩꦤꦸꦁꦱꦩꦸꦁꦏꦸꦢꦸꦢꦶꦱꦢꦂꦶꦭꦤ꧀ꦢꦶꦲꦏ꧀ꦠꦸꦭꦶꦱꦱꦶꦏꦏꦾꦑ꧀ꦑꦸꦮꦠꦤ꧀ꦦ꦳ꦶꦱꦶꦏ꧀ꦭꦤ꧀ꦢꦺꦴꦤꦾꦮꦶꦲꦶꦁꦏꦼꦱꦩꦼꦤ꧀ꦠꦫꦶꦱꦼꦢꦔꦤ꧀ꦥꦼꦤ꧀ꦕꦼꦫꦃꦤ꧀ꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀ꦲꦶꦁꦏꦼꦭꦁꦒꦼꦁ",
+                paragraf31: "ꦕꦿꦶꦠꦲꦶꦁꦏꦶꦲꦸꦒꦔꦗꦂꦏꦺꦧꦧ꧀ꦥꦼꦤ꧀ꦠꦶꦁꦤꦺꦏꦼꦠꦼꦏꦸꦤꦤ꧀ꦏꦼꦲꦶꦏ꧀ꦭꦱ꧀ꦭꦤ꧀ꦏꦮꦤꦶꦲꦶꦁꦒꦺꦴꦭꦼꦏ꧀ꦏꦱꦸꦚꦠꦤ꧀ꦨꦶꦩꦪꦺꦁꦮꦶꦮꦶꦠꦤꦺꦩꦸꦁꦔꦤ꧀ꦢꦼꦭꦏꦼꦏꦑꦑꦸꦮꦠꦤ꧀ꦦ꦳ꦶꦱꦶꦏ꧀ꦥꦸꦁꦏꦱꦱꦤꦺꦤꦼꦩꦺꦴꦏꦏ꧀ꦤꦺꦏꦑꦑꦸꦮꦠꦤ꧀ꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀ꦪꦁꦭꦧꦶꦃꦒꦼꦝꦺ",
+
+                // Ajaran
+                ajaran1: "ꦧꦧ꧀ꦗꦠꦶꦢꦶꦫꦶ:",
+                ajaran2: "ꦧꦧ꧀ꦥꦁꦒꦺꦴꦭꦼꦏ꧀ꦏꦱꦸꦚꦠꦤ꧀:",
+                ajaran3: "ꦧꦧ꧀ꦱꦁꦏꦤ꧀ꦥꦫꦤꦶꦁꦢꦸꦩꦢꦶ:",
+                ajaran4: "ꦧꦧ꧀ꦩꦤꦸꦁꦔꦭꦶꦁꦏꦮꦸꦭꦒꦸꦱ꧀ꦠꦶ:",
+
+                // Simbol
+                simbol1: "ꦒꦸꦤꦸꦁꦕꦤ꧀ꦢꦿꦩꦸꦏ:",
+                simbol2: "ꦥꦚꦶꦭꦼꦩꦤ꧀ꦩꦼꦚꦁꦢꦱꦂꦠꦼꦭꦒ:",
+                simbol3: "ꦤꦒꦥꦼꦤ꧀ꦗꦒ:",
+                simbol4: "ꦢꦺꦮꦫꦸꦕꦶ:",
+                simbol5: "ꦩ꧀ꦭꦼꦧꦸꦲꦶꦁꦏꦸꦥꦶꦁ:",
+
+                // Highlight Box
+                relevansiJudul: "ꦫꦺꦊꦮꦤ꧀ꦱꦶꦲꦶꦁꦈꦫꦶꦥꦩꦺꦴꦢꦼꦂꦤ꧀",
+                relevansiDeskripsi: "ꦏꦶꦱꦃꦢꦺꦮꦫꦸꦕꦶꦠꦼꦠꦼꦥ꧀ꦫꦺꦊꦮꦤ꧀ꦔꦤ꧀ꦠꦶꦱꦲꦶꦁꦏꦶꦱꦃꦲꦶꦤꦶꦩꦶꦁꦏꦼꦠ꧀ꦏꦶꦠꦲꦸꦠꦢꦏ꧀ꦭꦸꦥꦲꦶꦁꦠꦿꦺꦴꦱ꧀ꦥꦼꦏ꧀ꦱꦶꦭꦤ꧀ꦥꦔ꧀ꦒꦺꦴꦭꦼꦏ꧀ꦩꦏ꧀ꦤꦈꦫꦶꦥ꧀ꦏꦪꦨꦶꦩꦱꦧꦼꦤ꧀ꦩꦤꦸꦁꦱꦲꦸꦗꦸꦒꦲꦶꦁꦭꦼꦭꦸꦁꦔꦤ꧀ꦒꦺꦴꦭꦼꦏ꧀ꦧꦚꦸꦈꦫꦶꦥ꧀ꦏꦧꦸꦁꦲꦤ꧀ꦭꦤ꧀ꦩꦏ꧀ꦤꦱꦼꦗꦠꦶꦪꦺꦁꦱꦼꦫꦶꦁꦏꦔꦺꦴꦤꦲꦢꦲꦶꦁꦤ꧀ꦗꦼꦫꦺꦴꦲꦮꦤꦺꦢꦲꦺꦴ"
+            }
+        };
+        // Text untuk language switcher button
+        const languageLabels = {
+            id: "Bahasa Indonesia",
+            jv: "Basa Jawa",
+            jv_script: "ꦲꦏ꧀ꦱꦫꦗꦮ"
+        };
+
+        // DOM Elements
+        const burgerMenu = document.getElementById('burgerMenu');
+        const navbar = document.getElementById('navbar');
+        const critaBtn = document.getElementById('critaWayangBtn');
+        const critaDropdown = document.getElementById('critaWayangDropdown');
+        const tokohBtn = document.getElementById('tokohWayangBtn');
+        const tokohDropdown = document.getElementById('tokohWayangDropdown');
+        const languageBtn = document.getElementById('languageBtn');
+        const languageDropdown = document.getElementById('languageDropdown');
+        const currentLanguage = document.getElementById('currentLanguage');
+
+        // Fungsi untuk mengganti bahasa
+        function changeLanguage(lang) {
+            const elements = document.querySelectorAll('[data-i18n]');
+
+            // Reset font mode dulu
+            document.body.classList.remove('aksara-jawa-mode');
+
+            elements.forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                let text = translations[lang]?.[key];
+
+                if (text) {
+                    element.textContent = text;
+                }
+            });
+
+            // Update language button text
+            currentLanguage.textContent = languageLabels[lang];
+
+            // Apply font khusus untuk aksara Jawa
+            if (lang === 'jv_script') {
+                document.body.classList.add('aksara-jawa-mode');
+            }
+
+            // Simpan preferensi bahasa
+            localStorage.setItem('preferredLanguage', lang);
+
+            // Tutup dropdown
+            languageDropdown.classList.remove('active');
+            languageBtn.querySelector('.language-arrow').classList.remove('open');
+        }
+
+        // Event Listeners untuk navigation
+        burgerMenu.addEventListener('click', function () {
+            this.classList.toggle('active');
+            navbar.classList.toggle('active');
+        });
+
+        critaBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            critaDropdown.classList.toggle('active');
+            this.querySelector('.dropdown-arrow').classList.toggle('open');
+            tokohDropdown.classList.remove('active');
+            if (tokohBtn.querySelector('.dropdown-arrow')) {
+                tokohBtn.querySelector('.dropdown-arrow').classList.remove('open');
+            }
+        });
+
+        tokohBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            tokohDropdown.classList.toggle('active');
+            this.querySelector('.dropdown-arrow').classList.toggle('open');
+            critaDropdown.classList.remove('active');
+            if (critaBtn.querySelector('.dropdown-arrow')) {
+                critaBtn.querySelector('.dropdown-arrow').classList.remove('open');
+            }
+        });
+
+        // Event Listeners untuk language switcher
+        languageBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            languageDropdown.classList.toggle('active');
+            this.querySelector('.language-arrow').classList.toggle('open');
+        });
+
+        document.querySelectorAll('.language-option').forEach(option => {
+            option.addEventListener('click', function () {
+                const lang = this.getAttribute('data-lang');
+                changeLanguage(lang);
+            });
+        });
+
+        // Tutup dropdown ketika klik di luar
+        document.addEventListener('click', function (e) {
+            if (!e.target.closest('#containernavbar')) {
+                critaDropdown.classList.remove('active');
+                tokohDropdown.classList.remove('active');
+                languageDropdown.classList.remove('active');
+
+                if (critaBtn.querySelector('.dropdown-arrow')) {
+                    critaBtn.querySelector('.dropdown-arrow').classList.remove('open');
+                }
+                if (tokohBtn.querySelector('.dropdown-arrow')) {
+                    tokohBtn.querySelector('.dropdown-arrow').classList.remove('open');
+                }
+                if (languageBtn.querySelector('.language-arrow')) {
+                    languageBtn.querySelector('.language-arrow').classList.remove('open');
+                }
+                navbar.classList.remove('active');
+                burgerMenu.classList.remove('active');
+            }
+        });
+
+        // Load bahasa yang disimpan
+        const savedLang = localStorage.getItem('preferredLanguage') || 'id';
+        changeLanguage(savedLang);
+    </script>
+</body>
+
+</html>

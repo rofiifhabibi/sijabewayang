@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tokoh Mahabharata - Wayang</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Chonburi&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @font-face {
+            font-family: 'nyk Ngayogyan Jejeg';
+            src: local('nyk Ngayogyan Jejeg'),
+                url('../fontnyk/nyk Ngayogyan Jejeg.ttf') format('truetype');
+        }
+
+        body {
+            font-family: sans-serif;
+            background-color: rgb(22, 22, 22);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Styles untuk Language Switcher */
+        .language-switcher {
+            position: relative;
+            display: inline-block;
+        }
+
+        .language-btn {
+            background: transparent;
+            border: 1px solid orange;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.3125rem;
+            cursor: pointer;
+            font-family: "Chonburi", serif;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .language-btn:hover {
+            background-color: rgba(255, 165, 0, 0.1);
+        }
+
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: rgb(35, 35, 35);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.3125rem;
+            margin-top: 0.5rem;
+            min-width: 180px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            z-index: 1001;
+            display: none;
+        }
+
+        .language-dropdown.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .language-option {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: white;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.1s ease-in;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+        }
+
+        .language-option[data-lang="id"] {
+            font-family: "Chonburi", serif;
+        }
+
+        .language-option[data-lang="jv"] {
+            font-family: "Chonburi", serif;
+        }
+
+        .language-option[data-lang="jv_script"] {
+            font-family: "nyk Ngayogyan Jejeg", sans-serif;
+        }
+
+        .language-option:last-child {
+            border-bottom: none;
+        }
+
+        .language-option:hover {
+            background-color: rgb(45, 45, 45);
+            color: orange;
+            padding-left: 1.25rem;
+        }
+
+        .language-arrow {
+            font-size: 0.75rem;
+            transition: transform 0.2s ease;
+        }
+
+        .language-arrow.open {
+            transform: rotate(180deg);
+        }
+
+        #containernavbar {
+            display: flex;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+            flex-direction: row;
+            align-items: center;
+            width: 100%;
+            height: 5rem;
+            background-color: rgba(22, 22, 22, 0.95);
+            backdrop-filter: blur(10px);
+            justify-content: space-between;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        #logo {
+            font-size: 1.875rem;
+            font-family: "nyk Ngayogyan Jejeg", sans-serif;
+            color: #FFFFFF;
+            cursor: pointer;
+        }
+
+        .burger-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 0.35rem;
+        }
+
+        .burger-menu span {
+            width: 1.75rem;
+            height: 0.2rem;
+            background-color: #ee792b;
+            border-radius: 0.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .burger-menu.active span:nth-child(1) {
+            transform: rotate(45deg) translate(0.5rem, 0.5rem);
+        }
+
+        .burger-menu.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .burger-menu.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(0.5rem, -0.5rem);
+        }
+
+        #navbar {
+            width: 40%;
+            height: 2.5rem;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        .btnavbar {
+            font-family: "Chonburi", serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        #btactivenavbar {
+            padding-left: 0.625rem;
+            padding-right: 0.625rem;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            text-decoration: none;
+            color: rgb(0, 0, 0);
+            background-color: orange;
+            border-radius: 0.3125rem;
+            font-size: 0.9375rem;
+        }
+
+        .btinactivenavbar {
+            padding-left: 0.625rem;
+            padding-right: 0.625rem;
+            font-size: 0.9375rem;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+            border-radius: 0.3125rem;
+            transition: 0.1s ease-in;
+        }
+
+        .btinactivenavbar:hover {
+            background-color: rgb(35, 35, 35);
+            color: orange;
+            transition: 0.1s ease-in;
+        }
+
+        .dropdown-arrow {
+            font-size: 0.75rem;
+            transition: transform 0.2s ease;
+        }
+
+        .dropdown-arrow.open {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: rgb(35, 35, 35);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.3125rem;
+            margin-top: 0.5rem;
+            min-width: 180px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .dropdown-menu.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: white;
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: all 0.1s ease-in;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item.active {
+            background-color: orange;
+            color: black;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgb(45, 45, 45);
+            color: orange;
+            padding-left: 1.25rem;
+        }
+
+        #containertokoh {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 6rem 2rem 2rem;
+            min-height: 100vh;
+        }
+
+        .tokoh-header {
+            background: rgba(35, 35, 35, 0.8);
+            border-radius: 0;
+            padding: 3rem 2rem 2rem;
+            color: white;
+            position: relative;
+            border-bottom: 2px solid orange;
+            margin-bottom: 2rem;
+        }
+
+        .tokoh-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-family: "EB Garamond", serif;
+            font-weight: 700;
+            background-image: linear-gradient(to right, #CC9900 0%, #FFCC66 50%, #FFD700 85%, #FFEB3B 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tokoh-header p {
+            font-size: 1.1rem;
+            color: rgb(180, 180, 180);
+            font-family: "EB Garamond", serif;
+        }
+
+        .tokoh-category {
+            margin-bottom: 3rem;
+        }
+
+        .category-title {
+            font-family: "Chonburi", serif;
+            font-size: 1.8rem;
+            color: orange;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid rgba(255, 165, 0, 0.3);
+        }
+
+        .tokoh-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .tokoh-card {
+            background: rgba(35, 35, 35, 0.8);
+            border-radius: 0.5rem;
+            padding: 2rem;
+            border-left: 4px solid orange;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .tokoh-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .tokoh-name {
+            font-family: "EB Garamond", serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: orange;
+            margin-bottom: 1rem;
+        }
+
+        .tokoh-role {
+            font-family: "Chonburi", serif;
+            font-size: 1rem;
+            color: #FFD700;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .tokoh-description {
+            color: rgb(180, 180, 180);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .tokoh-attributes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .attribute {
+            background: rgba(255, 165, 0, 0.1);
+            color: orange;
+            padding: 0.3rem 0.8rem;
+            border-radius: 1rem;
+            font-size: 0.85rem;
+            font-family: "EB Garamond", serif;
+        }
+
+        .highlight-box {
+            background: rgba(255, 165, 0, 0.1);
+            border-left: 3px solid orange;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0.3125rem;
+        }
+
+        .highlight-box h4 {
+            color: orange;
+            margin-bottom: 0.8rem;
+            font-family: "EB Garamond", serif;
+            font-size: 1.2rem;
+        }
+
+        .highlight-box p {
+            color: rgb(200, 200, 200);
+            margin-bottom: 0;
+        }
+
+        /* Mode Aksara Jawa */
+        .aksara-jawa-mode .category-title,
+        .aksara-jawa-mode .tokoh-name,
+        .aksara-jawa-mode .tokoh-role,
+        .aksara-jawa-mode .attribute,
+        .aksara-jawa-mode .highlight-box h4,
+        .aksara-jawa-mode .btnavbar,
+        .aksara-jawa-mode #btactivenavbar,
+        .aksara-jawa-mode .btinactivenavbar,
+        .aksara-jawa-mode .dropdown-item,
+        .aksara-jawa-mode .language-btn,
+        .aksara-jawa-mode #logo {
+            font-family: 'nyk Ngayogyan Jejeg', sans-serif !important;
+        }
+
+        /* Untuk teks panjang biar mudah dibaca */
+        .aksara-jawa-mode .tokoh-description,
+        .aksara-jawa-mode .highlight-box p,
+        .aksara-jawa-mode .tokoh-header p {
+            font-family: 'nyk Ngayogyan Jejeg', sans-serif !important;
+            line-height: 2;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            #containernavbar {
+                padding-left: 1rem;
+                padding-right: 1rem;
+                height: 4rem;
+                flex-wrap: wrap;
+            }
+
+            #logo {
+                font-size: 1.5rem;
+            }
+
+            .burger-menu {
+                display: flex;
+                order: 3;
+            }
+
+            .nav-left {
+                order: 1;
+                flex: 1;
+            }
+
+            .nav-right {
+                order: 2;
+                width: auto;
+                flex-direction: row;
+                gap: 0.5rem;
+            }
+
+            .language-switcher {
+                width: auto;
+                margin-top: 0;
+            }
+
+            .language-btn {
+                width: auto;
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+                min-width: 120px;
+            }
+
+            .language-dropdown {
+                position: absolute;
+                top: 100%;
+                right: 0;
+                width: 180px;
+                margin-top: 0.5rem;
+                transform: none;
+                max-height: none;
+                background-color: rgb(35, 35, 35);
+            }
+
+            .language-dropdown.active {
+                max-height: none;
+            }
+
+            #navbar {
+                position: fixed;
+                top: 4rem;
+                right: -100%;
+                width: 100%;
+                height: calc(100vh - 4rem);
+                background-color: rgba(22, 22, 22, 0.98);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: stretch;
+                padding: 1.5rem 1rem;
+                gap: 0.75rem;
+                transition: right 0.3s ease;
+                overflow-y: auto;
+                order: 4;
+            }
+
+            #navbar.active {
+                right: 0;
+            }
+
+            .btnavbar {
+                width: 100%;
+                height: auto;
+                display: flex;
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            #btactivenavbar,
+            .btinactivenavbar {
+                width: 100%;
+                height: 2.5rem;
+                font-size: 1rem;
+            }
+
+            .dropdown-menu {
+                position: static;
+                margin-top: 0;
+                width: 100%;
+                margin-left: 0;
+                transform: none;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease, opacity 0.2s ease;
+                background-color: transparent;
+            }
+
+            .dropdown-menu.active {
+                display: block;
+                max-height: 300px;
+                margin-top: 0.5rem;
+            }
+
+            .dropdown-item {
+                padding: 0.75rem 1rem;
+                font-size: 0.95rem;
+            }
+
+            #containertokoh {
+                padding: 5rem 1rem 1rem;
+            }
+
+            .tokoh-header {
+                padding: 2rem 1rem;
+            }
+
+            .tokoh-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .tokoh-header p {
+                font-size: 1rem;
+            }
+
+            .tokoh-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .tokoh-card {
+                padding: 1.5rem;
+            }
+
+            .category-title {
+                font-size: 1.5rem;
+            }
+
+            .tokoh-name {
+                font-size: 1.3rem;
+            }
+        }
+
+        /* Media Query khusus untuk perangkat dengan lebar sangat kecil (Android portrait) */
+        @media (max-width: 480px) {
+            #containertokoh {
+                padding: 5rem 0.75rem 1rem;
+            }
+
+            .tokoh-card {
+                padding: 1.25rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="containernavbar">
+        <div class="nav-left">
+            <div id="logo">ꦱꦶꦗꦧꦺ</div>
+        </div>
+
+        <div class="nav-right">
+            <!-- Language Switcher -->
+            <div class="language-switcher">
+                <button class="language-btn" id="languageBtn">
+                    <span id="currentLanguage">Bahasa Indonesia</span>
+                    <span class="language-arrow">▼</span>
+                </button>
+                <div class="language-dropdown" id="languageDropdown">
+                    <button class="language-option" data-lang="id">Bahasa Indonesia</button>
+                    <button class="language-option" data-lang="jv">Basa Jawa</button>
+                    <button class="language-option" data-lang="jv_script">ꦲꦏ꧀ꦱꦫꦗꦮ</button>
+                </div>
+            </div>
+
+            <div class="burger-menu" id="burgerMenu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+
+        <div id="navbar">
+            <div class="btnavbar">
+                <a href="/sijabewayang/index.html" class="btinactivenavbar" data-i18n="beranda">Beranda</a>
+            </div>
+            <div class="btnavbar" id="critaWayangNav">
+                <a href="#" class="btinactivenavbar" id="critaWayangBtn">
+                    <span data-i18n="critaWayang">Crita Wayang</span>
+                    <span class="dropdown-arrow">▼</span>
+                </a>
+                <div class="dropdown-menu" id="critaWayangDropdown">
+                    <a href="../critawayang/mahabharata.html" class="dropdown-item"
+                        data-i18n="mahabharata">Mahabharata</a>
+                    <a href="../critawayang/ramayana.html" class="dropdown-item" data-i18n="ramayana">Ramayana</a>
+                    <a href="../critawayang/dewaruci.html" class="dropdown-item" data-i18n="dewaruci">Dewa Ruci</a>
+                </div>
+            </div>
+            <div class="btnavbar" id="tokohWayangNav">
+                <a href="#" class="btinactivenavbar" id="tokohWayangBtn">
+                    <span data-i18n="tokohWayang">Tokoh Wayang</span>
+                    <span class="dropdown-arrow">▼</span>
+                </a>
+                <div class="dropdown-menu" id="tokohWayangDropdown">
+                    <a href="mahabharata.html" class="dropdown-item active" data-i18n="mahabharata">Mahabharata</a>
+                    <a href="ramayana.html" class="dropdown-item" data-i18n="ramayana">Ramayana</a>
+                    <a href="dewaruci.html" class="dropdown-item" data-i18n="dewaruci">Dewa Ruci</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="containertokoh">
+        <div class="tokoh-header">
+            <h1 data-i18n="judulHalaman">Tokoh Mahabharata</h1>
+            <p data-i18n="subJudul">Mengenal para kesatria, dewa, dan tokoh penting dalam epos Mahabharata</p>
+        </div>
+
+        <!-- Keluarga Pandawa -->
+        <div class="tokoh-category">
+            <h2 class="category-title" data-i18n="keluargaPandawa">Keluarga Pandawa</h2>
+            <div class="tokoh-grid">
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="yudhistiraNama">Yudhistira</h3>
+                    <div class="tokoh-role" data-i18n="yudhistiraPeran">Raja Kebenaran</div>
+                    <p class="tokoh-description" data-i18n="yudhistiraDeskripsi">
+                        Putra tertua Pandu dan Kunti, dikenal sebagai Dharmaraja (Raja Dharma).
+                        Selalu berbicara benar dan menjunjung tinggi keadilan. Memimpin Pandawa dengan kebijaksanaan dan
+                        menjadi raja Hastinapura setelah perang Bharatayuddha.
+                    </p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrKebenaran">Kebenaran</span>
+                        <span class="attribute" data-i18n="attrKebijaksanaan">Kebijaksanaan</span>
+                        <span class="attribute" data-i18n="attrKeadilan">Keadilan</span>
+                    </div>
+                </div>
+
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="bimaNama">Bima</h3>
+                    <div class="tokoh-role" data-i18n="bimaPeran">Kesatria Perkasa</div>
+                    <p class="tokoh-description" data-i18n="bimaDeskripsi">
+                        Putra kedua Pandu dan Kunti, memiliki kekuatan fisik luar biasa.
+                        Dikenal dengan julukan Bayusutha. Senjata andalannya adalah gada. Dalam perang Bharatayuddha,
+                        berhasil membunuh Dursasana dan Duryodana.
+                    </p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrKekuatan">Kekuatan</span>
+                        <span class="attribute" data-i18n="attrKeberanian">Keberanian</span>
+                        <span class="attribute" data-i18n="attrKesetiaan">Kesetiaan</span>
+                    </div>
+                </div>
+
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="arjunaNama">Arjuna</h3>
+                    <div class="tokoh-role" data-i18n="arjunaPeran">Pemanah Ulung</div>
+                    <p class="tokoh-description" data-i18n="arjunaDeskripsi">
+                        Putra ketiga Pandu dan Kunti, pemanah terbaik di dunia. Diberi senjata
+                        sakti Pasopati oleh Dewa Siwa. Menjadi kusir kereta Krishna dalam perang Bharatayuddha dan
+                        menerima ajaran Bhagavad Gita.
+                    </p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrKeahlianMemanah">Keahlian Memanah</span>
+                        <span class="attribute" data-i18n="attrKecerdasan">Kecerdasan</span>
+                        <span class="attribute" data-i18n="attrSpiritualitas">Spiritualitas</span>
+                    </div>
+                </div>
+
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="nakulaNama">Nakula</h3>
+                    <div class="tokoh-role" data-i18n="nakulaPeran">Ahli Pedang dan Pengobatan</div>
+                    <p class="tokoh-description" data-i18n="nakulaDeskripsi">
+                        Putra Pandu dan Madri, kembaran Sadewa. Memiliki ketampanan luar biasa
+                        dan keahlian dalam ilmu pedang. Juga menguasai ilmu pengobatan dan perawatan kuda.
+                    </p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrKetampanan">Ketampanan</span>
+                        <span class="attribute" data-i18n="attrIlmuPedang">Ilmu Pedang</span>
+                        <span class="attribute" data-i18n="attrPengobatan">Pengobatan</span>
+                    </div>
+                </div>
+
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="sadewaNama">Sadewa</h3>
+                    <div class="tokoh-role" data-i18n="sadewaPeran">Ahli Nujum dan Kebijaksanaan</div>
+                    <p class="tokoh-description" data-i18n="sadewaDeskripsi">
+                        Putra bungsu Pandu dan Madri, kembaran Nakula. Memiliki kemampuan
+                        meramal dan kebijaksanaan yang mendalam. Sering memberikan nasihat yang tepat kepada Pandawa.
+                    </p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrKebijaksanaan">Kebijaksanaan</span>
+                        <span class="attribute" data-i18n="attrPeramalan">Peramalan</span>
+                        <span class="attribute" data-i18n="attrStrategi">Strategi</span>
+                    </div>
+                </div>
+
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="dropadiNama">Dropadi</h3>
+                    <div class="tokoh-role" data-i18n="dropadiPeran">Permaisuri Pandawa</div>
+                    <p class="tokoh-description" data-i18n="dropadiDeskripsi">
+                        Putri Raja Drupada, istri bersama kelima Pandawa. Dikenal dengan
+                        kecantikan dan kecerdasannya. Menjadi simbol kehormatan dan harga diri Pandawa ketika dihina di
+                        istana Hastinapura.
+                    </p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrKecantikan">Kecantikan</span>
+                        <span class="attribute" data-i18n="attrKecerdasan">Kecerdasan</span>
+                        <span class="attribute" data-i18n="attrHargaDiri">Harga Diri</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Keluarga Kurawa -->
+        <div class="tokoh-category">
+            <h2 class="category-title" data-i18n="keluargaKurawa">Keluarga Kurawa</h2>
+            <div class="tokoh-grid">
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="duryodanaNama">Duryodana</h3>
+                    <div class="tokoh-role" data-i18n="duryodanaPeran">Pemimpin Kurawa</div>
+                    <p class="tokoh-description" data-i18n="duryodanaDeskripsi">
+                        Putra tertua Dretarastra dan Gandari, pemimpin 100 Kurawa. Memiliki
+                        sifat iri hati dan ambisius. Konfliknya dengan Pandawa berawal dari persaingan sejak kecil dan
+                        berakhir dengan perang Bharatayuddha.
+                    </p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrAmbisi">Ambisi</span>
+                        <span class="attribute" data-i18n="attrKeirihatian">Keirihatian</span>
+                        <span class="attribute" data-i18n="attrKepemimpinan">Kepemimpinan</span>
+                    </div>
+                </div>
+
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="dursasanaNama">Dursasana</h3>
+                    <div class="tokoh-role" data-i18n="dursasanaPeran">Panglima Kurawa</div>
+                    <p class="tokoh-description" data-i18n="dursasanaDeskripsi">
+                        Putra kedua Dretarastra, dikenal dengan kekejamannya. Tokoh yang
+                        menghina Dropadi dengan menarik sarinya di depan umum. Gugur di tangan Bima dalam perang
+                        Bharatayuddha.
+                    </p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrKekejaman">Kekejaman</span>
+                        <span class="attribute" data-i18n="attrKesombongan">Kesombongan</span>
+                        <span class="attribute" data-i18n="attrKepatuhan">Kepatuhan</span>
+                    </div>
+                </div>
+
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="sangkuniNama">Sangkuni</h3>
+                    <div class="tokoh-role" data-i18n="sangkuniPeran">Penasihat Licik</div>
+                    <p class="tokoh-description" data-i18n="sangkuniDeskripsi">
+                        Paman Duryodana dari pihak ibu, dikenal dengan kelicikan dan
+                        kecerdikannya. Merencanakan berbagai siasat untuk mencelakakan Pandawa, termasuk permainan dadu
+                        yang curang.
+                    </p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrKelicikan">Kelicikan</span>
+                        <span class="attribute" data-i18n="attrKecerdikan">Kecerdikan</span>
+                        <span class="attribute" data-i18n="attrManipulasi">Manipulasi</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tokoh Penting Lainnya -->
+        <div class="tokoh-category">
+            <h2 class="category-title" data-i18n="tokohPentingLainnya">Tokoh Penting Lainnya</h2>
+            <div class="tokoh-grid">
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="kresnaNama">Kresna</h3>
+                    <div class="tokoh-role" data-i18n="kresnaPeran">Awatara Wisnu</div>
+                    <p class="tokoh-description" data-i18n="kresnaDeskripsi">
+                        Raja Dwaraka, awatara (penjelmaan) Dewa Wisnu. Menjadi penasihat dan
+                        kusir kereta Arjuna dalam perang Bharatayuddha. Memberikan ajaran spiritual Bhagavad Gita kepada
+                        Arjuna.
+                    </p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrKebijaksanaan">Kebijaksanaan</span>
+                        <span class="attribute" data-i18n="attrSpiritualitas">Spiritualitas</span>
+                        <span class="attribute" data-i18n="attrKepemimpinan">Kepemimpinan</span>
+                    </div>
+                </div>
+
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="bismaNama">Bisma</h3>
+                    <div class="tokoh-role" data-i18n="bismaPeran">Kakek dan Penasihat</div>
+                    <p class="tokoh-description" data-i18n="bismaDeskripsi">
+                        Putra Santanu dan Dewi Gangga, dikenal dengan sumpahnya untuk tidak
+                        menikah dan tidak menjadi raja. Memiliki kesaktian untuk menentukan waktu kematiannya sendiri.
+                        Gugur dalam perang Bharatayuddha.
+                    </p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrKesetiaan">Kesetiaan</span>
+                        <span class="attribute" data-i18n="attrKebijaksanaan">Kebijaksanaan</span>
+                        <span class="attribute" data-i18n="attrPengorbanan">Pengorbanan</span>
+                    </div>
+                </div>
+
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="dronaNama">Drona</h3>
+                    <div class="tokoh-role" data-i18n="dronaPeran">Guru Militer</div>
+                    <p class="tokoh-description" data-i18n="dronaDeskripsi">
+                        Guru seni perang bagi Pandawa dan Kurawa. Ahli dalam penggunaan senjata
+                        dan strategi perang. Terbunuh dalam perang Bharatayuddha setelah mendengar kabar palsu tentang
+                        kematian putranya.
+                    </p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrKeahlianMiliter">Keahlian Militer</span>
+                        <span class="attribute" data-i18n="attrKedisiplinan">Kedisiplinan</span>
+                        <span class="attribute" data-i18n="attrPengabdian">Pengabdian</span>
+                    </div>
+                </div>
+
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="karnaNama">Karna</h3>
+                    <div class="tokoh-role" data-i18n="karnaPeran">Kesatria Terhormat</div>
+                    <p class="tokoh-description" data-i18n="karnaDeskripsi">
+                        Putra tertua Kunti dengan Dewa Surya, namun dibesarkan oleh keluarga
+                        kusir. Dikenal sebagai "Danawardhana" (pemberi derma). Bergabung dengan Kurawa dan gugur melawan
+                        Arjuna.
+                    </p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrKemurahanHati">Kemurahan Hati</span>
+                        <span class="attribute" data-i18n="attrKehormatan">Kehormatan</span>
+                        <span class="attribute" data-i18n="attrKesetiaan">Kesetiaan</span>
+                    </div>
+                </div>
+
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="gatotkacaNama">Gatotkaca</h3>
+                    <div class="tokoh-role" data-i18n="gatotkacaPeran">Kesatria Terbang</div>
+                    <p class="tokoh-description" data-i18n="gatotkacaDeskripsi">
+                        Putra Bima dengan Hidimbi, memiliki kemampuan terbang dan kesaktian
+                        luar biasa. Gugur secara heroik dalam perang Bharatayuddha setelah mengorbankan dirinya untuk
+                        menghancurkan pasukan Kurawa.
+                    </p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrKesaktian">Kesaktian</span>
+                        <span class="attribute" data-i18n="attrPengorbanan">Pengorbanan</span>
+                        <span class="attribute" data-i18n="attrKesetiaan">Kesetiaan</span>
+                    </div>
+                </div>
+
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="aswatamaNama">Aswatama</h3>
+                    <div class="tokoh-role" data-i18n="aswatamaPeran">Putra Drona</div>
+                    <p class="tokoh-description" data-i18n="aswatamaDeskripsi">
+                        Putra Drona yang memiliki kesaktian luar biasa. Melakukan pembantaian
+                        malam hari terhadap sisa pasukan Pandawa setelah perang berakhir. Dikutuk untuk mengembara
+                        selamanya.
+                    </p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrKesaktian">Kesaktian</span>
+                        <span class="attribute" data-i18n="attrDendam">Dendam</span>
+                        <span class="attribute" data-i18n="attrKebencian">Kebencian</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h4 data-i18n="karakteristikJudul">Karakteristik Tokoh Mahabharata</h4>
+            <p data-i18n="karakteristikDeskripsi">
+                Setiap tokoh dalam Mahabharata memiliki karakter yang kompleks dan multidimensional. Tidak ada tokoh
+                yang
+                sepenuhnya baik atau buruk, membuat cerita ini sangat manusiawi dan relevan dengan kehidupan nyata.
+                Konflik internal dan eksternal yang dialami masing-masing tokoh mencerminkan pergulatan batin manusia
+                dalam menjalani kehidupan.
+            </p>
+        </div>
+
+        <div class="highlight-box">
+            <h4 data-i18n="nilaiJudul">Nilai-nilai yang Diwakili</h4>
+            <p data-i18n="nilaiDeskripsi">
+                Mahabharata mengajarkan tentang dharma (kewajiban), kebenaran, keadilan, pengorbanan, dan kompleksitas
+                kehidupan. Setiap tokoh mewakili nilai-nilai tertentu: Yudhistira (kebenaran), Bima (kekuatan dan
+                kesetiaan), Arjuna (keahlian dan spiritualitas), Kresna (kebijaksanaan), dan Karna (kehormatan dan
+                kemurahan hati).
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Data terjemahan untuk halaman tokoh Mahabharata
+        const translations = {
+            id: {
+                // Navbar
+                beranda: "Beranda",
+                critaWayang: "Crita Wayang",
+                tokohWayang: "Tokoh Wayang",
+                mahabharata: "Mahabharata",
+                ramayana: "Ramayana",
+                dewaruci: "Dewa Ruci",
+
+                // Header
+                judulHalaman: "Tokoh Mahabharata",
+                subJudul: "Mengenal para kesatria, dewa, dan tokoh penting dalam epos Mahabharata",
+
+                // Kategori
+                keluargaPandawa: "Keluarga Pandawa",
+                keluargaKurawa: "Keluarga Kurawa",
+                tokohPentingLainnya: "Tokoh Penting Lainnya",
+
+                // Tokoh Pandawa
+                yudhistiraNama: "Yudhistira",
+                yudhistiraPeran: "Raja Kebenaran",
+                yudhistiraDeskripsi: "Putra tertua Pandu dan Kunti, dikenal sebagai Dharmaraja (Raja Dharma). Selalu berbicara benar dan menjunjung tinggi keadilan. Memimpin Pandawa dengan kebijaksanaan dan menjadi raja Hastinapura setelah perang Bharatayuddha.",
+
+                bimaNama: "Bima",
+                bimaPeran: "Kesatria Perkasa",
+                bimaDeskripsi: "Putra kedua Pandu dan Kunti, memiliki kekuatan fisik luar biasa. Dikenal dengan julukan Bayusutha. Senjata andalannya adalah gada. Dalam perang Bharatayuddha, berhasil membunuh Dursasana dan Duryodana.",
+
+                arjunaNama: "Arjuna",
+                arjunaPeran: "Pemanah Ulung",
+                arjunaDeskripsi: "Putra ketiga Pandu dan Kunti, pemanah terbaik di dunia. Diberi senjata sakti Pasopati oleh Dewa Siwa. Menjadi kusir kereta Krishna dalam perang Bharatayuddha dan menerima ajaran Bhagavad Gita.",
+
+                nakulaNama: "Nakula",
+                nakulaPeran: "Ahli Pedang dan Pengobatan",
+                nakulaDeskripsi: "Putra Pandu dan Madri, kembaran Sadewa. Memiliki ketampanan luar biasa dan keahlian dalam ilmu pedang. Juga menguasai ilmu pengobatan dan perawatan kuda.",
+
+                sadewaNama: "Sadewa",
+                sadewaPeran: "Ahli Nujum dan Kebijaksanaan",
+                sadewaDeskripsi: "Putra bungsu Pandu dan Madri, kembaran Nakula. Memiliki kemampuan meramal dan kebijaksanaan yang mendalam. Sering memberikan nasihat yang tepat kepada Pandawa.",
+
+                dropadiNama: "Dropadi",
+                dropadiPeran: "Permaisuri Pandawa",
+                dropadiDeskripsi: "Putri Raja Drupada, istri bersama kelima Pandawa. Dikenal dengan kecantikan dan kecerdasannya. Menjadi simbol kehormatan dan harga diri Pandawa ketika dihina di istana Hastinapura.",
+
+                // Tokoh Kurawa
+                duryodanaNama: "Duryodana",
+                duryodanaPeran: "Pemimpin Kurawa",
+                duryodanaDeskripsi: "Putra tertua Dretarastra dan Gandari, pemimpin 100 Kurawa. Memiliki sifat iri hati dan ambisius. Konfliknya dengan Pandawa berawal dari persaingan sejak kecil dan berakhir dengan perang Bharatayuddha.",
+
+                dursasanaNama: "Dursasana",
+                dursasanaPeran: "Panglima Kurawa",
+                dursasanaDeskripsi: "Putra kedua Dretarastra, dikenal dengan kekejamannya. Tokoh yang menghina Dropadi dengan menarik sarinya di depan umum. Gugur di tangan Bima dalam perang Bharatayuddha.",
+
+                sangkuniNama: "Sangkuni",
+                sangkuniPeran: "Penasihat Licik",
+                sangkuniDeskripsi: "Paman Duryodana dari pihak ibu, dikenal dengan kelicikan dan kecerdikannya. Merencanakan berbagai siasat untuk mencelakakan Pandawa, termasuk permainan dadu yang curang.",
+
+                // Tokoh Lainnya
+                kresnaNama: "Kresna",
+                kresnaPeran: "Awatara Wisnu",
+                kresnaDeskripsi: "Raja Dwaraka, awatara (penjelmaan) Dewa Wisnu. Menjadi penasihat dan kusir kereta Arjuna dalam perang Bharatayuddha. Memberikan ajaran spiritual Bhagavad Gita kepada Arjuna.",
+
+                bismaNama: "Bisma",
+                bismaPeran: "Kakek dan Penasihat",
+                bismaDeskripsi: "Putra Santanu dan Dewi Gangga, dikenal dengan sumpahnya untuk tidak menikah dan tidak menjadi raja. Memiliki kesaktian untuk menentukan waktu kematiannya sendiri. Gugur dalam perang Bharatayuddha.",
+
+                dronaNama: "Drona",
+                dronaPeran: "Guru Militer",
+                dronaDeskripsi: "Guru seni perang bagi Pandawa dan Kurawa. Ahli dalam penggunaan senjata dan strategi perang. Terbunuh dalam perang Bharatayuddha setelah mendengar kabar palsu tentang kematian putranya.",
+
+                karnaNama: "Karna",
+                karnaPeran: "Kesatria Terhormat",
+                karnaDeskripsi: "Putra tertua Kunti dengan Dewa Surya, namun dibesarkan oleh keluarga kusir. Dikenal sebagai \"Danawardhana\" (pemberi derma). Bergabung dengan Kurawa dan gugur melawan Arjuna.",
+
+                gatotkacaNama: "Gatotkaca",
+                gatotkacaPeran: "Kesatria Terbang",
+                gatotkacaDeskripsi: "Putra Bima dengan Hidimbi, memiliki kemampuan terbang dan kesaktian luar biasa. Gugur secara heroik dalam perang Bharatayuddha setelah mengorbankan dirinya untuk menghancurkan pasukan Kurawa.",
+
+                aswatamaNama: "Aswatama",
+                aswatamaPeran: "Putra Drona",
+                aswatamaDeskripsi: "Putra Drona yang memiliki kesaktian luar biasa. Melakukan pembantaian malam hari terhadap sisa pasukan Pandawa setelah perang berakhir. Dikutuk untuk mengembara selamanya.",
+
+                // Atribut
+                attrKebenaran: "Kebenaran",
+                attrKebijaksanaan: "Kebijaksanaan",
+                attrKeadilan: "Keadilan",
+                attrKekuatan: "Kekuatan",
+                attrKeberanian: "Keberanian",
+                attrKesetiaan: "Kesetiaan",
+                attrKeahlianMemanah: "Keahlian Memanah",
+                attrKecerdasan: "Kecerdasan",
+                attrSpiritualitas: "Spiritualitas",
+                attrKetampanan: "Ketampanan",
+                attrIlmuPedang: "Ilmu Pedang",
+                attrPengobatan: "Pengobatan",
+                attrPeramalan: "Peramalan",
+                attrStrategi: "Strategi",
+                attrKecantikan: "Kecantikan",
+                attrHargaDiri: "Harga Diri",
+                attrAmbisi: "Ambisi",
+                attrKeirihatian: "Keirihatian",
+                attrKepemimpinan: "Kepemimpinan",
+                attrKekejaman: "Kekejaman",
+                attrKesombongan: "Kesombongan",
+                attrKepatuhan: "Kepatuhan",
+                attrKelicikan: "Kelicikan",
+                attrKecerdikan: "Kecerdikan",
+                attrManipulasi: "Manipulasi",
+                attrKeahlianMiliter: "Keahlian Militer",
+                attrKedisiplinan: "Kedisiplinan",
+                attrPengabdian: "Pengabdian",
+                attrKemurahanHati: "Kemurahan Hati",
+                attrKehormatan: "Kehormatan",
+                attrKesaktian: "Kesaktian",
+                attrPengorbanan: "Pengorbanan",
+                attrDendam: "Dendam",
+                attrKebencian: "Kebencian",
+
+                // Highlight Box
+                karakteristikJudul: "Karakteristik Tokoh Mahabharata",
+                karakteristikDeskripsi: "Setiap tokoh dalam Mahabharata memiliki karakter yang kompleks dan multidimensional. Tidak ada tokoh yang sepenuhnya baik atau buruk, membuat cerita ini sangat manusiawi dan relevan dengan kehidupan nyata. Konflik internal dan eksternal yang dialami masing-masing tokoh mencerminkan pergulatan batin manusia dalam menjalani kehidupan.",
+
+                nilaiJudul: "Nilai-nilai yang Diwakili",
+                nilaiDeskripsi: "Mahabharata mengajarkan tentang dharma (kewajiban), kebenaran, keadilan, pengorbanan, dan kompleksitas kehidupan. Setiap tokoh mewakili nilai-nilai tertentu: Yudhistira (kebenaran), Bima (kekuatan dan kesetiaan), Arjuna (keahlian dan spiritualitas), Kresna (kebijaksanaan), dan Karna (kehormatan dan kemurahan hati)."
+            },
+
+            jv: {
+                // Navbar
+                beranda: "Beranda",
+                critaWayang: "Crita Wayang",
+                tokohWayang: "Tokoh Wayang",
+                mahabharata: "Mahabharata",
+                ramayana: "Ramayana",
+                dewaruci: "Dewa Ruci",
+
+                // Header
+                judulHalaman: "Tokoh Mahabharata",
+                subJudul: "Ngenal para kesatria, dewa, lan tokoh penting ing epos Mahabharata",
+
+                // Kategori
+                keluargaPandawa: "Kulawarga Pandawa",
+                keluargaKurawa: "Kulawarga Kurawa",
+                tokohPentingLainnya: "Tokoh Penting Liyane",
+
+                // Tokoh Pandawa
+                yudhistiraNama: "Yudhistira",
+                yudhistiraPeran: "Raja Kasunyatan",
+                yudhistiraDeskripsi: "Putra paling tuwa Pandu lan Kunti, dikenal minangka Dharmaraja (Raja Dharma). Tansah ngendika leres lan njunjung dhuwur kaadilan. Mimpin Pandawa kanthi kawicaksanan lan dadi raja Hastinapura sawise perang Bharatayuddha.",
+
+                bimaNama: "Bima",
+                bimaPeran: "Kesatria Perkasa",
+                bimaDeskripsi: "Putra kaping loro Pandu lan Kunti, nduweni kekuwatan fisik sing luar biasa. Dikenal kanthi julukan Bayusutha. Senjata andalane yaiku gada. Ing perang Bharatayuddha, kasil mateni Dursasana lan Duryodana.",
+
+                arjunaNama: "Arjuna",
+                arjunaPeran: "Pamanah Mumpuni",
+                arjunaDeskripsi: "Putra kaping telu Pandu lan Kunti, pamanah paling apik ing donya. Diwenehi senjata sakti Pasopati dening Dewa Siwa. Dadi kusir kreta Krishna ing perang Bharatayuddha lan nampa ajaran Bhagavad Gita.",
+
+                nakulaNama: "Nakula",
+                nakulaPeran: "Ahli Pedhang lan Pengobatan",
+                nakulaDeskripsi: "Putra Pandu lan Madri, kembaran Sadewa. Ndarbeni katampanan luar biasa lan keahlian ing ilmu pedhang. Uga nguasai ilmu pengobatan lan perawatan jaran.",
+
+                sadewaNama: "Sadewa",
+                sadewaPeran: "Ahli Nujum lan Kawicaksanan",
+                sadewaDeskripsi: "Putra bungsu Pandu lan Madri, kembaran Nakula. Ndarbeni kemampuan meramal lan kawicaksanan sing jero. Asring menehi nasehat sing tepat marang Pandawa.",
+
+                dropadiNama: "Dropadi",
+                dropadiPeran: "Permaisuri Pandawa",
+                dropadiDeskripsi: "Putri Raja Drupada, bojo bebarengan kaping lima Pandawa. Dikenal kanthi kecaantikan lan kacerdasane. Dadi simbol kehormatan lan rega diri Pandawa nalika dihina ing istana Hastinapura.",
+
+                // Tokoh Kurawa
+                duryodanaNama: "Duryodana",
+                duryodanaPeran: "Pamimpin Kurawa",
+                duryodanaDeskripsi: "Putra paling tuwa Dretarastra lan Gandari, pamimpin 100 Kurawa. Ndarbeni sifat iri ati lan ambisius. Konflike karo Pandawa diwiwiti saka persaingan wiwit cilik lan dipungkasi karo perang Bharatayuddha.",
+
+                dursasanaNama: "Dursasana",
+                dursasanaPeran: "Panglima Kurawa",
+                dursasanaDeskripsi: "Putra kaping loro Dretarastra, dikenal kanthi kekejamane. Tokoh sing ngina Dropadi kanthi narik sarine ngadep umum. Gugur ing tangan Bima ing perang Bharatayuddha.",
+
+                sangkuniNama: "Sangkuni",
+                sangkuniPeran: "Penasehat Licik",
+                sangkuniDeskripsi: "Paman Duryodana saka pihak ibu, dikenal kanthi kelicikan lan kecerdikane. Ngramal macem-macem siasat kanggo nyelakake Pandawa, klebu permainan dadu sing curang.",
+
+                // Tokoh Lainnya
+                kresnaNama: "Kresna",
+                kresnaPeran: "Awatara Wisnu",
+                kresnaDeskripsi: "Raja Dwaraka, awatara (penjelmaan) Dewa Wisnu. Dadi penasehat lan kusir kreta Arjuna ing perang Bharatayuddha. Menehi ajaran spiritual Bhagavad Gita marang Arjuna.",
+
+                bismaNama: "Bisma",
+                bismaPeran: "Mbah lan Penasehat",
+                bismaDeskripsi: "Putra Santanu lan Dewi Gangga, dikenal kanthi sumpahe kanggo ora nikah lan ora dadi raja. Ndarbeni kesaktian kanggo nemtokake wektu patine dhewe. Gugur ing perang Bharatayuddha.",
+
+                dronaNama: "Drona",
+                dronaPeran: "Guru Militer",
+                dronaDeskripsi: "Guru seni perang kanggo Pandawa lan Kurawa. Ahli ing nggunakake senjata lan strategi perang. Mati ing perang Bharatayuddha sawise krungu kabar palsu bab patine putrane.",
+
+                karnaNama: "Karna",
+                karnaPeran: "Kesatria Terhormat",
+                karnaDeskripsi: "Putra paling tuwa Kunti karo Dewa Surya, nanging digedhekake dening kulawarga kusir. Dikenal minangka \"Danawardhana\" (pemberi derma). Gabung karo Kurawa lan gugur nglawan Arjuna.",
+
+                gatotkacaNama: "Gatotkaca",
+                gatotkacaPeran: "Kesatria Miber",
+                gatotkacaDeskripsi: "Putra Bima karo Hidimbi, ndarbeni kemampuan miber lan kesaktian luar biasa. Gugur kanthi heroik ing perang Bharatayuddha sawise ngurbanake awake kanggo numpes pasukan Kurawa.",
+
+                aswatamaNama: "Aswatama",
+                aswatamaPeran: "Putra Drona",
+                aswatamaDeskripsi: "Putra Drona sing ndarbeni kesaktian luar biasa. Nindakake pembantaian wengi marang sisa pasukan Pandawa sawise perang rampung. Dikutuk kanggo ngumbara salawase.",
+
+                // Atribut
+                attrKebenaran: "Kasunyatan",
+                attrKebijaksanaan: "Kawicaksanan",
+                attrKeadilan: "Kaadilan",
+                attrKekuatan: "Kekuwatan",
+                attrKeberanian: "Wani",
+                attrKesetiaan: "Kesetiaan",
+                attrKeahlianMemanah: "Keahlian Mamanah",
+                attrKecerdasan: "Kacerdasan",
+                attrSpiritualitas: "Spiritualitas",
+                attrKetampanan: "Katampanan",
+                attrIlmuPedang: "Ilmu Pedhang",
+                attrPengobatan: "Pengobatan",
+                attrPeramalan: "Peramalan",
+                attrStrategi: "Strategi",
+                attrKecantikan: "Kecantikan",
+                attrHargaDiri: "Rega Diri",
+                attrAmbisi: "Ambisi",
+                attrKeirihatian: "Iri Ati",
+                attrKepemimpinan: "Kapemimpinan",
+                attrKekejaman: "Kekejaman",
+                attrKesombongan: "Kesombongan",
+                attrKepatuhan: "Kepatuhan",
+                attrKelicikan: "Kelicikan",
+                attrKecerdikan: "Kecerdikan",
+                attrManipulasi: "Manipulasi",
+                attrKeahlianMiliter: "Keahlian Militer",
+                attrKedisiplinan: "Kedisiplinan",
+                attrPengabdian: "Pengabdian",
+                attrKemurahanHati: "Kemurahan Ati",
+                attrKehormatan: "Kehormatan",
+                attrKesaktian: "Kesaktian",
+                attrPengorbanan: "Pengorbanan",
+                attrDendam: "Dendam",
+                attrKebencian: "Kebencian",
+
+                // Highlight Box
+                karakteristikJudul: "Karakteristik Tokoh Mahabharata",
+                karakteristikDeskripsi: "Saben tokoh ing Mahabharata ndarbeni karakter sing kompleks lan multidimensional. Ora ana tokoh sing sakabehe apik utawa ala, ndadekake crita iki banget manusiawi lan relevan karo urip nyata. Konflik internal lan eksternal sing dialami saben tokoh nggambarake pergulatan batin manungsa ing njalanake urip.",
+
+                nilaiJudul: "Nilai-nilai sing Diwakili",
+                nilaiDeskripsi: "Mahabharata ngajarake bab dharma (kewajiban), kasunyatan, kaadilan, pengorbanan, lan kompleksitas urip. Saben tokoh ngewakili nilai-nilai tartamtu: Yudhistira (kasunyatan), Bima (kekuwatan lan kesetiaan), Arjuna (keahlian lan spiritualitas), Kresna (kawicaksanan), lan Karna (kehormatan lan kemurahan ati)."
+            },
+
+            jv_script: {
+                // Navbar
+                beranda: "ꦧꦼꦫꦤ꧀ꦢ",
+                critaWayang: "ꦕꦿꦶꦠꦮꦪꦁ",
+                tokohWayang: "ꦠꦺꦴꦏꦺꦴꦲ꧀ꦮꦪꦁ",
+                mahabharata: "ꦩꦲꦧꦿꦠ",
+                ramayana: "ꦫꦩꦪꦤ",
+                dewaruci: "ꦢꦺꦮꦫꦸꦕꦶ",
+
+                // Header
+                judulHalaman: "ꦠꦺꦴꦏꦺꦴꦲ꧀ꦩꦲꦧꦿꦠ",
+                subJudul: "ꦔꦼꦤꦭ꧀ꦥꦫꦑꦼꦱꦠꦿꦶꦪꦢꦺꦮꦭꦤ꧀ꦠꦺꦴꦏꦺꦴꦲ꧀ꦥꦼꦤ꧀ꦠꦶꦁꦲꦶꦁꦆꦥꦺꦴꦱ꧀ꦩꦲꦧꦿꦠ",
+
+                // Kategori
+                keluargaPandawa: "ꦑꦸꦭꦮꦂꦒꦦꦤ꧀ꦢꦮ",
+                keluargaKurawa: "ꦑꦸꦭꦮꦂꦒꦑꦸꦫꦮ",
+                tokohPentingLainnya: "ꦠꦺꦴꦏꦺꦴꦲ꧀ꦦꦼꦤ꧀ꦠꦶꦁꦭꦶꦪꦤꦺ",
+
+                // Tokoh Pandawa
+                yudhistiraNama: "ꦪꦸꦢ꧀ꦲꦶꦱ꧀ꦠꦶꦫ",
+                yudhistiraPeran: "ꦫꦗꦑꦱꦸꦚꦠꦤ꧀",
+                yudhistiraDeskripsi: "ꦦꦸꦠꦿꦦꦭꦶꦁꦠꦸꦮꦥꦤ꧀ꦢꦸꦭꦤ꧀ꦑꦸꦤ꧀ꦠꦶꦢꦶꦑꦼꦤꦭ꧀ꦩꦶꦤꦔꦏꦢꦲꦂꦩꦫꦗꦢꦲꦂꦩꦠꦤ꧀ꦱꦭꦃꦔꦼꦤ꧀ꦢꦶꦏꦭꦼꦫꦼꦱ꧀ꦭꦤ꧀ꦚꦸꦚꦸꦁꦝꦸꦮꦸꦂꦏꦲꦢꦶꦭꦤ꧀ꦩꦶꦩ꧀ꦥꦶꦤ꧀ꦦꦤ꧀ꦢꦮꦑꦤ꧀ꦛꦶꦏꦮꦶꦕꦏ꧀ꦱꦤꦤ꧀ꦭꦤ꧀ꦢꦢꦶꦫꦗꦲꦱ꧀ꦠꦶꦤꦥꦸꦫꦱꦺꦠꦼꦭꦤ꧀ꦥꦼꦫꦁꦨꦫꦠꦪꦸꦢ꧀ꦢ",
+
+                bimaNama: "ꦨꦶꦩ",
+                bimaPeran: "ꦑꦼꦱꦠꦿꦶꦪꦦꦼꦂꦑꦱ",
+                bimaDeskripsi: "ꦦꦸꦠꦿꦑꦥꦶꦁꦭꦺꦴꦫꦺꦴꦦꦤ꧀ꦢꦸꦭꦤ꧀ꦑꦸꦤ꧀ꦠꦶꦤ꧀ꦢꦲꦺꦤꦶꦏꦑꦑꦸꦮꦠꦤ꧀ꦦ꦳ꦶꦱꦶꦏ꧀ꦭꦸꦮꦂꦧꦶꦱꦢꦶꦑꦼꦤꦭ꧀ꦑꦤ꧀ꦛꦶꦗꦸꦭꦸꦏꦤ꧀ꦨꦪꦸꦱꦸꦡꦱꦼꦚꦠꦲꦤ꧀ꦢꦭꦤꦺꦪꦲꦶꦏꦸꦒꦢꦲꦶꦁꦥꦼꦫꦁꦨꦫꦠꦪꦸꦢ꧀ꦢꦏꦱꦶꦭ꧀ꦩꦠꦼꦤꦶꦢꦸꦂꦱꦱꦤꦭꦤ꧀ꦢꦸꦂꦪꦺꦴꦢꦤ",
+
+                arjunaNama: "ꦄꦂꦗꦸꦤ",
+                arjunaPeran: "ꦦꦩꦤꦃꦈꦭꦸꦁ",
+                arjunaDeskripsi: "ꦦꦸꦠꦿꦑꦥꦶꦁꦠꦼꦭꦸꦦꦤ꧀ꦢꦸꦭꦤ꧀ꦑꦸꦤ꧀ꦠꦶꦦꦩꦤꦃꦦꦭꦶꦁꦲꦥꦶꦏ꧀ꦲꦶꦁꦢꦺꦴꦤꦾꦢꦶꦮꦼꦤꦺꦲꦶꦱꦼꦚꦠꦱꦏ꧀ꦠꦶꦦꦱꦺꦴꦦꦠꦶꦢꦼꦤꦶꦁꦢꦺꦮꦯꦶꦮꦢꦢꦶꦏꦸꦱꦶꦂꦏꦉꦠꦑꦿꦰ꧀ꦟꦲꦶꦁꦥꦼꦫꦁꦨꦫꦠꦪꦸꦢ꧀ꦢꦭꦤ꧀ꦤꦩ꧀ꦥꦄꦗꦫꦤ꧀ꦨꦒꦮꦢ꧀ꦒꦶꦠ",
+
+                nakulaNama: "ꦤꦑꦸꦭ",
+                nakulaPeran: "ꦄꦲ꧀ꦭꦶꦦꦼꦝꦁꦭꦤ꧀ꦦꦼꦔꦺꦴꦧꦠꦤ꧀",
+                nakulaDeskripsi: "ꦦꦸꦠꦿꦦꦤ꧀ꦢꦸꦭꦤ꧀ꦩꦢꦿꦶꦑꦼꦩ꧀ꦧꦫꦤ꧀ꦱꦢꦺꦮꦤ꧀ꦢꦲꦂꦧꦤꦶꦏꦠꦩ꧀ꦦꦤꦤ꧀ꦭꦸꦮꦂꦧꦶꦱꦭꦤ꧀ꦏꦲꦲ꧀ꦭꦶꦪꦤ꧀ꦲꦶꦁꦲꦶꦭ꧀ꦩꦸꦦꦼꦝꦁꦭꦤ꧀ꦲꦸꦒꦩꦔꦸꦱꦻꦲꦶꦭ꧀ꦩꦸꦦꦼꦔꦺꦴꦧꦠꦤ꧀ꦭꦤ꧀ꦦꦼꦫꦮꦠꦤ꧀ꦗꦫꦤ꧀",
+
+                sadewaNama: "ꦱꦢꦺꦮ",
+                sadewaPeran: "ꦄꦲ꧀ꦭꦶꦤꦸꦗꦸꦩ꧀ꦭꦤ꧀ꦑꦧꦶꦗꦏ꧀ꦱꦤꦤ꧀",
+                sadewaDeskripsi: "ꦦꦸꦠꦿꦨꦸꦁꦱꦸꦦꦤ꧀ꦢꦸꦭꦤ꧀ꦩꦢꦿꦶꦑꦼꦩ꧀ꦧꦫꦤ꧀ꦤꦑꦸꦭꦤ꧀ꦢꦲꦂꦧꦤꦶꦏꦏꦩꦩ꧀ꦥꦸꦮꦤ꧀ꦩꦼꦫꦩꦭ꧀ꦭꦤ꧀ꦑꦧꦶꦗꦏ꧀ꦱꦤꦤ꧀ꦪꦺꦁꦗꦼꦫꦺꦴꦱꦼꦫꦶꦁꦩꦼꦤꦺꦲꦶꦤꦰꦲꦠ꧀ꦪꦺꦁꦠꦼꦥꦠ꧀ꦩꦂꦔꦤ꧀ꦦꦤ꧀ꦢꦮ",
+
+                dropadiNama: "ꦢꦿꦺꦴꦦꦢꦶ",
+                dropadiPeran: "ꦦꦼꦂꦩꦲꦶꦱꦸꦫꦶꦦꦤ꧀ꦢꦮ",
+                dropadiDeskripsi: "ꦦꦸꦠꦿꦶꦫꦗꦢꦿꦸꦦꦢꦧꦺꦴꦗꦺꦴꦧꦼꦧꦫꦔꦤ꧀ꦑꦥꦶꦁꦭꦶꦩꦦꦤ꧀ꦢꦮꦢꦶꦑꦼꦤꦭ꧀ꦑꦤ꧀ꦛꦶꦏꦕꦤ꧀ꦠꦶꦏꦭꦤ꧀ꦏꦕꦼꦂꦢꦱꦤꦺꦢꦢꦶꦱꦶꦩ꧀ꦧꦺꦴꦭ꧀ꦏꦲꦺꦴꦫꦩꦠꦤ꧀ꦭꦤ꧀ꦲꦂꦒꦢꦶꦫꦶꦦꦤ꧀ꦢꦮꦤꦭꦶꦏꦲꦶꦤꦲꦶꦁꦲꦶꦱ꧀ꦠꦤꦲꦱ꧀ꦠꦶꦤꦥꦸꦫ",
+
+                // Tokoh Kurawa
+                duryodanaNama: "ꦢꦸꦂꦪꦺꦴꦢꦤ",
+                duryodanaPeran: "ꦦꦼꦩꦶꦩ꧀ꦥꦶꦤ꧀ꦑꦸꦫꦮ",
+                duryodanaDeskripsi: "ꦦꦸꦠꦿꦦꦭꦶꦁꦠꦸꦮꦢꦽꦠꦫꦱ꧀ꦠꦿꦭꦤ꧀ꦒꦤ꧀ꦢꦫꦶꦦꦼꦩꦶꦩ꧀ꦥꦶꦤ꧀ꦱꦼꦠꦸꦁꦑꦸꦫꦮꦤ꧀ꦢꦲꦂꦧꦤꦶꦱꦶꦥꦠ꧀ꦲꦶꦫꦶꦲꦠꦶꦭꦤ꧀ꦲꦩ꧀ꦨꦶꦱꦶꦪꦸꦱ꧀ꦏꦺꦴꦤ꧀ꦥ꧀ꦭꦶꦏꦺꦤꦺꦑꦫꦺꦴꦦꦤ꧀ꦢꦮꦢꦶꦮꦶꦮꦶꦠꦶꦱꦏꦏꦥꦼꦂꦱꦲꦶꦁꦤ꧀ꦱꦏꦕꦶꦭꦶꦏ꧀ꦭꦤ꧀ꦢꦶꦥꦸꦁꦏꦱꦶꦏꦫꦺꦴꦥꦼꦫꦁꦨꦫꦠꦪꦸꦢ꧀ꦢ",
+
+                dursasanaNama: "ꦢꦸꦂꦱꦱꦤ",
+                dursasanaPeran: "ꦦꦔ꧀ꦭꦶꦩꦑꦸꦫꦮ",
+                dursasanaDeskripsi: "ꦦꦸꦠꦿꦑꦥꦶꦁꦭꦺꦴꦫꦺꦴꦢꦽꦠꦫꦱ꧀ꦠꦿꦢꦶꦑꦼꦤꦭ꧀ꦑꦤ꧀ꦛꦶꦏꦑꦼꦗꦩꦤ꧀ꦤꦺꦠꦺꦴꦏꦺꦴꦲ꧀ꦪꦺꦁꦩꦲꦶꦤꦢꦿꦺꦴꦦꦢꦶꦑꦤ꧀ꦛꦶꦤꦫꦶꦏ꧀ꦱꦫꦶꦤꦺꦔꦢꦼꦥ꧀ꦲꦸꦩꦸꦩ꧀ꦒꦸꦒꦸꦂꦲꦶꦁꦠꦔꦤ꧀ꦨꦶꦩꦲꦶꦁꦥꦼꦫꦁꦨꦫꦠꦪꦸꦢ꧀ꦢ",
+
+                sangkuniNama: "ꦱꦁꦑꦸꦤꦶ",
+                sangkuniPeran: "ꦦꦼꦤꦱꦲꦺꦠ꧀ꦭꦶꦕꦶꦏ꧀",
+                sangkuniDeskripsi: "ꦦꦩꦤ꧀ꦢꦸꦂꦪꦺꦴꦢꦤꦱꦏꦥꦶꦃꦲꦶꦧꦸꦢꦶꦑꦼꦤꦭ꧀ꦑꦤ꧀ꦛꦶꦏꦼꦭꦶꦕꦶꦏꦤ꧀ꦭꦤ꧀ꦏꦕꦼꦂꦢꦶꦏꦤꦺꦩꦺꦫꦼꦤ꧀ꦕꦤꦏ꧀ꦩꦕꦼꦩ꧀ꦩꦕꦼꦩ꧀ꦱꦶꦪꦱꦠ꧀ꦏꦁꦒꦺꦴꦤꦺꦭꦏꦏꦺꦦꦤ꧀ꦢꦮꦏꦼꦭꦸꦧꦸꦥꦼꦂꦩꦲꦶꦤꦢꦢꦸꦪꦺꦁꦕꦸꦫꦁ",
+
+                // Tokoh Lainnya
+                kresnaNama: "ꦑꦽꦱ꧀ꦟ",
+                kresnaPeran: "ꦄꦮꦠꦫꦮꦶꦱ꧀ꦟꦸ",
+                kresnaDeskripsi: "ꦫꦗꦢ꧀ꦮꦫꦑꦮꦠꦫꦥꦼꦚ꧀ꦗꦼꦭ꧀ꦩꦲꦤ꧀ꦢꦺꦮꦮꦶꦱ꧀ꦟꦸꦢꦢꦶꦦꦼꦤꦱꦲꦺꦠ꧀ꦭꦤ꧀ꦏꦸꦱꦶꦂꦏꦉꦠꦄꦂꦗꦸꦤꦲꦶꦁꦥꦼꦫꦁꦨꦫꦠꦪꦸꦢ꧀ꦢꦩꦼꦤꦺꦲꦶꦤꦄꦗꦫꦤ꧀ꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀ꦨꦒꦮꦢ꧀ꦒꦶꦠꦩꦂꦔꦤ꧀ꦄꦂꦗꦸꦤ",
+
+                bismaNama: "ꦨꦶꦰ꧀ꦩ",
+                bismaPeran: "ꦑꦏꦺꦏ꧀ꦭꦤ꧀ꦦꦼꦤꦱꦲꦺꦠ꧀",
+                bismaDeskripsi: "ꦦꦸꦠꦿꦱꦤ꧀ꦠꦤꦸꦭꦤ꧀ꦢꦺꦮꦶꦒꦁꦒꦢꦶꦑꦼꦤꦭ꧀ꦑꦤ꧀ꦛꦶꦱꦸꦩ꧀ꦥꦲꦺꦤꦺꦴꦫꦤꦶꦏꦃꦭꦤ꧀ꦲꦺꦴꦫꦢꦢꦶꦫꦗꦤ꧀ꦢꦲꦂꦧꦤꦶꦏꦼꦱꦏ꧀ꦠꦶꦪꦤ꧀ꦏꦁꦒꦺꦴꦤꦔꦼꦠꦼꦠ꧀ꦏꦤ꧀ꦮꦏ꧀ꦠꦸꦥꦠꦶꦤꦺꦢꦲꦺꦴꦒꦸꦒꦸꦂꦲꦶꦁꦥꦼꦫꦁꦨꦫꦠꦪꦸꦢ꧀ꦢ",
+
+                dronaNama: "ꦢꦿꦺꦴꦟ",
+                dronaPeran: "ꦒꦸꦫꦸꦩꦶꦭꦶꦠꦼꦂ",
+                dronaDeskripsi: "ꦒꦸꦫꦸꦱꦼꦤꦶꦥꦼꦫꦁꦏꦁꦒꦺꦴꦦꦤ꧀ꦢꦮꦭꦤ꧀ꦑꦸꦫꦮꦄꦲ꧀ꦭꦶꦲꦶꦁꦔꦺꦴꦤꦏꦏꦺꦱꦼꦚꦠꦭꦤ꧀ꦱ꧀ꦠꦿꦠꦼꦒꦶꦥꦼꦫꦁꦠꦼꦂꦧꦸꦤꦸꦃꦲꦶꦁꦥꦼꦫꦁꦨꦫꦠꦪꦸꦢ꧀ꦢꦱꦺꦠꦼꦭꦤ꧀ꦏꦿꦸꦔꦸꦏꦧꦂꦥꦭꦱꦸꦧꦧꦥꦠꦶꦤꦺꦥꦸꦠꦿꦤꦺ",
+
+                karnaNama: "ꦑꦂꦟ",
+                karnaPeran: "ꦑꦼꦱꦠꦿꦶꦪꦠꦼꦂꦲꦺꦴꦫꦩꦠ꧀",
+                karnaDeskripsi: "ꦦꦸꦠꦿꦦꦭꦶꦁꦠꦸꦮꦑꦸꦤ꧀ꦠꦶꦏꦫꦺꦴꦢꦺꦮꦱꦸꦂꦪꦤꦔꦤ꧀ꦢꦶꦒꦼꦝꦺꦏꦏꦺꦢꦼꦤꦶꦁꦏꦸꦭꦮꦂꦒꦏꦸꦱꦶꦂꦢꦶꦑꦼꦤꦭ꧀ꦩꦶꦤꦔꦏꦢꦤꦮꦂꦝꦤꦦꦼꦩ꧀ꦧꦼꦂꦢꦼꦫꦩꦒꦧꦸꦁꦏꦫꦺꦴꦑꦸꦫꦮꦭꦤ꧀ꦒꦸꦒꦸꦂꦩꦼꦭꦮꦤ꧀ꦄꦂꦗꦸꦤ",
+
+                gatotkacaNama: "ꦒꦠꦺꦴꦠ꧀ꦑꦕ",
+                gatotkacaPeran: "ꦑꦼꦱꦠꦿꦶꦪꦠꦼꦂꦧꦁ",
+                gatotkacaDeskripsi: "ꦦꦸꦠꦿꦨꦶꦩꦏꦫꦺꦴꦲꦶꦢꦶꦩ꧀ꦨꦶꦤ꧀ꦢꦲꦂꦧꦤꦶꦏꦩꦩ꧀ꦥꦸꦮꦤ꧀ꦩꦶꦧꦼꦂꦭꦤ꧀ꦏꦼꦱꦏ꧀ꦠꦶꦪꦤ꧀ꦭꦸꦮꦂꦧꦶꦱꦒꦸꦒꦸꦂꦱꦏꦫꦲꦺꦫꦺꦴꦲꦶꦏ꧀ꦲꦶꦁꦥꦼꦫꦁꦨꦫꦠꦪꦸꦢ꧀ꦢꦱꦺꦠꦼꦭꦤ꧀ꦔꦺꦴꦫꦧꦤꦏꦺꦲꦮꦏꦺꦏꦁꦒꦺꦴꦤꦸꦩꦸꦱ꧀ꦤꦏꦺꦥꦱꦸꦏꦤ꧀ꦑꦸꦫꦮ",
+
+                aswatamaNama: "ꦄꦱ꧀ꦮꦠꦩ",
+                aswatamaPeran: "ꦦꦸꦠꦿꦢꦿꦺꦴꦟ",
+                aswatamaDeskripsi: "ꦦꦸꦠꦿꦢꦿꦺꦴꦟꦪꦺꦁꦤ꧀ꦢꦲꦂꦧꦤꦶꦏꦼꦱꦏ꧀ꦠꦶꦪꦤ꧀ꦭꦸꦮꦂꦧꦶꦱꦩꦼꦭꦏꦸꦏꦤ꧀ꦦꦼꦩ꧀ꦨꦤ꧀ꦠꦲꦶꦪꦤ꧀ꦩꦭꦩ꧀ꦧꦔꦶꦲꦶꦩꦂꦔꦤ꧀ꦱꦶꦱꦥꦱꦸꦏꦤ꧀ꦦꦤ꧀ꦢꦮꦱꦺꦠꦼꦭꦤ꧀ꦥꦼꦫꦁꦫꦩ꧀ꦥꦸꦁꦢꦶꦏꦸꦠꦸꦏ꧀ꦏꦁꦒꦺꦴꦤꦔꦼꦩ꧀ꦧꦫꦱꦭꦮꦱꦺ",
+
+                // Atribut (hanya beberapa contoh karena panjang)
+                attrKebenaran: "ꦑꦱꦸꦚꦠꦤ꧀",
+                attrKebijaksanaan: "ꦑꦧꦶꦗꦏ꧀ꦱꦤꦤ꧀",
+                attrKeadilan: "ꦑꦲꦢꦶꦭꦤ꧀",
+                attrKekuatan: "ꦑꦑꦸꦮꦠꦤ꧀",
+                attrKeberanian: "ꦮꦤꦶ",
+                attrKesetiaan: "ꦑꦼꦱꦼꦠꦶꦪꦤ꧀",
+
+                // Highlight Box
+                karakteristikJudul: "ꦑꦫꦏ꧀ꦠꦼꦫꦶꦱ꧀ꦠꦶꦏ꧀ꦠꦺꦴꦏꦺꦴꦲ꧀ꦩꦲꦧꦿꦠ",
+                karakteristikDeskripsi: "ꦱꦧꦺꦤ꧀ꦠꦺꦴꦏꦺꦴꦲ꧀ꦲꦶꦁꦩꦲꦧꦿꦠꦤ꧀ꦢꦲꦂꦧꦤꦶꦏꦫꦏ꧀ꦠꦼꦂꦪꦺꦁꦏꦺꦴꦩ꧀ꦦꦼꦊꦏ꧀ꦱ꧀ꦭꦤ꧀ꦩꦸꦭ꧀ꦠꦶꦢꦶꦩꦼꦤ꧀ꦱꦶꦪꦺꦴꦤꦭ꧀ꦲꦺꦴꦫꦤꦠꦺꦴꦏꦺꦴꦲ꧀ꦪꦺꦁꦱꦏꦧꦺꦔꦲꦺꦴꦥꦶꦁꦲꦠꦠꦧꦸꦂꦩꦤꦸꦱꦶꦪꦲꦶꦤ꧀ꦢꦢꦺꦏꦏꦺꦕꦿꦶꦠꦆꦤꦶꦱꦁꦏꦼꦠ꧀ꦩꦤꦸꦱꦶꦪꦲꦶꦭꦤ꧀ꦉꦭꦮꦤ꧀ꦢꦼꦤꦒꦤ꧀ꦲꦶꦢꦸꦥ꧀ꦤꦾꦠꦏꦺꦴꦤ꧀ꦥ꧀ꦭꦶꦏ꧀ꦲꦶꦤ꧀ꦠꦼꦂꦤꦭ꧀ꦭꦤ꧀ꦲꦺꦏ꧀ꦱ꧀ꦠꦼꦂꦤꦭ꧀ꦪꦺꦁꦢꦶꦭꦩꦶꦤꦶꦱꦧꦺꦤ꧀ꦠꦺꦴꦏꦺꦴꦲ꧀ꦤꦒꦩ꧀ꦧꦂꦏꦺꦥꦼꦂꦒꦸꦭꦠꦤ꧀ꦧꦠꦶꦤ꧀ꦩꦤꦸꦱꦲꦶꦁꦚꦗꦭꦤꦏꦺꦈꦫꦶꦥ",
+
+                nilaiJudul: "ꦤꦶꦭꦻꦤꦶꦭꦻꦪꦺꦁꦢꦶꦮꦏꦶꦭꦶ",
+                nilaiDeskripsi: "ꦩꦲꦧꦿꦠꦔꦗꦫꦏꦺꦧꦧꦢꦲꦂꦩꦏꦮꦗꦶꦧ꧀ꦏꦱꦸꦚꦠꦤ꧀ꦏꦲꦢꦶꦭꦤ꧀ꦦꦼꦔꦺꦴꦫꦧꦤꦤ꧀ꦭꦤ꧀ꦏꦺꦴꦩ꧀ꦦꦼꦊꦏ꧀ꦱꦶꦠꦱ꧀ꦈꦫꦶꦥꦱꦧꦺꦤ꧀ꦠꦺꦴꦏꦺꦴꦲ꧀ꦩꦺꦮꦏꦶꦭꦶꦤꦶꦭꦻꦤꦶꦭꦻꦠꦂꦠꦼꦤ꧀ꦠꦸꦪꦸꦢ꧀ꦲꦶꦱ꧀ꦠꦶꦫꦏꦱꦸꦚꦠꦤ꧀ꦨꦶꦩꦏꦑꦸꦮꦠꦤ꧀ꦭꦤ꧀ꦏꦼꦱꦼꦠꦶꦪꦤ꧀ꦄꦂꦗꦸꦤꦏꦲꦲ꧀ꦭꦶꦪꦤ꧀ꦭꦤ꧀ꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀ꦑꦿꦰ꧀ꦟꦏꦧꦶꦗꦏ꧀ꦱꦤꦤ꧀ꦭꦤ꧀ꦑꦂꦟꦏꦲꦺꦴꦫꦩꦠꦤ꧀ꦭꦤ꧀ꦏꦼꦩꦸꦫꦲꦤ꧀ꦲꦠꦶ"
+            }
+        };
+
+        // Text untuk language switcher button
+        const languageLabels = {
+            id: "Bahasa Indonesia",
+            jv: "Basa Jawa",
+            jv_script: "ꦲꦏ꧀ꦱꦫꦗꦮ"
+        };
+
+        // DOM Elements
+        const burgerMenu = document.getElementById('burgerMenu');
+        const navbar = document.getElementById('navbar');
+        const critaBtn = document.getElementById('critaWayangBtn');
+        const critaDropdown = document.getElementById('critaWayangDropdown');
+        const tokohBtn = document.getElementById('tokohWayangBtn');
+        const tokohDropdown = document.getElementById('tokohWayangDropdown');
+        const languageBtn = document.getElementById('languageBtn');
+        const languageDropdown = document.getElementById('languageDropdown');
+        const currentLanguage = document.getElementById('currentLanguage');
+
+        // Fungsi untuk mengganti bahasa
+        function changeLanguage(lang) {
+            const elements = document.querySelectorAll('[data-i18n]');
+
+            // Reset font mode dulu
+            document.body.classList.remove('aksara-jawa-mode');
+
+            elements.forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                let text = translations[lang]?.[key];
+
+                if (text) {
+                    element.textContent = text;
+                }
+            });
+
+            // Update language button text
+            currentLanguage.textContent = languageLabels[lang];
+
+            // Apply font khusus untuk aksara Jawa
+            if (lang === 'jv_script') {
+                document.body.classList.add('aksara-jawa-mode');
+            }
+
+            // Simpan preferensi bahasa
+            localStorage.setItem('preferredLanguage', lang);
+
+            // Tutup dropdown
+            languageDropdown.classList.remove('active');
+            languageBtn.querySelector('.language-arrow').classList.remove('open');
+        }
+
+        // Event Listeners untuk navigation
+        burgerMenu.addEventListener('click', function () {
+            this.classList.toggle('active');
+            navbar.classList.toggle('active');
+        });
+
+        critaBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            critaDropdown.classList.toggle('active');
+            this.querySelector('.dropdown-arrow').classList.toggle('open');
+            tokohDropdown.classList.remove('active');
+            if (tokohBtn.querySelector('.dropdown-arrow')) {
+                tokohBtn.querySelector('.dropdown-arrow').classList.remove('open');
+            }
+        });
+
+        tokohBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            tokohDropdown.classList.toggle('active');
+            this.querySelector('.dropdown-arrow').classList.toggle('open');
+            critaDropdown.classList.remove('active');
+            if (critaBtn.querySelector('.dropdown-arrow')) {
+                critaBtn.querySelector('.dropdown-arrow').classList.remove('open');
+            }
+        });
+
+        // Event Listeners untuk language switcher
+        languageBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            languageDropdown.classList.toggle('active');
+            this.querySelector('.language-arrow').classList.toggle('open');
+        });
+
+        document.querySelectorAll('.language-option').forEach(option => {
+            option.addEventListener('click', function () {
+                const lang = this.getAttribute('data-lang');
+                changeLanguage(lang);
+            });
+        });
+
+        // Tutup dropdown ketika klik di luar
+        document.addEventListener('click', function (e) {
+            if (!e.target.closest('#containernavbar')) {
+                critaDropdown.classList.remove('active');
+                tokohDropdown.classList.remove('active');
+                languageDropdown.classList.remove('active');
+
+                if (critaBtn.querySelector('.dropdown-arrow')) {
+                    critaBtn.querySelector('.dropdown-arrow').classList.remove('open');
+                }
+                if (tokohBtn.querySelector('.dropdown-arrow')) {
+                    tokohBtn.querySelector('.dropdown-arrow').classList.remove('open');
+                }
+                if (languageBtn.querySelector('.language-arrow')) {
+                    languageBtn.querySelector('.language-arrow').classList.remove('open');
+                }
+                navbar.classList.remove('active');
+                burgerMenu.classList.remove('active');
+            }
+        });
+
+        // Load bahasa yang disimpan
+        const savedLang = localStorage.getItem('preferredLanguage') || 'id';
+        changeLanguage(savedLang);
+    </script>
+</body>
+
+</html>

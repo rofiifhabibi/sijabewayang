@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mahabharata - Crita Wayang</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Chonburi&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @font-face {
+            font-family: 'nyk Ngayogyan Jejeg';
+            src: local('nyk Ngayogyan Jejeg'),
+                url('../fontnyk/nyk Ngayogyan Jejeg.ttf') format('truetype');
+        }
+
+        body {
+            font-family: sans-serif;
+            background-color: rgb(22, 22, 22);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Styles untuk Language Switcher */
+        .language-switcher {
+            position: relative;
+            display: inline-block;
+        }
+
+        .language-btn {
+            background: transparent;
+            border: 1px solid orange;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.3125rem;
+            cursor: pointer;
+            font-family: "nyk Ngayogyan Jejeg", sans-serif;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .language-btn:hover {
+            background-color: rgba(255, 165, 0, 0.1);
+        }
+
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: rgb(35, 35, 35);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.3125rem;
+            margin-top: 0.5rem;
+            min-width: 180px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            z-index: 1001;
+            display: none;
+        }
+
+        .language-dropdown.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .language-option {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: all 0.1s ease-in;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+        }
+
+        .language-option[data-lang="id"] {
+            font-family: "Chonburi", serif;
+        }
+
+        .language-option[data-lang="jv"] {
+            font-family: "Chonburi", serif;
+        }
+
+        .language-option[data-lang="jv_script"] {
+            font-family: "nyk Ngayogyan Jejeg", sans-serif;
+        }
+
+        .language-option:last-child {
+            border-bottom: none;
+        }
+
+        .language-option:hover {
+            background-color: rgb(45, 45, 45);
+            color: orange;
+            padding-left: 1.25rem;
+        }
+
+        .language-arrow {
+            font-size: 0.75rem;
+            transition: transform 0.2s ease;
+        }
+
+        .language-arrow.open {
+            transform: rotate(180deg);
+        }
+
+        #containernavbar {
+            display: flex;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+            flex-direction: row;
+            align-items: center;
+            width: 100%;
+            height: 5rem;
+            background-color: rgba(22, 22, 22, 0.95);
+            backdrop-filter: blur(10px);
+            justify-content: space-between;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        #logo {
+            font-size: 1.875rem;
+            font-family: "nyk Ngayogyan Jejeg", sans-serif;
+            color: #FFFFFF;
+            cursor: pointer;
+        }
+
+        .burger-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 0.35rem;
+        }
+
+        .burger-menu span {
+            width: 1.75rem;
+            height: 0.2rem;
+            background-color: #ee792b;
+            border-radius: 0.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .burger-menu.active span:nth-child(1) {
+            transform: rotate(45deg) translate(0.5rem, 0.5rem);
+        }
+
+        .burger-menu.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .burger-menu.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(0.5rem, -0.5rem);
+        }
+
+        #navbar {
+            width: 40%;
+            height: 2.5rem;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        .btnavbar {
+            font-family: "Chonburi", serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        #btactivenavbar {
+            padding-left: 0.625rem;
+            padding-right: 0.625rem;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            text-decoration: none;
+            color: rgb(0, 0, 0);
+            background-color: orange;
+            border-radius: 0.3125rem;
+            font-size: 0.9375rem;
+        }
+
+        .btinactivenavbar {
+            padding-left: 0.625rem;
+            padding-right: 0.625rem;
+            font-size: 0.9375rem;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+            border-radius: 0.3125rem;
+            transition: 0.1s ease-in;
+        }
+
+        .btinactivenavbar:hover {
+            background-color: rgb(35, 35, 35);
+            color: orange;
+            transition: 0.1s ease-in;
+        }
+
+        .dropdown-arrow {
+            font-size: 0.75rem;
+            transition: transform 0.2s ease;
+        }
+
+        .dropdown-arrow.open {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: rgb(35, 35, 35);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.3125rem;
+            margin-top: 0.5rem;
+            min-width: 180px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .dropdown-menu.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: white;
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: all 0.1s ease-in;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item.active {
+            background-color: orange;
+            color: black;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgb(45, 45, 45);
+            color: orange;
+            padding-left: 1.25rem;
+        }
+
+        #containercerita {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 6rem 2rem 2rem;
+            min-height: 100vh;
+        }
+
+        .story-header {
+            background: rgba(35, 35, 35, 0.8);
+            border-radius: 0;
+            padding: 3rem 2rem 2rem;
+            color: white;
+            position: relative;
+            border-bottom: 2px solid orange;
+            margin-bottom: 0;
+        }
+
+        .story-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-family: "EB Garamond", serif;
+            font-weight: 700;
+            background-image: linear-gradient(to right, #CC9900 0%, #FFCC66 50%, #FFD700 85%, #FFEB3B 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .story-header p {
+            font-size: 1.1rem;
+            color: rgb(180, 180, 180);
+            font-family: "EB Garamond", serif;
+        }
+
+        .story-content {
+            background: rgba(35, 35, 35, 0.8);
+            border-radius: 0;
+            padding: 3rem;
+            max-height: 70vh;
+            overflow-y: auto;
+            margin-bottom: 2rem;
+        }
+
+        .story-content::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .story-content::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .story-content::-webkit-scrollbar-thumb {
+            background: orange;
+            border-radius: 5px;
+        }
+
+        .story-section h2 {
+            color: orange;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-family: "EB Garamond", serif;
+            font-weight: 700;
+            padding-bottom: 0.5rem;
+        }
+
+        .story-section h3 {
+            font-family: "Chonburi", serif;
+            font-size: 1.3rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            background-image: linear-gradient(to right, #CC9900, #FFD700);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .story-section p {
+            color: rgb(180, 180, 180);
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            text-align: justify;
+            font-family: sans-serif;
+        }
+
+        .highlight-box {
+            background: rgba(255, 165, 0, 0.1);
+            border-left: 3px solid orange;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0.3125rem;
+        }
+
+        .highlight-box h4 {
+            color: orange;
+            margin-bottom: 0.8rem;
+            font-family: "EB Garamond", serif;
+            font-size: 1.2rem;
+        }
+
+        .highlight-box p {
+            color: rgb(200, 200, 200);
+            margin-bottom: 0;
+        }
+
+        /* Mode Aksara Jawa - SEMUA TEKS MENGGUNAKAN FONT AKSARA JAWA */
+        .aksara-jawa-mode * {
+            font-family: 'nyk Ngayogyan Jejeg', sans-serif !important;
+        }
+
+        /* Untuk judul utama tetap menggunakan gradient */
+        .aksara-jawa-mode .story-header h1,
+        .aksara-jawa-mode .story-section h2,
+        .aksara-jawa-mode .story-section h3 {
+            background-image: linear-gradient(to right, #CC9900, #FFD700);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Untuk teks paragraf beri line-height lebih besar agar mudah dibaca */
+        .aksara-jawa-mode .story-section p,
+        .aksara-jawa-mode .highlight-box p,
+        .aksara-jawa-mode .story-header p {
+            line-height: 2.0 !important;
+            font-size: 1.1rem !important;
+        }
+
+        /* Mobile Responsive - NAVBAR MOBILE DIPERBAIKI */
+        @media (max-width: 768px) {
+            #containernavbar {
+                padding-left: 1rem;
+                padding-right: 1rem;
+                height: 4rem;
+                flex-wrap: wrap;
+            }
+
+            #logo {
+                font-size: 1.5rem;
+            }
+
+            .burger-menu {
+                display: flex;
+                order: 3;
+            }
+
+            .nav-left {
+                order: 1;
+                flex: 1;
+            }
+
+            .nav-right {
+                order: 2;
+                width: auto;
+                flex-direction: row;
+                gap: 0.5rem;
+            }
+
+            .language-switcher {
+                width: auto;
+                margin-top: 0;
+            }
+
+            .language-btn {
+                width: auto;
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
+                min-width: 120px;
+            }
+
+            .language-dropdown {
+                position: absolute;
+                top: 100%;
+                right: 0;
+                width: 180px;
+                margin-top: 0.5rem;
+                transform: none;
+                max-height: none;
+                background-color: rgb(35, 35, 35);
+            }
+
+            .language-dropdown.active {
+                max-height: none;
+            }
+
+            #navbar {
+                position: fixed;
+                top: 4rem;
+                right: -100%;
+                width: 100%;
+                height: calc(100vh - 4rem);
+                background-color: rgba(22, 22, 22, 0.98);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: stretch;
+                padding: 1.5rem 1rem;
+                gap: 0.75rem;
+                transition: right 0.3s ease;
+                overflow-y: auto;
+                order: 4;
+            }
+
+            #navbar.active {
+                right: 0;
+            }
+
+            .btnavbar {
+                width: 100%;
+                height: auto;
+                display: flex;
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            #btactivenavbar,
+            .btinactivenavbar {
+                width: 100%;
+                height: 2.5rem;
+                font-size: 1rem;
+            }
+
+            .dropdown-menu {
+                position: static;
+                margin-top: 0;
+                width: 100%;
+                margin-left: 0;
+                padding-left: 1rem;
+                transform: none;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease, opacity 0.2s ease;
+                background-color: rgba(35, 35, 35, 0.9);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 0.3125rem;
+            }
+
+            .dropdown-menu.active {
+                display: block;
+                max-height: 300px;
+                margin-top: 0.5rem;
+            }
+
+            .dropdown-item {
+                padding: 0.75rem 1rem;
+                font-size: 0.95rem;
+                background-color: transparent;
+            }
+
+            .dropdown-item.active {
+                background-color: orange !important;
+                color: black !important;
+            }
+
+            #containercerita {
+                padding: 5rem 1rem 1rem;
+            }
+
+            .story-header {
+                padding: 2rem 1rem;
+            }
+
+            .story-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .story-header p {
+                font-size: 1rem;
+            }
+
+            .story-content {
+                padding: 1.5rem;
+                max-height: 60vh;
+            }
+
+            .story-section h2 {
+                font-size: 1.5rem;
+            }
+
+            .story-section h3 {
+                font-size: 1.1rem;
+            }
+
+            .story-section p {
+                font-size: 0.95rem;
+            }
+
+            /* Mobile untuk aksara Jawa */
+            .aksara-jawa-mode .story-section p,
+            .aksara-jawa-mode .highlight-box p,
+            .aksara-jawa-mode .story-header p {
+                line-height: 1.8 !important;
+                font-size: 1rem !important;
+            }
+        }
+
+        /* Media Query khusus untuk perangkat dengan lebar sangat kecil (Android portrait) */
+        @media (max-width: 480px) {
+            #containercerita {
+                padding: 5rem 0.75rem 1rem;
+            }
+
+            .story-content {
+                max-height: 55vh;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="containernavbar">
+        <div class="nav-left">
+            <div id="logo">ꦱꦶꦗꦧꦺ</div>
+        </div>
+
+        <div class="nav-right">
+            <!-- Language Switcher -->
+            <div class="language-switcher">
+                <button class="language-btn" id="languageBtn">
+                    <span id="currentLanguage">Bahasa Indonesia</span>
+                    <span class="language-arrow">▼</span>
+                </button>
+                <div class="language-dropdown" id="languageDropdown">
+                    <button class="language-option" data-lang="id">Bahasa Indonesia</button>
+                    <button class="language-option" data-lang="jv">Basa Jawa</button>
+                    <button class="language-option" data-lang="jv_script">ꦲꦏ꧀ꦱꦫꦗꦮ</button>
+                </div>
+            </div>
+
+            <div class="burger-menu" id="burgerMenu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+
+        <div id="navbar">
+            <div class="btnavbar">
+                <a href="/sijabewayang/index.html" class="btinactivenavbar" data-i18n="beranda">Beranda</a>
+            </div>
+            <div class="btnavbar" id="critaWayangNav">
+                <a href="#" class="btinactivenavbar" id="critaWayangBtn">
+                    <span data-i18n="critaWayang">Crita Wayang</span>
+                    <span class="dropdown-arrow">▼</span>
+                </a>
+                <div class="dropdown-menu" id="critaWayangDropdown">
+                    <a href="mahabharata.html" class="dropdown-item active" data-i18n="mahabharata">Mahabharata</a>
+                    <a href="ramayana.html" class="dropdown-item" data-i18n="ramayana">Ramayana</a>
+                    <a href="dewaruci.html" class="dropdown-item" data-i18n="dewaruci">Dewa Ruci</a>
+                </div>
+            </div>
+            <div class="btnavbar" id="tokohWayangNav">
+                <a href="#" class="btinactivenavbar" id="tokohWayangBtn">
+                    <span data-i18n="tokohWayang">Tokoh Wayang</span>
+                    <span class="dropdown-arrow">▼</span>
+                </a>
+                <div class="dropdown-menu" id="tokohWayangDropdown">
+                    <a href="../tokohwayang/mahabharata.html" class="dropdown-item"
+                        data-i18n="mahabharata">Mahabharata</a>
+                    <a href="../tokohwayang/ramayana.html" class="dropdown-item" data-i18n="ramayana">Ramayana</a>
+                    <a href="../tokohwayang/dewaruci.html" class="dropdown-item" data-i18n="dewaruci">Dewa Ruci</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="containercerita">
+        <div class="story-header">
+            <h1 data-i18n="judulHalaman">Mahabharata</h1>
+            <p data-i18n="subJudul">Kisah agung perseteruan antara Pandawa dan Kurawa dalam perang Bharatayuddha</p>
+        </div>
+
+        <div class="story-content">
+            <div class="story-section">
+                <h2 data-i18n="judulCerita">Mahabharata</h2>
+                <p data-i18n="deskripsiCerita"><em>Kisah agung perseteruan antara Pandawa dan Kurawa dalam perang
+                        Bharatayuddha</em></p>
+
+                <h3 data-i18n="subJudul1">Latar Belakang dan Keluarga Bharata</h3>
+                <p data-i18n="paragraf1">
+                    Mahabharata adalah wiracarita terpanjang di dunia yang berasal dari India, ditulis oleh Bhagawan
+                    Byasa. Kisah ini berpusat pada perseteruan antara dua kelompok sepupu, Pandawa dan Kurawa, dalam
+                    memperebutkan hak atas takhta kerajaan Hastinapura. Kisah ini bukan hanya tentang perang, tetapi
+                    juga tentang dharma, kebenaran, dan keadilan.
+                </p>
+
+                <p data-i18n="paragraf2">
+                    Kisah dimulai dari Raja Santanu yang menikahi Dewi Gangga dan memiliki putra bernama Dewabrata
+                    (yang kemudian dikenal sebagai Bisma). Setelah Gangga pergi, Santanu menikahi Satyawati dan
+                    memiliki dua putra: Citrangada dan Wicitrawirya. Bisma mengucapkan sumpah untuk tidak menikah dan
+                    tidak menjadi raja, sehingga garis keturunan dilanjutkan oleh putra-putra Satyawati.
+                </p>
+
+                <h3 data-i18n="subJudul2">Kelahiran Pandawa dan Kurawa</h3>
+                <p data-i18n="paragraf3">
+                    Wicitrawirya menikah dengan Ambika dan Ambalika, tetapi meninggal tanpa keturunan. Atas permintaan
+                    Satyawati, Byasa (putra Satyawati dengan Resi Parasara) melakukan Niyoga. Dari Ambika lahirlah
+                    Dretarastra yang buta, dari Ambalika lahirlah Pandu yang pucat, dan dari dayang mereka lahirlah
+                    Widura.
+                </p>
+
+                <p data-i18n="paragraf4">
+                    Dretarastra menikahi Gandari dan memiliki 100 putra (Kurawa) dengan putri sulungnya Duryodana.
+                    Pandu menikahi Kunti dan Madrim, namun karena kutukan bahwa dia akan mati jika berhubungan
+                    dengan istri, Kunti menggunakan mantra yang diperoleh dari Resi Durwasa untuk memanggil dewa.
+                    Dari Dharma lahir Yudhistira, dari Bayu lahir Bima, dari Indra lahir Arjuna. Madrim menggunakan
+                    mantra itu untuk memanggil Aswin dan mendapatkan Nakula dan Sadewa. Inilah kelima Pandawa.
+                </p>
+
+                <h3 data-i18n="subJudul3">Masa Kecil dan Pendidikan</h3>
+                <p data-i18n="paragraf5">
+                    Pandawa dan Kurawa dibesarkan bersama di istana Hastinapura di bawah bimbingan Bisma dan guru
+                    mereka, Resi Drona. Meski dibesarkan bersama, persaingan antara mereka, khususnya antara Bima dan
+                    Duryodana, selalu terjadi. Duryodana sering kali mencoba mencelakai Pandawa karena cemburu
+                    dengan kemampuan dan popularitas mereka.
+                </p>
+
+                <p data-i18n="paragraf6">
+                    Pada suatu ketika, Drona mengadakan sayembara untuk menunjukkan kemampuan para pangeran.
+                    Arjuna menunjukkan kehebatannya dalam memanah, membuat Drona sangat bangga. Setelah menyelesaikan
+                    pendidikan, Drona meminta upah dengan menaklukkan Kerajaan Panchala dan menangkap Raja
+                    Drupada, yang pernah menghina Drona.
+                </p>
+
+                <h3 data-i18n="subJudul4">Raja Muda di Indraprastha</h3>
+                <p data-i18n="paragraf7">
+                    Karena perseteruan semakin panas, Bisma membagi kerajaan. Kurawa mendapatkan Hastinapura,
+                    sementara Pandawa mendapatkan hutan Khandawaprastha yang gersang. Dengan bantuan Kresna dan
+                    Wiswakarman (arsitek dewa), Pandawa membangun kota megah bernama Indraprastha yang bahkan lebih
+                    indah daripada Hastinapura.
+                </p>
+
+                <p data-i18n="paragraf8">
+                    Yudhistira melakukan upacara Rajasuya untuk menyatakan kekuasaannya. Dalam upacara ini,
+                    Sishupala, sepupu Kresna, menghina Kresna dan akhirnya dibunuh olehnya. Kejayaan Pandawa ini
+                    semakin membuat Duryodana iri dan berniat menghancurkan mereka.
+                </p>
+
+                <h3 data-i18n="subJudul5">Permainan Dadu dan Pengasingan</h3>
+                <p data-i18n="paragraf9">
+                    Atas sasaran Sakuni (paman Kurawa yang ahli bermain dadu), Duryodana mengundang Yudhistira untuk
+                    bermain dadu. Yudhistira yang memiliki kelemahan dalam judi, akhirnya kalah dan kehilangan
+                    segala-galanya: kerajaan, harta benda, saudara-saudaranya, bahkan dirinya sendiri dan Dropadi
+                    (istri Pandawa).
+                </p>
+
+                <p data-i18n="paragraf10">
+                    Dalam peristiwa memalukan di balairung, Dursasana (adik Duryodana) mencoba menelanjangi Dropadi,
+                    namun berkat perlindungan Kresna, kain sari Dropadi tidak pernah habis. Bima bersumpah akan
+                    membunuh Dursasana dan meminum darahnya, serta mematahkan paha Duryodana.
+                </p>
+
+                <p data-i18n="paragraf11">
+                    Atas permohonan Dretarastra, Pandawa mendapatkan kembali kebebasan mereka, namun harus menjalani
+                    pengasingan di hutan selama 12 tahun dan hidup dalam penyamaran selama 1 tahun. Jika terdeteksi
+                    selama masa penyamaran, mereka harus mengulang pengasingan selama 12 tahun lagi.
+                </p>
+
+                <h3 data-i18n="subJudul6">Masa Pengasingan dan Penyamaran</h3>
+                <p data-i18n="paragraf12">
+                    Selama 12 tahun di hutan, Pandawa mengalami banyak petualangan dan bertemu dengan berbagai
+                    resi dan dewa. Pada tahun ke-13, mereka menyamar di Kerajaan Wirata. Yudhistira menjadi ahli
+                    nasihat, Bima menjadi juru masak, Arjuna menjadi guru tari yang banci, Nakula menjadi penjaga
+                    kuda, Sadewa menjadi penggembala sapi, dan Dropadi menjadi dayang ratu.
+                </p>
+
+                <p data-i18n="paragraf13">
+                    Pada akhir tahun penyamaran, terjadi serangan dari Kurawa yang mengetahui keberadaan mereka.
+                    Arjuna yang sudah tidak lagi menyamar, berhasil mengusir pasukan Kurawa dan menyelamatkan putra
+                    mahkota Wirata. Identitas Pandawa pun terungkap, namun masa penyamaran telah berhasil dilalui.
+                </p>
+
+                <h3 data-i18n="subJudul7">Perundingan Damai yang Gagal</h3>
+                <p data-i18n="paragraf14">
+                    Setelah masa pengasingan selesai, Pandawa menuntut hak mereka atas kerajaan. Kresna sebagai
+                    penasihat Pandawa mencoba berunding dengan Kurawa, menawarkan perdamaian dengan syarat
+                    Pandawa hanya meminta 5 desa saja. Namun Duryodana dengan keras kepala menolak, bahkan
+                    mengatakan tidak akan memberikan tanah seluas ujung jarum pun kepada Pandawa.
+                </p>
+
+                <p data-i18n="paragraf15">
+                    Segala upaya perdamaian gagal. Kresna yang datang sebagai duta perdamaian bahkan mengalami
+                    percobaan penangkapan oleh Duryodana. Kresna menunjukkan wujud Wisnu yang sejati, membuat
+                    semua yang hadir di balairung kecuali Pandawa dan beberapa orang tertutup matanya.
+                </p>
+
+                <h3 data-i18n="subJudul8">Persiapan Perang Bharatayuddha</h3>
+                <p data-i18n="paragraf16">
+                    Perang tidak terelakkan lagi. Kedua belah pihak mulai mengumpulkan sekutu. Di pihak Pandawa
+                    bergabung: Kekaisaran Pandya, Chola, Chera, Kamboja, Yawana, Sinhala, dan banyak kerajaan lain.
+                    Di pihak Kurawa bergabung: Kerajaan Angga, Kalinga, Sindhu, Gandhara, dan lain-lain.
+                </p>
+
+                <p data-i18n="paragraf17">
+                    Sebelum perang dimulai, Arjuna mengalami keraguan di medan perang Kurukshetra. Dia ragu untuk
+                    memerangi keluarga, guru, dan teman-temannya sendiri. Kresna kemudian memberikan wejangan
+                    spiritual yang dikenal sebagai Bhagawad Gita, mengajarkan tentang dharma, karma, dan
+                    kewajiban seorang kesatria.
+                </p>
+
+                <h3 data-i18n="subJudul9">Perang Bharatayuddha 18 Hari</h3>
+                <p data-i18n="paragraf18">
+                    Perang berlangsung selama 18 hari dengan aturan-aturan tertentu yang disepakati oleh kedua
+                    belah pihak. Setiap hari memiliki kejadian penting:
+                    <br>Hari 1-9: Pertempuran umum dengan kemenangan berganti-ganti
+                    <br>Hari 10: Bisma gugur setelah dijadikan sasaran panah oleh Arjuna dengan bantuan Srikandi
+                    <br>Hari 11-14: Drona menjadi panglima, gugur setelah mendengar kabar palsu tentang kematian
+                    Aswatama
+                    <br>Hari 15: Karna menjadi panglima, gugur setelah kutukan dan kehilangan pusaka
+                    <br>Hari 16-17: Salya menjadi panglima, gugur di tangan Yudhistira
+                    <br>Hari 18: Sisa Kurawa dibantai, termasuk Duryodana yang gugur setelah duel dengan Bima
+                </p>
+
+                <p data-i18n="paragraf19">
+                    Dalam perang ini, banyak pahlawan yang gugur dari kedua belah pihak. Hanya 10 kesatria yang
+                    selamat: 5 Pandawa, Kresna, Satyaki, Yuyutsu, Kertawarma, dan Krepa. Seluruh 100 Kurawa dan
+                    sekutunya tewas, termasuk putra-putra mereka.
+                </p>
+
+                <h3 data-i18n="subJudul10">Akhir Kisah dan Ajaran Moral</h3>
+                <p data-i18n="paragraf20">
+                    Setelah perang usai, Yudhistira dinobatkan sebagai raja Hastinapura. Namun kemenangan terasa
+                    pahit karena harus mengorbankan begitu banyak nyawa, termasuk putra-putra mereka sendiri.
+                    Gandari mengutuk Kresna bahwa keluarganya akan musnah dalam 36 tahun, yang kemudian terjadi
+                    dalam perang antara Wangsa Yadawa.
+                </p>
+
+                <p data-i18n="paragraf21">
+                    Setelah memerintah selama beberapa tahun, Pandawa menyerahkan tahta kepada Parikesit (cucu
+                    Arjuna) dan melakukan perjalanan terakhir ke Himalaya untuk mencapai surga. Dalam perjalanan
+                    ini, satu per satu mereka meninggal, hanya Yudhistira yang mencapai surga dalam wujud manusia.
+                </p>
+
+                <div class="highlight-box">
+                    <h4 data-i18n="nilaiFilosofis">Nilai Filosofis Mahabharata</h4>
+                    <p data-i18n="nilaiDeskripsi">
+                        Mahabharata mengajarkan bahwa kebenaran dan dharma harus selalu ditegakkan meskipun
+                        menghadapi berbagai rintangan. Kisah ini menunjukkan konsep karma bahwa setiap perbuatan
+                        akan mendapatkan balasannya. Bhagawad Gita sebagai bagian dari Mahabharata memberikan
+                        ajaran spiritual tentang kewajiban, pelepasan dari hasil kerja, dan hubungan antara manusia
+                        dengan Tuhan. Perang Bharatayuddha juga mengajarkan bahwa perang seharusnya menjadi pilihan
+                        terakhir setelah segala upaya damai gagal.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data terjemahan untuk halaman Mahabharata - LENGKAP dengan semua teks
+        const translations = {
+            id: {
+                // Navbar
+                beranda: "Beranda",
+                critaWayang: "Crita Wayang",
+                tokohWayang: "Tokoh Wayang",
+                mahabharata: "Mahabharata",
+                ramayana: "Ramayana",
+                dewaruci: "Dewa Ruci",
+
+                // Header
+                judulHalaman: "Mahabharata",
+                subJudul: "Kisah agung perseteruan antara Pandawa dan Kurawa dalam perang Bharatayuddha",
+
+                // Konten
+                judulCerita: "Mahabharata",
+                deskripsiCerita: "Kisah agung perseteruan antara Pandawa dan Kurawa dalam perang Bharatayuddha",
+
+                // Subjudul
+                subJudul1: "Latar Belakang dan Keluarga Bharata",
+                subJudul2: "Kelahiran Pandawa dan Kurawa",
+                subJudul3: "Masa Kecil dan Pendidikan",
+                subJudul4: "Raja Muda di Indraprastha",
+                subJudul5: "Permainan Dadu dan Pengasingan",
+                subJudul6: "Masa Pengasingan dan Penyamaran",
+                subJudul7: "Perundingan Damai yang Gagal",
+                subJudul8: "Persiapan Perang Bharatayuddha",
+                subJudul9: "Perang Bharatayuddha 18 Hari",
+                subJudul10: "Akhir Kisah dan Ajaran Moral",
+
+                // Paragraf
+                paragraf1: "Mahabharata adalah wiracarita terpanjang di dunia yang berasal dari India, ditulis oleh Bhagawan Byasa. Kisah ini berpusat pada perseteruan antara dua kelompok sepupu, Pandawa dan Kurawa, dalam memperebutkan hak atas takhta kerajaan Hastinapura. Kisah ini bukan hanya tentang perang, tetapi juga tentang dharma, kebenaran, dan keadilan.",
+                paragraf2: "Kisah dimulai dari Raja Santanu yang menikahi Dewi Gangga dan memiliki putra bernama Dewabrata (yang kemudian dikenal sebagai Bisma). Setelah Gangga pergi, Santanu menikahi Satyawati dan memiliki dua putra: Citrangada dan Wicitrawirya. Bisma mengucapkan sumpah untuk tidak menikah dan tidak menjadi raja, sehingga garis keturunan dilanjutkan oleh putra-putra Satyawati.",
+                paragraf3: "Wicitrawirya menikah dengan Ambika dan Ambalika, tetapi meninggal tanpa keturunan. Atas permintaan Satyawati, Byasa (putra Satyawati dengan Resi Parasara) melakukan Niyoga. Dari Ambika lahirlah Dretarastra yang buta, dari Ambalika lahirlah Pandu yang pucat, dan dari dayang mereka lahirlah Widura.",
+                paragraf4: "Dretarastra menikahi Gandari dan memiliki 100 putra (Kurawa) dengan putri sulungnya Duryodana. Pandu menikahi Kunti dan Madrim, namun karena kutukan bahwa dia akan mati jika berhubungan dengan istri, Kunti menggunakan mantra yang diperoleh dari Resi Durwasa untuk memanggil dewa. Dari Dharma lahir Yudhistira, dari Bayu lahir Bima, dari Indra lahir Arjuna. Madrim menggunakan mantra itu untuk memanggil Aswin dan mendapatkan Nakula dan Sadewa. Inilah kelima Pandawa.",
+                paragraf5: "Pandawa dan Kurawa dibesarkan bersama di istana Hastinapura di bawah bimbingan Bisma dan guru mereka, Resi Drona. Meski dibesarkan bersama, persaingan antara mereka, khususnya antara Bima dan Duryodana, selalu terjadi. Duryodana sering kali mencoba mencelakai Pandawa karena cemburu dengan kemampuan dan popularitas mereka.",
+                paragraf6: "Pada suatu ketika, Drona mengadakan sayembara untuk menunjukkan kemampuan para pangeran. Arjuna menunjukkan kehebatannya dalam memanah, membuat Drona sangat bangga. Setelah menyelesaikan pendidikan, Drona meminta upah dengan menaklukkan Kerajaan Panchala dan menangkap Raja Drupada, yang pernah menghina Drona.",
+                paragraf7: "Karena perseteruan semakin panas, Bisma membagi kerajaan. Kurawa mendapatkan Hastinapura, sementara Pandawa mendapatkan hutan Khandawaprastha yang gersang. Dengan bantuan Kresna dan Wiswakarman (arsitek dewa), Pandawa membangun kota megah bernama Indraprastha yang bahkan lebih indah daripada Hastinapura.",
+                paragraf8: "Yudhistira melakukan upacara Rajasuya untuk menyatakan kekuasaannya. Dalam upacara ini, Sishupala, sepupu Kresna, menghina Kresna dan akhirnya dibunuh olehnya. Kejayaan Pandawa ini semakin membuat Duryodana iri dan berniat menghancurkan mereka.",
+                paragraf9: "Atas sasaran Sakuni (paman Kurawa yang ahli bermain dadu), Duryodana mengundang Yudhistira untuk bermain dadu. Yudhistira yang memiliki kelemahan dalam judi, akhirnya kalah dan kehilangan segala-galanya: kerajaan, harta benda, saudara-saudaranya, bahkan dirinya sendiri dan Dropadi (istri Pandawa).",
+                paragraf10: "Dalam peristiwa memalukan di balairung, Dursasana (adik Duryodana) mencoba menelanjangi Dropadi, namun berkat perlindungan Kresna, kain sari Dropadi tidak pernah habis. Bima bersumpah akan membunuh Dursasana dan meminum darahnya, serta mematahkan paha Duryodana.",
+                paragraf11: "Atas permohonan Dretarastra, Pandawa mendapatkan kembali kebebasan mereka, namun harus menjalani pengasingan di hutan selama 12 tahun dan hidup dalam penyamaran selama 1 tahun. Jika terdeteksi selama masa penyamaran, mereka harus mengulang pengasingan selama 12 tahun lagi.",
+                paragraf12: "Selama 12 tahun di hutan, Pandawa mengalami banyak petualangan dan bertemu dengan berbagai resi dan dewa. Pada tahun ke-13, mereka menyamar di Kerajaan Wirata. Yudhistira menjadi ahli nasihat, Bima menjadi juru masak, Arjuna menjadi guru tari yang banci, Nakula menjadi penjaga kuda, Sadewa menjadi penggembala sapi, dan Dropadi menjadi dayang ratu.",
+                paragraf13: "Pada akhir tahun penyamaran, terjadi serangan dari Kurawa yang mengetahui keberadaan mereka. Arjuna yang sudah tidak lagi menyamar, berhasil mengusir pasukan Kurawa dan menyelamatkan putra mahkota Wirata. Identitas Pandawa pun terungkap, namun masa penyamaran telah berhasil dilalui.",
+                paragraf14: "Setelah masa pengasingan selesai, Pandawa menuntut hak mereka atas kerajaan. Kresna sebagai penasihat Pandawa mencoba berunding dengan Kurawa, menawarkan perdamaian dengan syarat Pandawa hanya meminta 5 desa saja. Namun Duryodana dengan keras kepala menolak, bahkan mengatakan tidak akan memberikan tanah seluas ujung jarum pun kepada Pandawa.",
+                paragraf15: "Segala upaya perdamaian gagal. Kresna yang datang sebagai duta perdamaian bahkan mengalami percobaan penangkapan oleh Duryodana. Kresna menunjukkan wujud Wisnu yang sejati, membuat semua yang hadir di balairung kecuali Pandawa dan beberapa orang tertutup matanya.",
+                paragraf16: "Perang tidak terelakkan lagi. Kedua belah pihak mulai mengumpulkan sekutu. Di pihak Pandawa bergabung: Kekaisaran Pandya, Chola, Chera, Kamboja, Yawana, Sinhala, dan banyak kerajaan lain. Di pihak Kurawa bergabung: Kerajaan Angga, Kalinga, Sindhu, Gandhara, dan lain-lain.",
+                paragraf17: "Sebelum perang dimulai, Arjuna mengalami keraguan di medan perang Kurukshetra. Dia ragu untuk memerangi keluarga, guru, dan teman-temannya sendiri. Kresna kemudian memberikan wejangan spiritual yang dikenal sebagai Bhagawad Gita, mengajarkan tentang dharma, karma, dan kewajiban seorang kesatria.",
+                paragraf18: "Perang berlangsung selama 18 hari dengan aturan-aturan tertentu yang disepakati oleh kedua belah pihak. Setiap hari memiliki kejadian penting: Hari 1-9: Pertempuran umum dengan kemenangan berganti-ganti. Hari 10: Bisma gugur setelah dijadikan sasaran panah oleh Arjuna dengan bantuan Srikandi. Hari 11-14: Drona menjadi panglima, gugur setelah mendengar kabar palsu tentang kematian Aswatama. Hari 15: Karna menjadi panglima, gugur setelah kutukan dan kehilangan pusaka. Hari 16-17: Salya menjadi panglima, gugur di tangan Yudhistira. Hari 18: Sisa Kurawa dibantai, termasuk Duryodana yang gugur setelah duel dengan Bima.",
+                paragraf19: "Dalam perang ini, banyak pahlawan yang gugur dari kedua belah pihak. Hanya 10 kesatria yang selamat: 5 Pandawa, Kresna, Satyaki, Yuyutsu, Kertawarma, dan Krepa. Seluruh 100 Kurawa dan sekutunya tewas, termasuk putra-putra mereka.",
+                paragraf20: "Setelah perang usai, Yudhistira dinobatkan sebagai raja Hastinapura. Namun kemenangan terasa pahit karena harus mengorbankan begitu banyak nyawa, termasuk putra-putra mereka sendiri. Gandari mengutuk Kresna bahwa keluarganya akan musnah dalam 36 tahun, yang kemudian terjadi dalam perang antara Wangsa Yadawa.",
+                paragraf21: "Setelah memerintah selama beberapa tahun, Pandawa menyerahkan tahta kepada Parikesit (cucu Arjuna) dan melakukan perjalanan terakhir ke Himalaya untuk mencapai surga. Dalam perjalanan ini, satu per satu mereka meninggal, hanya Yudhistira yang mencapai surga dalam wujud manusia.",
+
+                // Highlight Box
+                nilaiFilosofis: "Nilai Filosofis Mahabharata",
+                nilaiDeskripsi: "Mahabharata mengajarkan bahwa kebenaran dan dharma harus selalu ditegakkan meskipun menghadapi berbagai rintangan. Kisah ini menunjukkan konsep karma bahwa setiap perbuatan akan mendapatkan balasannya. Bhagawad Gita sebagai bagian dari Mahabharata memberikan ajaran spiritual tentang kewajiban, pelepasan dari hasil kerja, dan hubungan antara manusia dengan Tuhan. Perang Bharatayuddha juga mengajarkan bahwa perang seharusnya menjadi pilihan terakhir setelah segala upaya damai gagal."
+            },
+
+            jv: {
+                // Navbar
+                beranda: "Beranda",
+                critaWayang: "Crita Wayang",
+                tokohWayang: "Tokoh Wayang",
+                mahabharata: "Mahabharata",
+                ramayana: "Ramayana",
+                dewaruci: "Dewa Ruci",
+
+                // Header
+                judulHalaman: "Mahabharata",
+                subJudul: "Kisah agung perseteruan antawis Pandawa lan Kurawa ing perang Bharatayuddha",
+
+                // Konten
+                judulCerita: "Mahabharata",
+                deskripsiCerita: "Kisah agung perseteruan antawis Pandawa lan Kurawa ing perang Bharatayuddha",
+
+                // Subjudul
+                subJudul1: "Latar Mburi lan Kulawarga Bharata",
+                subJudul2: "Lairipun Pandawa lan Kurawa",
+                subJudul3: "Masa Cilik lan Pawiyatan",
+                subJudul4: "Raja Muda ing Indraprastha",
+                subJudul5: "Dolanan Dadu lan Pangasingan",
+                subJudul6: "Masa Pangasingan lan Penyamaran",
+                subJudul7: "Rembug Damai sing Gagal",
+                subJudul8: "Persiapan Perang Bharatayuddha",
+                subJudul9: "Perang Bharatayuddha 18 Dina",
+                subJudul10: "Pungkasan Crita lan Wulangan Moral",
+
+                // Paragraf - SEMUA DITERJEMAHKAN LENGKAP
+                paragraf1: "ꦩꦲꦧꦿꦠꦥꦸꦤꦶꦏꦮꦶꦫꦕꦫꦶꦠꦠꦼꦂꦥꦚ꧀ꦗꦁꦲꦶꦁꦢꦸꦤꦶꦪꦲꦶꦁꦏꦁꦠꦼꦏꦼꦤ꧀ꦱꦏꦶꦁꦆꦤ꧀ꦢꦶꦪꦲꦶꦁꦏꦁꦢꦶꦥꦸꦤ꧀ꦱꦼꦫꦠ꧀ꦢꦼꦤꦶꦁꦨꦒꦮꦤ꧀ꦧꦾꦱꦏꦶꦱꦃꦆꦤꦶꦧꦺꦴꦤ꧀ꦠꦼꦤ꧀ꦏꦥꦼꦂꦱꦺꦠꦼꦂꦪꦸꦲꦤ꧀ꦲꦤ꧀ꦠꦮꦶꦱꦶꦱꦼꦥꦸꦥꦸꦥꦤ꧀ꦢꦮꦭꦤ꧀ꦑꦸꦫꦮꦲꦶꦁꦦꦼꦫꦤꦸꦠꦩ꧀ꦧꦸꦭꦏ꧀ꦲꦏ꧀ꦱꦠꦠꦏ꧀ꦛꦏꦫꦗꦤ꧀ꦲꦱ꧀ꦠꦶꦤꦥꦸꦫꦏꦶꦱꦃꦆꦤꦶꦢꦸꦢꦸꦧꦧꦧꦁꦥꦼꦫꦁꦤꦔꦤ꧀ꦧꦧꦢꦿꦩꦑꦧꦼꦤꦂꦱꦤ꧀ꦭꦤ꧀ꦏꦲꦢꦶꦭꦤ꧀",
+                paragraf2: "ꦏꦶꦱꦃꦢꦶꦩꦸꦭꦲꦶꦱꦏꦶꦁꦫꦗꦱꦤ꧀ꦠꦤꦸꦲꦶꦁꦏꦁꦤꦶꦏꦲꦶꦢꦼꦮꦶꦒꦁꦒꦭꦤ꧀ꦒꦢꦃꦥꦸꦠꦿꦤꦩꦤ꧀ꦢꦼꦮꦧꦿꦠꦲꦶꦁꦏꦁꦭꦠꦱ꧀ꦏꦭꦶꦪꦤ꧀ꦢꦶꦏꦼꦤꦭ꧀ꦱꦕꦕꦶꦩꦤ꧀ꦱꦼꦱꦸꦢꦸꦫꦤꦶꦏꦏꦼꦤꦶꦁꦒꦁꦒꦭꦤ꧀ꦤꦶꦁꦒꦭ꧀ꦱꦠꦾꦮꦠꦶꦭꦤ꧀ꦒꦢꦃꦢꦮꦥꦸꦠꦿꦕꦶꦠꦿꦔꦢꦭꦤ꧀ꦮꦶꦕꦶꦠꦿꦮꦶꦂꦪꦨꦶꦱ꧀ꦩꦔꦸꦕꦥ꧀ꦱꦩ꧀ꦥꦃꦏꦁꦒꦺꦴꦤꦠꦺꦴꦩ꧀ꦤꦶꦏꦲꦶꦭꦤ꧀ꦠꦶꦢꦏ꧀ꦩꦼꦤ꧀ꦗꦢꦶꦫꦗꦱꦺꦴꦤꦮꦶꦱ꧀ꦏꦸꦭꦤ꧀ꦠꦸꦂꦫꦤꦶꦥꦸꦤ꧀ꦢꦶꦭꦚꦸꦠ꧀ꦏꦼꦤ꧀ꦢꦼꦤꦶꦁꦥꦸꦠꦿꦥꦸꦠꦿꦱꦠꦾꦮꦠꦶ",
+                paragraf3: "ꦮꦶꦕꦶꦠꦿꦮꦶꦂꦪꦤꦶꦏꦲꦶꦭꦩ꧀ꦧꦶꦏꦭꦤ꧀ꦄꦩ꧀ꦧꦭꦶꦏꦤꦔꦤ꧀ꦩꦼꦔꦶꦁꦒꦭ꧀ꦠꦤ꧀ꦥꦶꦁꦥꦸꦠꦂꦲꦠꦱ꧀ꦥꦼꦂꦩꦺꦤ꧀ꦠꦃꦱꦠꦾꦮꦠꦶꦧꦾꦱꦥꦸꦠꦿꦱꦠꦾꦮꦠꦶꦏꦭꦶꦪꦤ꧀ꦉꦯꦶꦥꦫꦱꦫꦤꦼꦤ꧀ꦢꦼꦤꦶꦁꦔꦤꦤꦶꦪꦺꦴꦒꦢꦫꦶꦥꦩ꧀ꦧꦶꦏꦭꦲꦶꦂꦭꦃꦢꦿꦼꦠꦫꦱ꧀ꦠꦿꦪꦁꦧꦸꦠꦮꦱꦏꦶꦁꦄꦩ꧀ꦧꦭꦶꦏꦭꦲꦶꦂꦭꦃꦥꦤ꧀ꦢꦸꦪꦁꦥꦸꦕꦠ꧀ꦭꦤ꧀ꦢꦫꦶꦢꦪꦁꦥꦲꦺꦴꦫꦭꦲꦶꦂꦭꦃꦮꦶꦢꦸꦫ",
+                paragraf4: "ꦢꦿꦼꦠꦫꦱ꧀ꦠꦿꦤꦶꦏꦲꦶꦒꦤ꧀ꦢꦫꦶꦭꦤ꧀ꦒꦢꦃꦱꦸꦠꦭꦤ꧀ꦏꦸꦫꦮꦏꦭꦶꦪꦤ꧀ꦥꦸꦠꦿꦶꦱꦸꦭꦸꦁꦤꦶꦥꦸꦤ꧀ꦢꦸꦂꦪꦺꦴꦢꦤꦥꦤ꧀ꦢꦸꦤꦶꦏꦲꦶꦏꦸꦤ꧀ꦠꦶꦭꦤ꧀ꦩꦢꦿꦶꦩ꧀ꦤꦔꦤ꧀ꦲꦩꦂꦒꦏꦸꦠꦸꦏꦤ꧀ꦧꦃꦮꦤꦢꦼꦤꦺꦤꦩꦠꦶꦪꦲꦶꦏꦒꦫꦸꦥꦠ꧀ꦢꦼꦤꦶꦁꦏꦺꦴꦮꦤ꧀ꦏꦸꦤ꧀ꦠꦶꦔꦔꦺꦤꦩꦤ꧀ꦠꦿꦲꦶꦁꦏꦁꦢꦶꦥꦸꦤ꧀ꦲꦺꦴꦭꦃꦢꦢꦶꦉꦯꦶꦢꦸꦂꦮꦱꦏꦁꦒꦺꦴꦤꦩꦔꦔꦼꦤ꧀ꦢꦺꦮꦢꦿꦶꦥꦩ꧀ꦧꦼꦂꦭꦲꦶꦂꦭꦃꦪꦸꦢ꧀ꦝꦶꦱ꧀ꦠꦶꦫꦱꦏꦶꦁꦧꦪꦸꦭꦲꦶꦂꦭꦃꦨꦶꦩꦱꦏꦶꦁꦆꦤ꧀ꦢꦿꦭꦲꦶꦂꦭꦃꦄꦂꦗꦸꦤꦄꦩ꧀ꦩꦢꦿꦶꦩꦔꦔꦺꦤꦩꦤ꧀ꦠꦿꦆꦏꦸꦁꦒꦺꦴꦤꦩꦔꦔꦼꦤ꧀ꦄꦱ꧀ꦮꦶꦤ꧀ꦭꦤ꧀ꦒꦢꦃꦤꦏꦸꦭꦭꦤ꧀ꦱꦢꦺꦮꦲꦶꦤꦶꦭꦃꦏꦼꦭꦶꦩꦥꦤ꧀ꦢꦮ",
+                paragraf5: "ꦥꦤ꧀ꦢꦮꦭꦤ꧀ꦑꦸꦫꦮꦢꦶꦧꦼꦱꦂꦏꦼꦤ꧀ꦱꦩꦲꦶꦁꦲꦶꦱ꧀ꦠꦤꦥꦸꦤ꧀ꦲꦱ꧀ꦠꦶꦤꦥꦸꦫꦲꦢꦶꦏꦫꦺꦴꦨꦶꦩꦱ꧀ꦩꦭꦤ꧀ꦒꦸꦫꦸꦥꦲꦺꦴꦉꦯꦶꦢꦿꦺꦴꦤꦩꦼꦱ꧀ꦏꦶꦢꦶꦧꦼꦱꦂꦏꦼꦤ꧀ꦱꦩꦃꦥꦼꦂꦱꦸꦥꦼꦔꦤ꧀ꦲꦤ꧀ꦠꦮꦶꦱꦶꦥꦼꦂꦱꦼꦧꦭꦤ꧀ꦨꦶꦩꦭꦤ꧀ꦢꦸꦂꦪꦺꦴꦢꦤꦱꦼꦭꦭꦸꦲꦶꦁꦠꦼꦂꦗꦢꦶꦢꦸꦂꦪꦺꦴꦢꦤꦱꦼꦫꦶꦁꦏꦭꦶꦤꦺꦧꦸꦤ꧀ꦕꦺꦴꦧꦤꦼꦭꦏꦏꦺꦥꦤ꧀ꦢꦮꦲꦩꦂꦒꦕꦼꦩ꧀ꦧꦸꦫꦸꦏꦭꦶꦪꦤ꧀ꦏꦧꦶꦭꦤ꧀ꦭꦤ꧀ꦥꦺꦴꦥꦸꦭꦼꦂꦤꦶꦠꦱ꧀ꦥꦲꦺꦴ",
+                paragraf6: "ꦏꦁꦒꦺꦴꦤ꧀ꦱꦪꦗꦤꦺꦉꦯꦶꦢꦿꦺꦴꦤꦏꦁꦒꦺꦴꦤꦠꦁꦒꦶꦭ꧀ꦠꦁꦒꦺꦴꦤꦥꦫꦥꦭꦔꦂꦥꦲꦺꦴꦲꦂꦗꦸꦤꦨꦶꦪꦠ꧀ꦠꦠꦶꦁꦏꦏꦸꦮꦠ꧀ꦢꦩꦼꦩ꧀ꦥꦤꦃꦲꦤ꧀ꦢꦭꦺꦫꦠ꧀ꦫꦤꦶꦥꦸꦤ꧀ꦩꦼꦔꦲꦶꦱ꧀ꦠꦤꦺꦥꦤ꧀ꦢꦿꦺꦴꦤꦩꦼꦚꦠꦸꦱꦪꦼꦩ꧀ꦧꦫꦠꦂꦏꦱ꧀ꦏꦁꦒꦺꦴꦤꦥꦭꦃꦄꦂꦗꦸꦤꦲꦶꦁꦏꦁꦱꦗꦺꦴꦱ꧀ꦧꦲꦁꦏꦪꦱꦏꦭꦶꦪꦤ꧀ꦢꦿꦺꦴꦤꦩꦸꦠꦸꦱ꧀ꦠꦸꦭꦸꦱ꧀ꦥꦮꦶꦪꦠꦤ꧀ꦢꦿꦺꦴꦤꦩꦺꦤꦸꦱꦠꦩꦭ꧀ꦏꦸꦥꦃꦏꦭꦶꦪꦤ꧀ꦩꦼꦚꦏ꧀ꦭꦸꦏꦏꦂꦗꦤ꧀ꦥꦤ꧀ꦕꦭꦭꦤ꧀ꦩꦼꦚꦔꦥ꧀ꦫꦗꦢꦿꦸꦥꦢꦲꦶꦁꦏꦁꦱꦸꦥꦸꦤ꧀ꦲꦶꦤꦢꦿꦺꦴꦤ",
+                paragraf7: "ꦲꦩꦂꦒꦥꦼꦂꦱꦺꦠꦼꦫꦪꦤ꧀ꦱꦼꦩꦏꦶꦤ꧀ꦥꦤꦱ꧀ꦨꦶꦱ꧀ꦩꦩꦼꦩ꧀ꦧꦱꦏꦫꦗꦤ꧀ꦑꦸꦫꦮꦤꦼꦩꦺꦴꦤ꧀ꦏꦏ꧀ꦲꦱ꧀ꦠꦶꦤꦥꦸꦫꦱꦩꦼꦤ꧀ꦠꦮ꧀ꦥꦤ꧀ꦢꦮꦤꦼꦩꦺꦴꦤ꧀ꦏꦏ꧀ꦲꦭꦱ꧀ꦏꦤ꧀ꦢꦮꦥꦿꦱ꧀ꦛꦪꦁꦒꦼꦂꦱꦁꦢꦼꦔꦤ꧀ꦧꦤ꧀ꦠꦸꦤ꧀ꦧꦒꦮꦱ꧀ꦫꦤꦭꦤ꧀ꦮꦶꦱ꧀ꦮꦏꦂꦩꦤ꧀ꦥꦤ꧀ꦢꦮꦩꦺꦩ꧀ꦧꦁꦤꦺꦏꦺꦴꦠꦩꦼꦒꦃꦲꦤꦩꦤ꧀ꦢꦶꦤ꧀ꦝꦿꦥꦿꦱ꧀ꦛꦲꦶꦁꦏꦁꦩꦂꦠꦏꦼꦤ꧀ꦭꦧꦶꦃꦆꦤ꧀ꦢꦺꦭ꧀ꦱꦏꦏꦺꦤ꧀ꦲꦱ꧀ꦠꦶꦤꦥꦸꦫ",
+                paragraf8: "ꦪꦸꦢ꧀ꦝꦶꦱ꧀ꦠꦶꦫꦤꦼꦤ꧀ꦢꦏꦏꦼꦤ꧀ꦪꦸꦥꦕꦫꦫꦗꦱꦸꦪꦏꦁꦒꦺꦴꦤꦪꦠꦼꦤ꧀ꦢꦩ꧀ꦥꦏꦺꦏꦸꦮꦱꦤꦤꦶꦥꦸꦤ꧀ꦲꦶꦁꦪꦸꦥꦕꦫꦆꦤꦶꦱꦶꦱꦸꦥꦠ꧀ꦱꦼꦥꦸꦥꦸꦧꦒꦮꦱ꧀ꦫꦤꦲꦶꦤꦸꦤꦭꦤ꧀ꦥꦩ꧀ꦧꦸꦤꦸꦃꦏꦼꦤ꧀ꦢꦺꦤꦶꦁꦧꦒꦮꦱ꧀ꦫꦤꦏꦺꦚꦪꦪꦤ꧀ꦥꦤ꧀ꦢꦮꦆꦤꦶꦱꦼꦩꦏꦶꦤ꧀ꦢꦢꦶꦢꦸꦂꦪꦺꦴꦢꦤꦧꦺꦴꦤ꧀ꦧꦱꦠꦏꦺꦨꦱꦂꦏꦲꦺꦴ",
+                paragraf9: "ꦱꦏꦼꦤ꧀ꦱꦏꦸꦤꦶꦥꦩꦤ꧀ꦑꦸꦫꦮꦲꦶꦁꦏꦁꦲꦁꦒꦼꦂꦧꦺꦱ꧀ꦢꦺꦴꦭꦤꦤ꧀ꦢꦢꦸꦢꦸꦂꦪꦺꦴꦢꦤꦲꦁꦒꦸꦤ꧀ꦱꦏꦺꦪꦸꦢ꧀ꦝꦶꦱ꧀ꦠꦶꦫꦏꦁꦒꦺꦴꦤꦢꦺꦴꦭꦤꦤ꧀ꦢꦢꦸꦪꦸꦢ꧀ꦝꦶꦱ꧀ꦠꦶꦫꦲꦶꦁꦏꦁꦒꦢꦃꦏꦼꦭꦼꦩ꧀ꦧꦤꦲꦶꦁꦗꦺꦴꦣꦶꦪꦸꦏꦼꦤ꧀ꦲꦶꦭꦁꦱꦏꦧꦺꦃꦮꦼꦱꦱꦲꦶꦁꦒꦭ꧀ꦒꦭꦤꦧꦁꦏꦫꦗꦤ꧀ꦲꦂꦠꦧꦼꦤ꧀ꦢꦭꦤ꧀ꦥꦲꦺꦴꦩꦲꦺꦴꦩꦏꦺꦴꦱꦮꦼꦝꦶꦤꦶꦥꦸꦤ꧀ꦒꦺꦴꦤꦠꦶꦩꦺꦩ꧀ꦥꦭꦤ꧀ꦢꦶꦫꦶꦥꦸꦤ꧀ꦏꦭꦶꦪꦤ꧀ꦢꦿꦺꦴꦥꦢꦶꦲꦶꦱ꧀ꦠꦿꦶꦥꦤ꧀ꦢꦮ",
+                paragraf10: "ꦢꦭꦩ꧀ꦥꦼꦂꦫꦶꦱ꧀ꦠꦶꦩꦼꦩꦭꦸꦲꦶꦁꦧꦭꦲꦶꦫꦸꦁꦢꦸꦂꦱꦱꦤꦢꦶꦏꦶꦑꦸꦫꦮꦮꦺꦴꦤ꧀ꦤꦶꦤꦥꦺꦴꦤ꧀ꦠꦭꦤ꧀ꦢꦶꦁꦢꦿꦺꦴꦥꦢꦶꦤꦔꦤ꧀ꦱꦸꦩꦺꦂꦧꦠꦲꦺꦥꦼꦂꦭꦶꦤ꧀ꦢꦸꦁꦔꦤ꧀ꦧꦒꦮꦱ꧀ꦫꦤꦏꦺꦌꦪꦸꦤ꧀ꦢꦿꦺꦴꦥꦢꦶꦠꦶꦢꦏ꧀ꦥꦼꦂꦤꦃꦏꦧꦺꦲꦶꦁꦨꦶꦩꦱꦸꦩ꧀ꦥꦃꦧꦏꦭ꧀ꦧꦏꦤ꧀ꦩꦺꦩꦺꦤ꧀ꦤꦸꦂꦢꦸꦂꦱꦱꦤꦭꦤ꧀ꦩꦼꦩꦶꦤꦸꦩ꧀ꦢꦲꦼꦤ꧀ꦤꦶꦥꦸꦤ꧀ꦭꦤ꧀ꦩꦼꦩꦠꦃꦏꦲ꧀ꦢꦸꦂꦪꦺꦴꦢꦤ",
+                paragraf11: "ꦲꦠꦱ꧀ꦥꦼꦂꦩꦺꦴꦲꦺꦴꦤꦢꦿꦼꦠꦫꦱ꧀ꦠꦿꦥꦤ꧀ꦢꦮꦤꦼꦩꦺꦤ꧀ꦏꦏ꧀ꦩꦭꦶꦃꦏꦧꦺꦧꦱꦤꦤꦶꦥꦸꦤ꧀ꦤꦔꦤ꧀ꦏꦸꦢꦸꦩꦸꦫꦏꦁꦒꦺꦴꦤꦪꦔꦱꦶꦁꦔꦤ꧀ꦢꦲꦶꦁꦲꦭꦱ꧀ꦱꦭꦩꦶꦤ꧀ꦔꦥꦸꦭꦸꦃꦠꦲꦸꦤ꧀ꦭꦤ꧀ꦲꦶꦢꦸꦥ꧀ꦥꦼꦤꦾꦩꦂꦫꦤ꧀ꦱꦭꦩꦶꦤ꧀ꦔꦥꦸꦭꦸꦃꦠꦲꦸꦤ꧀ꦪꦺꦤ꧀ꦠꦼꦂꦢꦺꦠꦼꦏ꧀ꦱꦶꦩꦸꦫꦤ꧀ꦏꦁꦒꦺꦤꦩꦱꦩꦺꦴꦤꦾꦩꦂꦫꦤ꧀ꦥꦲꦺꦴꦚꦶꦥꦸꦤ꧀ꦏꦸꦢꦸꦩꦸꦫꦶꦪꦔꦱꦶꦁꦔꦤ꧀ꦱꦭꦩꦶꦤ꧀ꦔꦥꦸꦭꦸꦃꦠꦲꦸꦤ꧀ꦩꦤꦶꦁ",
+                paragraf12: "ꦱꦭꦩꦤ꧀ꦔꦥꦸꦭꦸꦃꦠꦲꦸꦤ꧀ꦢꦲꦶꦁꦲꦭꦱ꧀ꦥꦤ꧀ꦢꦮꦚꦚꦥꦼꦠꦸꦭꦁꦕꦤ꧀ꦱꦏꦼꦭꦤ꧀ꦧꦼꦠꦼꦩꦸꦏꦭꦶꦪꦤ꧀ꦫꦯꦶꦭꦤ꧀ꦢꦺꦮꦏꦁꦒꦺꦴꦤ꧀ꦠꦲꦸꦤ꧀ꦏꦼꦤ꧀ꦠꦼꦭꦥꦸꦠꦸꦤ꧀ꦥꦲꦺꦴꦲꦶꦁꦏꦫꦗꦤ꧀ꦮꦶꦫꦠꦪꦸꦢ꧀ꦝꦶꦱ꧀ꦠꦶꦫꦢꦢꦶꦢꦢꦤ꧀ꦥꦲꦺꦴꦪꦸꦤ꧀ꦨꦶꦩꦢꦢꦶꦗꦸꦫꦸꦩꦱꦏ꧀ꦄꦂꦗꦸꦤꦢꦢꦶꦒꦸꦫꦸꦠꦫꦶꦪꦁꦧꦚ꧀ꦕꦶꦤꦏꦸꦭꦢꦢꦶꦥꦼꦚꦗꦒꦏꦸꦠꦟꦏꦸꦭꦢꦢꦶꦥꦼꦔ꧀ꦒꦺꦩ꧀ꦧꦭꦱꦥꦶꦱꦢꦺꦮꦢꦢꦶꦥꦼꦔ꧀ꦒꦺꦩ꧀ꦧꦭꦱꦮꦼꦱꦭꦤ꧀ꦢꦿꦺꦴꦥꦢꦶꦢꦢꦶꦢꦪꦁꦫꦠꦸ",
+                paragraf13: "ꦏꦁꦒꦺꦴꦤ꧀ꦥꦸꦁꦏꦱꦤ꧀ꦩꦱꦥꦼꦤꦾꦩꦂꦫꦤ꧀ꦏꦢꦺꦢꦢꦶꦱꦼꦫꦁꦔꦤ꧀ꦢꦫꦶꦑꦸꦫꦮꦲꦶꦁꦏꦁꦔꦼꦂꦠꦶꦏꦝꦢꦲꦺꦚꦺꦤ꧀ꦄꦂꦗꦸꦤꦲꦶꦁꦏꦁꦱꦸꦢꦃꦠꦶꦢꦏ꧀ꦩꦤꦶꦁꦩꦼꦤꦾꦩꦂꦩꦼꦩ꧀ꦥꦸꦤ꧀ꦕꦱꦶꦭ꧀ꦩꦼꦔꦸꦱꦶꦂꦥꦱꦸꦏꦤ꧀ꦑꦸꦫꦮꦭꦤ꧀ꦱꦺꦭꦩꦼꦠ꧀ꦏꦼꦤ꧀ꦥꦸꦠꦿꦩꦲꦏꦺꦴꦠꦮꦶꦫꦠꦲꦶꦢꦼꦤ꧀ꦠꦶꦠꦱ꧀ꦥꦤ꧀ꦢꦮꦥꦸꦤ꧀ꦠꦼꦂꦫꦸꦁꦒꦏ꧀ꦤꦔꦤ꧀ꦩꦱꦥꦼꦤꦾꦩꦂꦫꦤ꧀ꦠꦼꦭꦃꦲꦢꦶꦥꦸꦤ꧀ꦧꦼꦂꦲꦱꦶꦭ꧀ꦢꦶꦭꦸꦤꦮꦸ",
+                paragraf14: "ꦱꦼꦱꦸꦢꦸꦤ꧀ꦩꦱꦥꦔꦱꦶꦁꦔꦤ꧀ꦱꦼꦭꦼꦱꦺꦪꦸꦤ꧀ꦢ꧀ꦝꦶꦱ꧀ꦠꦶꦫꦚꦸꦮꦸꦤ꧀ꦲꦏ꧀ꦥꦲꦺꦴꦚꦶꦥꦸꦤ꧀ꦏꦏ꧀ꦱꦏꦸꦤꦂꦗꦱꦁꦥꦼꦤ꧀ꦱꦸꦲꦶꦤ꧀ꦥꦤ꧀ꦢꦮꦮꦺꦴꦤ꧀ꦤꦺꦉꦩ꧀ꦧꦸꦒꦏꦭꦶꦪꦤ꧀ꦑꦸꦫꦮꦩꦺꦤ꧀ꦠꦮꦏꦏ꧀ꦥꦼꦫ꧀ꦢꦩꦶꦪꦤ꧀ꦏꦤ꧀ꦛꦶꦱꦾꦫꦠꦥꦤ꧀ꦢꦮꦚꦤꦁꦒꦮꦸꦠ꧀ꦠꦏ꧀ꦢꦺꦱꦏꦺꦕꦸꦭꦪꦺꦴꦢꦸꦂꦪꦺꦴꦢꦤꦢꦼꦔꦤ꧀ꦏꦼꦂꦱ꧀ꦏꦸꦭꦂꦲꦺꦴꦤ꧀ꦩꦸꦭ꧀ꦭꦺꦱꦸꦤꦥꦼꦩ꧀ꦧꦼꦤꦺꦴꦃꦏꦠꦭꦱꦭꦸꦮꦱꦸꦁꦗꦸꦩ꧀ꦥꦸꦤ꧀ꦏꦁꦒꦺꦪꦸꦥꦤ꧀ꦢꦮ",
+                paragraf15: "ꦱꦒꦭꦥꦸꦉꦴꦭꦁꦥꦼꦂꦢꦩꦶꦪꦤ꧀ꦒꦒꦭ꧀ꦧꦒꦮꦱ꧀ꦫꦤꦲꦶꦁꦏꦁꦠꦺꦏꦏꦁꦥꦢꦢꦶꦥꦼꦂꦢꦩꦶꦪꦤ꧀ꦮꦺꦴꦤ꧀ꦤꦺꦏꦢꦢꦶꦥꦼꦂꦕꦺꦴꦧꦤ꧀ꦥꦼꦤꦁꦏꦥꦤ꧀ꦢꦼꦤꦶꦁꦢꦸꦂꦪꦺꦴꦢꦤꦧꦒꦮꦱ꧀ꦫꦤꦲꦶꦁꦏꦁꦔꦼꦂꦠꦶꦧꦣꦃꦏꦮꦸꦗꦺꦴꦢ꧀ꦮꦶꦱ꧀ꦤꦸꦲꦶꦁꦏꦁꦱꦼꦗꦠꦶꦩꦼꦔꦲꦏꦏꦼꦤ꧀ꦱꦩꦧꦢꦤꦺꦲꦶꦁꦧꦭꦲꦶꦫꦸꦁꦏꦕꦭꦶꦥꦤ꧀ꦢꦮꦭꦤ꧀ꦱꦥꦺꦂꦠꦲꦺꦴꦤ꧀ꦒꦺꦴꦪꦥꦸꦤ꧀ꦠꦼꦂꦠꦸꦠꦸꦥ꧀ꦩꦠꦤꦺ",
+                paragraf16: "ꦥꦼꦫꦁꦠꦶꦢꦏ꧀ꦠꦼꦂꦲꦼꦭꦏꦤ꧀ꦩꦤꦶꦁꦏꦼꦢꦸꦧꦺꦭꦃꦥꦶꦃꦮꦺꦴꦤ꧀ꦤꦺꦩꦼꦤ꧀ꦏꦸꦩ꧀ꦥꦸꦭ꧀ꦱꦼꦏꦸꦠꦸꦢꦼꦁꦥꦶꦃꦥꦤ꧀ꦢꦮꦧꦺꦂꦒꦧꦸꦁꦏꦼꦏꦺꦴꦏꦲꦶꦱꦫꦤ꧀ꦥꦤ꧀ꦝꦾꦕ꧀ꦃꦭꦨꦺꦂꦥꦕꦼꦂꦤ꧀ꦕꦩ꧀ꦧꦺꦴꦗꦪꦮꦤꦱꦶꦤ꧀ꦲꦭꦭꦤ꧀ꦏꦫꦗꦤ꧀ꦭꦶꦪꦤ꧀ꦢꦼꦔꦤ꧀ꦥꦶꦃꦥꦑꦸꦫꦮꦧꦺꦂꦒꦧꦸꦁꦏꦒꦏꦫꦗꦤ꧀ꦄꦁꦒꦑꦭꦶꦁꦒꦱꦶꦤ꧀ꦢꦸꦒꦤ꧀ꦢꦲꦫꦭꦤ꧀ꦭꦶꦪꦤ꧀",
+                paragraf17: "ꦱꦧꦼꦢꦼꦂꦥꦼꦫꦁꦢꦶꦩꦸꦭꦶꦦꦫꦗꦸꦤꦚꦚꦥꦺꦂꦫꦒꦸꦔꦤ꧀ꦢꦲꦶꦁꦩꦼꦢꦤ꧀ꦥꦼꦫꦁꦏꦸꦂꦸꦏ꧀ꦱꦺꦠꦿꦠꦩꦸꦫꦔꦸꦏꦁꦒꦺꦤꦩꦼꦂꦁꦥꦲꦶꦫꦔꦤ꧀ꦥꦧꦺꦪꦤ꧀ꦏꦸꦭꦮꦒꦒꦸꦫꦸꦭꦤ꧀ꦩꦶꦠꦿꦩꦶꦠꦿꦤꦶꦥꦸꦤ꧀ꦢꦲꦺꦴꦱꦼꦤ꧀ꦢꦶꦫꦶꦧꦒꦮꦱ꧀ꦫꦤꦠꦼꦂꦱꦺꦤꦠꦶꦩꦺꦤꦱꦂꦠꦥꦏꦼꦤ꧀ꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀ꦲꦶꦁꦏꦁꦢꦶꦏꦼꦤꦭ꧀ꦱꦕꦧꦒꦮꦢ꧀ꦒꦶꦠꦩꦼꦔꦗꦂꦏꦼꦤ꧀ꦧꦧꦢꦿꦩꦏꦂꦩꦭꦤ꧀ꦏꦮꦗꦶꦧꦤ꧀ꦱꦏꦺꦱꦠꦿꦶꦪ",
+                paragraf18: "ꦥꦼꦫꦁꦧꦼꦂꦭꦁꦱꦸꦁꦒꦸꦃꦱꦭꦩꦶꦤ꧀ꦔꦥꦸꦭꦸꦃꦠꦲꦸꦤ꧀ꦏꦤ꧀ꦛꦶꦠꦼꦠꦼꦤ꧀ꦠꦸꦭꦤ꧀ꦲꦶꦁꦏꦁꦢꦶꦱꦼꦥꦼꦏꦠ꧀ꦏꦏ꧀ꦏꦁꦒꦺꦴꦤ꧀ꦏꦭꦶꦃꦧꦺꦭꦃꦥꦶꦃꦱꦼꦠꦶꦥꦤ꧀ꦢꦶꦤ꧀ꦥꦼꦫꦁꦔꦤ꧀ꦲꦤ꧀ꦢꦃꦏꦩꦼꦤꦁꦔꦤ꧀ꦧꦺꦂꦒꦤ꧀ꦠꦶꦏꦒꦸꦭ꧀ꦒꦸꦭ꧀ꦏꦁꦒꦺꦴꦤ꧀ꦔꦤ꧀ꦢꦃꦕꦸꦏꦸꦥ꧀ꦥꦤ꧀ꦗꦒꦢꦸꦃꦩꦶꦥꦸꦤ꧀ꦮꦏ꧀ꦠꦸꦲꦤ꧀ꦲꦤ꧀ꦗꦒꦢ꧀ꦢꦸꦲ꧀ꦧꦸꦁꦧꦸꦁꦢꦶꦤꦲꦤ꧀ꦢꦃꦠꦲꦸꦤ꧀ꦠꦼꦫꦮꦶꦲꦶꦁꦥꦼꦫꦁꦔꦤ꧀ꦥꦸꦤ꧀ꦝꦺꦴꦧꦂꦒꦤ꧀ꦠꦶꦏꦲꦤ꧀ꦗꦒꦢ꧀ꦢꦸꦲ꧀ꦧꦸꦁꦧꦸꦁꦢꦶꦤꦲꦤ꧀ꦢꦃꦢꦂꦪꦤꦺꦧꦸꦁꦧꦸꦁꦢꦶꦤꦲꦤ꧀ꦢꦃꦕꦸꦏꦸꦥ꧀ꦥꦤ꧀ꦗꦒꦢ꧀ꦢꦸꦲ꧀ꦧꦸꦁꦧꦸꦁꦢꦶꦤꦏꦏꦁꦒꦺꦴꦤ꧀ꦥꦼꦂꦫꦁꦔꦤ꧀ꦲꦤ꧀ꦗꦒꦢ꧀ꦢꦸꦲ꧀ꦧꦸꦁꦧꦸꦁꦢꦶꦤꦏꦁꦒꦺꦴꦤ꧀ꦥꦼꦂꦫꦁꦔꦤ꧀ꦲꦤ꧀ꦗꦒꦢ꧀ꦢꦸꦲ꧀ꦧꦸꦁꦧꦸꦁꦢꦶꦤꦲꦤ꧀ꦢꦃꦕꦸꦏꦸꦥ꧀ꦥꦤ꧀ꦗꦒꦢ꧀ꦢꦸꦲ꧀ꦧꦸꦁꦧꦸꦁꦢꦶꦤꦲꦤ꧀ꦢꦃꦕꦸꦏꦸꦥ꧀ꦥꦤ꧀ꦗꦒꦢ꧀ꦢꦸꦲ꧀ꦧꦸꦁꦧꦸꦁꦢꦶꦤꦏꦁꦒꦺꦴꦤ꧀ꦥꦼꦂꦫꦁꦔꦤ꧀ꦥꦥꦁꦭꦶꦩ",
+                paragraf19: "ꦢꦭꦩ꧀ꦥꦼꦫꦁꦆꦤꦶꦱꦩꦤ꧀ꦪꦏ꧀ꦥꦲꦼꦭꦮꦤ꧀ꦏꦁꦒꦺꦴꦒꦸꦒꦸꦂꦱꦏꦶꦁꦏꦭꦶꦃꦧꦺꦭꦃꦥꦶꦃꦲꦤ꧀ꦗꦒꦢ꧀ꦢꦸꦲ꧀ꦧꦸꦁꦧꦸꦁꦢꦶꦤꦲꦤ꧀ꦢꦃꦕꦸꦏꦸꦥ꧀ꦥꦤ꧀ꦗꦒꦢ꧀ꦢꦸꦲ꧀ꦧꦸꦁꦧꦸꦁꦢꦶꦤꦲꦤ꧀ꦢꦃꦕꦸꦏꦸꦥ꧀ꦥꦤ꧀ꦗꦒꦢ꧀ꦢꦸꦲ꧀ꦧꦸꦁꦧꦸꦁꦢꦶꦤꦲꦤ꧀ꦢꦃꦕꦸꦏꦸꦥ꧀ꦥꦤ꧀ꦗꦒꦢ꧀ꦢꦸꦲ꧀ꦧꦸꦁꦧꦸꦁꦢꦶꦤꦲꦤ꧀ꦢꦃꦕꦸꦏꦸꦥ꧀ꦥꦤ꧀ꦗꦒꦢ꧀ꦢꦸꦲ꧀ꦧꦸꦁꦧꦸꦁꦢꦶꦤꦲꦤ꧀ꦢꦃꦕꦸꦏꦸꦥ꧀ꦥꦤ꧀ꦗꦒꦢ꧀ꦢꦸꦲ꧀ꦧꦸꦁꦧꦸꦁꦢꦶꦤꦲꦤ꧀ꦢꦃꦕꦸꦏꦸꦥ꧀ꦥꦤ꧀ꦗꦒꦢ꧀ꦢꦸꦲ꧀ꦧꦸꦁꦧꦸꦁꦢꦶꦤꦲꦤ꧀ꦢꦃꦕꦸꦏꦸꦥ꧀ꦥꦤ꧀ꦗꦒꦢ꧀ꦢꦸꦲ꧀ꦧꦸꦁꦧꦸꦁꦢꦶꦤꦲꦤ꧀ꦢꦃꦕꦸꦏꦸꦥ꧀ꦥꦤ꧀ꦗꦒꦢ꧀ꦢꦸꦲ꧀ꦧꦸꦁꦧꦸꦁꦢꦶꦤꦲꦤ꧀ꦢꦃꦕꦸꦏꦸꦥ꧀ꦥꦤ꧀ꦗꦒꦢ꧀ꦢꦸꦲ꧀ꦧꦸꦁꦧꦸꦁꦢꦶꦤꦏꦁꦒꦺꦴꦤ꧀ꦥꦼꦂꦫꦁꦔꦤ꧀ꦥꦥꦁꦭꦶꦩ",
+                paragraf20: "ꦱꦼꦱꦸꦢꦸꦤ꧀ꦥꦼꦫꦁꦪꦸꦱꦲꦶꦪꦸꦢ꧀ꦝꦶꦱ꧀ꦠꦶꦫꦢꦶꦤꦺꦴꦧꦠ꧀ꦏꦼꦤ꧀ꦱꦕꦫꦗꦲꦱ꧀ꦠꦶꦤꦥꦸꦫꦤꦔꦤ꧀ꦏꦩꦼꦤꦁꦠꦼꦫꦱꦥꦲꦶꦠ꧀ꦲꦩꦂꦒꦏꦸꦢꦸꦩꦼꦤ꧀ꦏꦺꦴꦂꦧꦤ꧀ꦏꦼꦤ꧀ꦱꦩꦤꦶꦁꦪꦏ꧀ꦩꦤꦶꦁꦔꦚꦺꦴꦢꦠꦤ꧀ꦥꦸꦠꦿꦥꦸꦠꦿꦤꦶꦥꦸꦤ꧀ꦢꦲꦺꦴꦱꦼꦤ꧀ꦢꦶꦫꦶꦒꦤ꧀ꦢꦫꦶꦔꦸꦠꦸꦏ꧀ꦧꦒꦮꦱ꧀ꦫꦤꦧꦃꦮꦏꦸꦭꦮꦒꦤꦺꦫꦠꦤ꧀ꦢꦲꦶꦁꦔꦥꦸꦭꦸꦃꦠꦲꦸꦤ꧀ꦱꦏꦼꦤ꧀ꦢꦢꦸꦱꦤ꧀ꦠꦺꦫꦗꦢꦶꦁꦥꦼꦂꦫꦁꦔꦤ꧀ꦲꦤ꧀ꦠꦮꦶꦱꦶꦥꦸꦤ꧀ꦮꦁꦱꦪꦢꦮ",
+                paragraf21: "ꦱꦼꦱꦸꦢꦸꦤ꧀ꦩꦼꦩꦺꦫꦺꦤ꧀ꦠꦲ꧀ꦱꦭꦩꦤ꧀ꦏꦲꦤꦺꦠꦲꦸꦤ꧀ꦥꦤ꧀ꦢꦮꦚꦸꦮꦸꦤ꧀ꦠꦏ꧀ꦛꦏꦏꦺꦤ꧀ꦥꦂꦏꦼꦱꦶꦠ꧀ꦕꦸꦕꦸꦄꦂꦗꦸꦤꦭꦤ꧀ꦤꦼꦤ꧀ꦢꦏꦏꦼꦤ꧀ꦭꦼꦭꦩ꧀ꦥꦲꦤ꧀ꦠꦼꦂꦥꦸꦁꦏꦱ꧀ꦢꦠꦼꦁꦲꦶꦩꦭꦪꦕꦁꦒꦺꦴꦤꦩꦁꦒꦺꦪꦸꦃꦱꦸꦂꦒꦲꦶꦁꦭꦼꦭꦩ꧀ꦥꦲꦤ꧀ꦆꦤꦶꦱꦠꦸꦱꦠꦸꦱ꧀ꦱꦤꦺꦩꦼꦔꦶꦁꦒꦭ꧀ꦲꦤꦺꦗꦸꦢꦤꦺꦪꦸꦢ꧀ꦝꦶꦱ꧀ꦠꦶꦫꦲꦶꦁꦏꦁꦩꦁꦒꦺꦪꦸꦃꦱꦸꦂꦒꦲꦶꦁꦏꦮꦸꦗꦺꦢ꧀ꦩꦤꦸꦁꦱ",
+
+                // Highlight Box
+                nilaiFilosofis: "ꦤꦶꦭꦲꦶꦦ꦳ꦶꦭꦺꦴꦱꦺꦴꦦꦶꦱ꧀ꦩꦲꦧꦿꦠ",
+                nilaiDeskripsi: "ꦩꦲꦧꦿꦠꦔꦗꦂꦏꦏꦼꦤ꧀ꦧꦶꦧꦲꦺꦫꦏꦧꦼꦤꦂꦱꦤ꧀ꦭꦤ꧀ꦢꦿꦩꦠꦼꦠꦥ꧀ꦠꦼꦠꦼꦠꦼꦄꦥꦿꦪꦢꦥꦸꦤ꧀ꦔꦢꦼꦥ꧀ꦲꦸꦮꦚ꧀ꦗꦭꦚ꧀ꦫꦶꦤ꧀ꦠꦁꦔꦤ꧀ꦏꦶꦱꦃꦆꦤꦶꦪꦸꦒꦶꦤꦺꦢꦃꦏꦼꦤ꧀ꦏꦺꦴꦤ꧀ꦱꦺꦥ꧀ꦏꦂꦩꦧꦃꦮꦤ꧀ꦱꦒꦢꦥꦼꦂꦧꦸꦠꦤ꧀ꦪꦸꦏꦁꦒꦺꦤꦲꦏ꧀ꦧꦭꦱꦤꦺꦨꦒꦮꦢ꧀ꦒꦶꦠꦲꦱꦧꦒꦶꦪꦤ꧀ꦩꦲꦧꦿꦠꦩꦺꦤꦼꦮꦲꦶꦤ꧀ꦮꦸꦭꦁꦔꦤ꧀ꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀ꦧꦧꦏꦮꦗꦶꦧꦤ꧀ꦥꦼꦭꦺꦥꦱ꧀ꦱꦤ꧀ꦢꦫꦶꦲꦱꦶꦭ꧀ꦏꦂꦗꦭꦤ꧀ꦲꦸꦧꦸꦁꦔꦤ꧀ꦲꦤ꧀ꦠꦮꦶꦱꦶꦥꦸꦤ꧀ꦒꦸꦱ꧀ꦠꦶꦪꦁꦆꦭꦤ꧀ꦢꦼꦔꦤ꧀ꦠꦸꦃꦥꦼꦫꦁꦠꦺꦱꦤ꧀ꦩꦶꦤꦔꦏꦥꦶꦭꦶꦃꦤ꧀ꦩꦸꦠꦸꦲꦏ꧀ꦠꦼꦂꦥꦸꦁꦏꦱ꧀ꦱꦤꦼꦱꦸꦢꦸꦤ꧀ꦱꦒꦢꦥꦸꦉꦴꦭꦁꦥꦼꦂꦢꦩꦶꦪꦤ꧀ꦒꦒꦭ꧀"
+            },
+
+            jv_script: {
+                // Navbar
+                beranda: "ꦧꦼꦫꦤ꧀ꦢ",
+                critaWayang: "ꦕꦿꦶꦠꦮꦪꦁ",
+                tokohWayang: "ꦠꦺꦴꦏꦺꦴꦲ꧀ꦮꦪꦁ",
+                mahabharata: "ꦩꦲꦧꦿꦠ",
+                ramayana: "ꦫꦩꦪꦤ",
+                dewaruci: "ꦢꦺꦮꦫꦸꦕꦶ",
+
+                // Header
+                judulHalaman: "ꦩꦲꦧꦿꦠ",
+                subJudul: "ꦏꦶꦱꦃꦲꦒꦸꦁꦥꦼꦂꦱꦺꦠꦼꦫꦪꦲꦤ꧀ꦲꦤ꧀ꦠꦮꦶꦱꦶꦥꦤ꧀ꦢꦮꦭꦤ꧀ꦑꦸꦫꦮꦲꦶꦁꦥꦼꦫꦁꦨꦿꦠꦪꦸꦢ꧀ꦢ",
+
+                // Konten
+                judulCerita: "ꦩꦲꦧꦿꦠ",
+                deskripsiCerita: "ꦏꦶꦱꦃꦲꦒꦸꦁꦥꦼꦂꦱꦺꦠꦼꦫꦪꦲꦤ꧀ꦲꦤ꧀ꦠꦮꦶꦱꦶꦥꦤ꧀ꦢꦮꦭꦤ꧀ꦑꦸꦫꦮꦲꦶꦁꦥꦼꦫꦁꦨꦿꦠꦪꦸꦢ꧀ꦢ",
+
+                // Subjudul - SEMUA DITERJEMAHKAN LENGKAP
+                subJudul1: "ꦭꦠꦂꦩꦼꦧꦸꦫꦶꦭꦤ꧀ꦑꦼꦭꦮꦂꦒꦨꦿꦠ",
+                subJudul2: "ꦭꦲꦶꦫꦶꦥꦸꦤ꧀ꦥꦤ꧀ꦢꦮꦭꦤ꧀ꦑꦸꦫꦮ",
+                subJudul3: "ꦩꦱꦕꦶꦭꦶꦏ꧀ꦭꦤ꧀ꦥꦮꦶꦪꦠꦤ꧀",
+                subJudul4: "ꦫꦗꦩꦸꦢꦲꦶꦁꦆꦤ꧀ꦢꦿꦥꦿꦱ꧀ꦛ",
+                subJudul5: "ꦢꦺꦴꦭꦤꦤ꧀ꦢꦢꦸꦭꦤ꧀ꦥꦔꦱꦶꦁꦔꦤ꧀",
+                subJudul6: "ꦩꦱꦥꦔꦱꦶꦁꦔꦤ꧀ꦭꦤ꧀ꦥꦼꦚꦩꦂꦫꦤ꧀",
+                subJudul7: "ꦉꦩ꧀ꦧꦸꦒ꧀ꦢꦩꦺꦭꦤ꧀ꦪꦁꦒꦒꦭ꧀",
+                subJudul8: "ꦥꦼꦂꦱꦶꦪꦥꦤ꧀ꦥꦼꦫꦁꦨꦿꦠꦪꦸꦢ꧀ꦢ",
+                subJudul9: "ꦥꦼꦫꦁꦨꦿꦠꦪꦸꦢ꧀ꦢꦱꦭꦩꦤ꧀ꦧꦼꦂꦔꦥꦸꦭꦸꦃꦠꦲꦸꦤ꧀",
+                subJudul10: "ꦥꦸꦁꦏꦱꦤ꧀ꦏꦶꦱꦃꦭꦤ꧀ꦄꦗꦫꦤ꧀ꦩꦺꦴꦫꦭ꧀",
+
+                // Paragraf - SEMUA DITERJEMAHKAN LENGKAP
+                paragraf1: "ꦩꦲꦧꦿꦠꦥꦸꦤꦶꦏꦮꦶꦫꦕꦫꦶꦠꦠꦼꦂꦥꦚ꧀ꦗꦁꦲꦶꦁꦢꦸꦤꦶꦪꦲꦶꦁꦏꦁꦠꦼꦏꦼꦤ꧀ꦱꦏꦶꦁꦆꦤ꧀ꦢꦶꦪꦲꦶꦁꦏꦁꦢꦶꦥꦸꦤ꧀ꦱꦼꦫꦠ꧀ꦢꦼꦤꦶꦁꦨꦒꦮꦤ꧀ꦧꦾꦱꦏꦶꦱꦃꦆꦤꦶꦧꦺꦴꦤ꧀ꦠꦼꦤ꧀ꦏꦥꦼꦂꦱꦺꦠꦼꦫꦪꦲꦤ꧀ꦲꦤ꧀ꦠꦮꦶꦱꦶꦱꦼꦥꦸꦥꦸꦥꦤ꧀ꦢꦮꦭꦤ꧀ꦑꦸꦫꦮꦲꦶꦁꦦꦼꦫꦤꦸꦠꦩ꧀ꦧꦸꦭꦏ꧀ꦲꦏ꧀ꦱꦠꦠꦏ꧀ꦛꦏꦫꦗꦤ꧀ꦲꦱ꧀ꦠꦶꦤꦥꦸꦫꦏꦶꦱꦃꦆꦤꦶꦢꦸꦢꦸꦧꦧꦧꦁꦥꦼꦫꦁꦤꦔꦤ꧀ꦧꦧꦢꦿꦩꦑꦧꦼꦤꦂꦱꦤ꧀ꦭꦤ꧀ꦏꦲꦢꦶꦭꦤ꧀",
+                paragraf2: "ꦏꦶꦱꦃꦢꦶꦩꦸꦭꦲꦶꦱꦏꦶꦁꦫꦗꦱꦤ꧀ꦠꦤꦸꦲꦶꦁꦏꦁꦤꦶꦏꦲꦶꦢꦼꦮꦶꦒꦁꦒꦭꦤ꧀ꦒꦢꦃꦥꦸꦠꦿꦤꦩꦤ꧀ꦢꦼꦮꦧꦿꦠꦲꦶꦁꦏꦁꦭꦠꦱ꧀ꦏꦭꦶꦪꦤ꧀ꦢꦶꦏꦼꦤꦭ꧀ꦱꦕꦕꦶꦩꦤ꧀ꦱꦼꦱꦸꦢꦸꦱꦠꦾꦮꦠꦶꦭꦤ꧀ꦒꦢꦃꦢꦮꦥꦸꦠꦿꦕꦶꦠꦿꦔꦢꦭꦤ꧀ꦮꦶꦕꦶꦠꦿꦮꦶꦂꦪꦨꦶꦱ꧀ꦩꦔꦸꦕꦥ꧀ꦱꦩ꧀ꦥꦃꦏꦁꦒꦺꦴꦤꦠꦺꦴꦩ꧀ꦤꦶꦏꦲꦶꦭꦤ꧀ꦠꦶꦢꦏ꧀ꦩꦼꦤ꧀ꦗꦢꦶꦫꦗꦱꦺꦴꦤꦮꦶꦱ꧀ꦏꦸꦭꦤ꧀ꦠꦸꦂꦫꦤꦶꦥꦸꦤ꧀ꦢꦶꦭꦚꦸꦠ꧀ꦏꦼꦤ꧀ꦢꦼꦤꦶꦁꦥꦸꦠꦿꦥꦸꦠꦿꦱꦠꦾꦮꦠꦶ",
+                paragraf3: "ꦮꦶꦕꦶꦠꦿꦮꦶꦂꦪꦤꦶꦏꦲꦶꦭꦩ꧀ꦧꦶꦏꦭꦤ꧀ꦄꦩ꧀ꦧꦭꦶꦏꦤꦔꦤ꧀ꦩꦼꦔꦶꦁꦒꦭ꧀ꦠꦤ꧀ꦥꦶꦁꦥꦸꦠꦂꦲꦠꦱ꧀ꦥꦼꦂꦩꦺꦤ꧀ꦠꦃꦱꦠꦾꦮꦠꦶꦧꦾꦱꦥꦸꦠꦿꦱꦠꦾꦮꦠꦶꦏꦭꦶꦪꦤ꧀ꦉꦯꦶꦥꦫꦱꦫꦤꦼꦤ꧀ꦢꦼꦤꦶꦁꦔꦤꦤꦶꦪꦺꦴꦒꦢꦫꦶꦥꦩ꧀ꦧꦶꦏꦭꦲꦶꦂꦭꦃꦢꦿꦼꦠꦫꦱ꧀ꦠꦿꦪꦁꦧꦸꦠꦮꦱꦏꦶꦁꦄꦩ꧀ꦧꦭꦶꦏꦭꦲꦶꦂꦭꦃꦥꦤ꧀ꦢꦸꦪꦁꦥꦸꦕꦠ꧀ꦭꦤ꧀ꦢꦫꦶꦢꦪꦁꦥꦲꦺꦴꦫꦭꦲꦶꦂꦭꦃꦮꦶꦢꦸꦫ",
+                paragraf4: "ꦢꦿꦼꦠꦫꦱ꧀ꦠꦿꦤꦶꦏꦲꦶꦒꦤ꧀ꦢꦫꦶꦭꦤ꧀ꦒꦢꦃꦱꦸꦠꦭꦤ꧀ꦑꦸꦫꦮꦏꦭꦶꦪꦤ꧀ꦥꦸꦠꦿꦶꦱꦸꦭꦸꦁꦤꦶꦥꦸꦤ꧀ꦢꦸꦂꦪꦺꦴꦢꦤꦥꦤ꧀ꦢꦸꦤꦶꦏꦲꦶꦏꦸꦤ꧀ꦠꦶꦭꦤ꧀ꦩꦢꦿꦶꦩ꧀ꦤꦔꦤ꧀ꦲꦩꦂꦒꦏꦸꦠꦸꦏꦤ꧀ꦧꦃꦮꦤꦢꦼꦤꦺꦤꦩꦠꦶꦪꦲꦶꦏꦒꦫꦸꦥꦠ꧀ꦢꦼꦤꦶꦁꦏꦺꦴꦮꦤ꧀ꦏꦸꦤ꧀ꦠꦶꦔꦔꦺꦤꦩꦤ꧀ꦠꦿꦲꦶꦁꦏꦁꦢꦶꦥꦸꦤ꧀ꦲꦺꦴꦭꦃꦢꦢꦶꦉꦯꦶꦢꦸꦂꦮꦱꦏꦁꦒꦺꦴꦤꦩꦔꦔꦼꦤ꧀ꦢꦺꦮꦢꦿꦶꦥꦩ꧀ꦧꦼꦂꦭꦲꦶꦂꦭꦃꦪꦸꦢ꧀ꦝꦶꦱ꧀ꦠꦶꦫꦱꦏꦶꦁꦧꦪꦸꦭꦲꦶꦂꦭꦃꦨꦶꦩꦱꦏꦶꦁꦆꦤ꧀ꦢꦿꦭꦲꦶꦂꦭꦃꦄꦂꦗꦸꦤꦄꦩ꧀ꦩꦢꦿꦶꦩꦔꦔꦺꦤꦩꦤ꧀ꦠꦿꦆꦏꦸꦁꦒꦺꦴꦤꦩꦔꦔꦼꦤ꧀ꦄꦱ꧀ꦮꦶꦤ꧀ꦭꦤ꧀ꦒꦢꦃꦤꦏꦸꦭꦭꦤ꧀ꦱꦢꦺꦮꦲꦶꦤꦶꦭꦃꦏꦼꦭꦶꦩꦥꦤ꧀ꦢꦮ",
+                paragraf5: "ꦥꦤ꧀ꦢꦮꦭꦤ꧀ꦑꦸꦫꦮꦢꦶꦧꦼꦱꦂꦏꦼꦤ꧀ꦱꦩꦲꦶꦁꦲꦶꦱ꧀ꦠꦤꦥꦸꦤ꧀ꦲꦱ꧀ꦠꦶꦤꦥꦸꦫꦲꦢꦶꦏꦫꦺꦴꦨꦶꦩꦱ꧀ꦩꦭꦤ꧀ꦒꦸꦫꦸꦥꦲꦺꦴꦉꦯꦶꦢꦿꦺꦴꦤꦩꦼꦱ꧀ꦏꦶꦢꦶꦧꦼꦱꦂꦏꦼꦤ꧀ꦱꦩꦃꦥꦼꦂꦱꦸꦥꦼꦔꦤ꧀ꦲꦤ꧀ꦠꦮꦶꦱꦶꦥꦼꦂꦱꦼꦧꦭ꧀ꦨꦶꦩꦭꦤ꧀ꦢꦸꦂꦪꦺꦴꦢꦤꦱꦼꦭꦭꦸꦲꦶꦁꦠꦼꦂꦗꦢꦶꦢꦸꦂꦪꦺꦴꦢꦤꦱꦼꦫꦶꦁꦏꦭꦶꦤꦺꦧꦸꦤ꧀ꦕꦺꦴꦧꦤꦼꦭꦏꦏꦺꦥꦤ꧀ꦢꦮꦲꦩꦂꦒꦕꦼꦩ꧀ꦧꦸꦫꦸꦏꦭꦶꦪꦤ꧀ꦏꦧꦶꦭꦤ꧀ꦭꦤ꧀ꦥꦺꦴꦥꦸꦭꦼꦂꦤꦶꦠꦱ꧀ꦥꦲꦺꦴ",
+                paragraf6: "ꦏꦁꦒꦺꦴꦤ꧀ꦱꦪꦗꦤꦺꦉꦯꦶꦢꦿꦺꦴꦤꦏꦁꦒꦺꦴꦤꦠꦁꦒꦶꦭ꧀ꦠꦁꦒꦺꦴꦤꦥꦫꦥꦭꦔꦂꦥꦲꦺꦴꦲꦂꦗꦸꦤꦨꦶꦪꦠ꧀ꦠꦠꦶꦁꦏꦏꦸꦮꦠ꧀ꦢꦩꦼꦩ꧀ꦥꦤꦃꦲꦤ꧀ꦢꦭꦺꦫꦠ꧀ꦫꦤꦶꦥꦸꦤ꧀ꦩꦼꦔꦲꦶꦱ꧀ꦠꦤꦺꦥꦤ꧀ꦢꦿꦺꦴꦤꦩꦼꦚꦠꦸꦱꦪꦼꦩ꧀ꦧꦫꦠꦂꦏꦱ꧀ꦏꦁꦒꦺꦴꦤꦥꦭꦃꦄꦂꦗꦸꦤꦲꦶꦁꦏꦁꦱꦗꦺꦴꦱ꧀ꦧꦲꦁꦏꦪꦱꦏꦭꦶꦪꦤ꧀ꦢꦿꦺꦴꦤꦩꦸꦠꦸꦱ꧀ꦠꦸꦭꦸꦱ꧀ꦥꦮꦶꦪꦠꦤ꧀ꦢꦿꦺꦴꦤꦩꦺꦤꦸꦱꦠꦩꦭ꧀ꦏꦸꦥꦃꦏꦭꦶꦪꦤ꧀ꦩꦼꦚꦏ꧀ꦭꦸꦏꦏꦂꦗꦤ꧀ꦥꦤ꧀ꦕꦭꦭꦤ꧀ꦩꦼꦚꦔꦥ꧀ꦫꦗꦢꦿꦸꦥꦢꦲꦶꦁꦏꦁꦱꦸꦥꦸꦤ꧀ꦲꦶꦤꦢꦿꦺꦴꦤ",
+                paragraf7: "ꦲꦩꦂꦒꦥꦼꦂꦱꦺꦠꦼꦫꦪꦤ꧀ꦱꦼꦩꦏꦶꦤ꧀ꦥꦤꦱ꧀ꦨꦶꦱ꧀ꦩꦩꦼꦩ꧀ꦧꦱꦏꦫꦗꦤ꧀ꦑꦸꦫꦮꦤꦼꦩꦺꦴꦤ꧀ꦏꦏ꧀ꦲꦱ꧀ꦠꦶꦤꦥꦸꦫꦱꦩꦼꦤ꧀ꦠꦮ꧀ꦥꦤ꧀ꦢꦮꦤꦼꦩꦺꦴꦤ꧀ꦏꦏ꧀ꦲꦭꦱ꧀ꦏꦤ꧀ꦢꦮꦥꦿꦱ꧀ꦛꦪꦁꦒꦼꦂꦱꦁꦢꦼꦔꦤ꧀ꦧꦤ꧀ꦠꦸꦤ꧀ꦧꦒꦮꦱ꧀ꦫꦤꦭꦤ꧀ꦮꦶꦱ꧀ꦮꦏꦂꦩꦤ꧀ꦥꦤ꧀ꦢꦮꦩꦺꦩ꧀ꦧꦁꦤꦺꦏꦺꦴꦠꦩꦼꦒꦃꦲꦤꦩꦤ꧀ꦢꦶꦤ꧀ꦝꦿꦥꦿꦱ꧀ꦛꦲꦶꦁꦏꦁꦩꦂꦠꦏꦼꦤ꧀ꦭꦧꦶꦃꦆꦤ꧀ꦢꦺꦭ꧀ꦱꦏꦏꦺꦤ꧀ꦲꦱ꧀ꦠꦶꦤꦥꦸꦫ",
+                paragraf8: "ꦪꦸꦢ꧀ꦝꦶꦱ꧀ꦠꦶꦫꦤꦼꦤ꧀ꦢꦏꦏꦼꦤ꧀ꦪꦸꦥꦕꦫꦫꦗꦱꦸꦪꦏꦁꦒꦺꦤꦪꦠꦼꦤ꧀ꦢꦩ꧀ꦥꦏꦺꦏꦸꦮꦱꦤꦤꦶꦥꦸꦤ꧀ꦲꦶꦁꦪꦸꦥꦕꦫꦆꦤꦶꦱꦶꦱꦸꦥꦠ꧀ꦱꦼꦥꦸꦥꦸꦧꦒꦮꦱ꧀ꦫꦤꦲꦶꦤꦸꦤꦭꦤ꧀ꦥꦩ꧀ꦧꦸꦤꦸꦃꦏꦼꦤ꧀ꦢꦺꦤꦶꦁꦧꦒꦮꦱ꧀ꦫꦤꦏꦺꦚꦪꦪꦤ꧀ꦥꦤ꧀ꦢꦮꦆꦤꦶꦱꦼꦩꦏꦶꦤ꧀ꦢꦢꦶꦢꦸꦂꦪꦺꦴꦢꦤꦧꦺꦴꦤ꧀ꦧꦱꦠꦏꦺꦨꦱꦂꦏꦲꦺꦴ",
+                paragraf9: "ꦱꦏꦼꦤ꧀ꦱꦏꦸꦤꦶꦥꦩꦤ꧀ꦑꦸꦫꦮꦲꦶꦁꦏꦁꦲꦁꦒꦼꦂꦧꦺꦱ꧀ꦢꦺꦴꦭꦤꦤ꧀ꦢꦢꦸꦢꦸꦂꦪꦺꦴꦢꦤꦲꦁꦒꦸꦤ꧀ꦱꦏꦺꦪꦸꦢ꧀ꦝꦶꦱ꧀ꦠꦶꦫꦏꦁꦒꦺꦴꦤꦢꦺꦴꦭꦤꦤ꧀ꦢꦢꦸꦪꦸꦢ꧀ꦝꦶꦱ꧀ꦠꦶꦫꦲꦶꦁꦏꦁꦒꦢꦃꦏꦼꦭꦼꦩ꧀ꦧꦤꦲꦶꦁꦗꦺꦴꦣꦶꦪꦸꦏꦼꦤ꧀ꦲꦶꦭꦁꦱꦏꦧꦺꦃꦮꦼꦱꦱꦲꦶꦁꦒꦭ꧀ꦒꦭꦤꦧꦁꦏꦫꦗꦤ꧀ꦲꦂꦠꦧꦼꦤ꧀ꦢꦭꦤ꧀ꦥꦲꦺꦴꦩꦲꦺꦴꦩꦏꦺꦴꦱꦮꦼꦝꦶꦤꦶꦥꦸꦤ꧀ꦒꦺꦴꦤꦠꦶꦩꦺꦩ꧀ꦥꦭꦤ꧀ꦢꦶꦫꦶꦥꦸꦤ꧀ꦏꦭꦶꦪꦤ꧀ꦢꦿꦺꦴꦥꦢꦶꦲꦶꦱ꧀ꦠꦿꦶꦥꦤ꧀ꦢꦮ",
+                paragraf10: "ꦢꦭꦩ꧀ꦥꦼꦂꦫꦶꦱ꧀ꦠꦶꦩꦼꦩꦭꦸꦲꦶꦁꦧꦭꦲꦶꦫꦸꦁꦢꦸꦂꦱꦱꦤꦢꦶꦏꦶꦑꦸꦫꦮꦮꦺꦴꦤ꧀ꦤꦶꦤꦥꦺꦴꦤ꧀ꦠꦭꦤ꧀ꦢꦶꦁꦢꦿꦺꦴꦥꦢꦶꦤꦔꦤ꧀ꦱꦸꦩꦺꦂꦧꦠꦲꦺꦥꦼꦂꦭꦶꦤ꧀ꦢꦸꦁꦔꦤ꧀ꦧꦒꦮꦱ꧀ꦫꦤꦏꦺꦌꦪꦸꦤ꧀ꦢꦿꦺꦴꦥꦢꦶꦠꦶꦢꦏ꧀ꦥꦼꦂꦤꦃꦏꦧꦺꦲꦶꦁꦨꦶꦩꦱꦸꦩ꧀ꦥꦃꦧꦏꦭ꧀ꦧꦏꦤ꧀ꦩꦺꦩꦺꦤ꧀ꦤꦸꦂꦢꦸꦂꦱꦱꦤꦭꦤ꧀ꦩꦼꦩꦶꦤꦸꦩ꧀ꦢꦲꦼꦤ꧀ꦤꦶꦥꦸꦤ꧀ꦭꦤ꧀ꦩꦼꦩꦠꦃꦏꦲ꧀ꦢꦸꦂꦪꦺꦴꦢꦤ",
+                paragraf11: "ꦲꦠꦱ꧀ꦥꦼꦂꦩꦺꦴꦲꦺꦴꦤꦢꦿꦼꦠꦫꦱ꧀ꦠꦿꦥꦤ꧀ꦢꦮꦤꦼꦩꦺꦤ꧀ꦏꦏ꧀ꦩꦭꦶꦃꦏꦧꦺꦧꦱꦤꦤꦶꦥꦸꦤ꧀ꦤꦔꦤ꧀ꦏꦸꦢꦸꦩꦸꦫꦏꦁꦒꦺꦴꦤꦪꦔꦱꦶꦁꦔꦤ꧀ꦢꦲꦶꦁꦲꦭꦱ꧀ꦱꦭꦩꦶꦤ꧀ꦔꦥꦸꦭꦸꦃꦠꦲꦸꦤ꧀ꦭꦤ꧀ꦲꦶꦢꦸꦥ꧀ꦥꦼꦤꦾꦩꦂꦫꦤ꧀ꦱꦭꦩꦶꦤ꧀ꦔꦥꦸꦭꦸꦃꦠꦲꦸꦤ꧀ꦪꦺꦤ꧀ꦠꦼꦂꦢꦺꦠꦼꦏ꧀ꦱꦶꦩꦸꦫꦤ꧀ꦏꦁꦒꦺꦤꦩꦱꦮꦼꦤ꧀ꦢꦩꦂꦫꦤ꧀ꦥꦲꦺꦴꦚꦶꦥꦸꦤ꧀ꦏꦸꦢꦸꦩꦸꦫꦶꦪꦔꦱꦶꦁꦔꦤ꧀ꦱꦭꦩꦶꦤ꧀ꦔꦥꦸꦭꦸꦃꦠꦲꦸꦤ꧀ꦩꦤꦶꦁ",
+                paragraf12: "ꦱꦭꦩꦤ꧀ꦔꦥꦸꦭꦸꦃꦠꦲꦸꦤ꧀ꦢꦲꦶꦁꦲꦭꦱ꧀ꦥꦤ꧀ꦢꦮꦚꦚꦥꦼꦠꦸꦭꦁꦕꦤ꧀ꦱꦏꦼꦭꦤ꧀ꦧꦼꦠꦼꦩꦸꦏꦭꦶꦪꦤ꧀ꦫꦯꦶꦭꦤ꧀ꦢꦺꦮꦏꦁꦒꦺꦴꦤ꧀ꦠꦲꦸꦤ꧀ꦏꦼꦤ꧀ꦠꦼꦭꦥꦸꦠꦸꦤ꧀ꦥꦲꦺꦴꦲꦶꦁꦏꦫꦗꦤ꧀ꦮꦶꦫꦠꦪꦸꦢ꧀ꦝꦶꦱ꧀ꦠꦶꦫꦢꦢꦶꦢꦢꦤ꧀ꦥꦲꦺꦴꦪꦸꦤ꧀ꦨꦶꦩꦢꦢꦶꦗꦸꦫꦸꦩꦱꦏ꧀ꦄꦂꦗꦸꦤꦢꦢꦶꦒꦸꦫꦸꦠꦫꦶꦪꦁꦧꦚ꧀ꦕꦶꦤꦏꦸꦭꦢꦢꦶꦥꦼꦚꦗꦒꦏꦸꦠꦟꦏꦸꦭꦢꦢꦶꦥꦼꦔ꧀ꦒꦺꦩ꧀ꦧꦭꦱꦥꦶꦱꦢꦺꦮꦢꦢꦶꦥꦼꦔ꧀ꦒꦺꦩ꧀ꦧꦭꦱꦮꦼꦱꦭꦤ꧀ꦢꦿꦺꦴꦥꦢꦶꦢꦢꦶꦢꦪꦁꦫꦠꦸ",
+                paragraf13: "ꦏꦁꦒꦺꦴꦤ꧀ꦥꦸꦁꦏꦱꦤ꧀ꦩꦱꦥꦼꦤꦾꦩꦂꦫꦤ꧀ꦏꦢꦺꦢꦢꦶꦱꦼꦫꦁꦔꦤ꧀ꦢꦫꦶꦑꦸꦫꦮꦲꦶꦁꦏꦁꦔꦼꦂꦠꦶꦏꦝꦢꦲꦺꦚꦺꦤ꧀ꦄꦂꦗꦸꦤꦲꦶꦁꦏꦁꦱꦸꦢꦃꦠꦶꦢꦏ꧀ꦩꦤꦶꦁꦩꦼꦤꦾꦩꦂꦩꦼꦩ꧀ꦥꦸꦤ꧀ꦕꦱꦶꦭ꧀ꦩꦼꦔꦸꦱꦶꦂꦥꦱꦸꦏꦤ꧀ꦑꦸꦫꦮꦭꦤ꧀ꦱꦺꦭꦩꦼꦠ꧀ꦏꦼꦤ꧀ꦥꦸꦠꦿꦩꦲꦏꦺꦴꦠꦮꦶꦫꦠꦲꦶꦢꦼꦤ꧀ꦠꦶꦠꦱ꧀ꦥꦤ꧀ꦢꦮꦥꦸꦤ꧀ꦠꦼꦂꦫꦸꦁꦒꦏ꧀ꦤꦔꦤ꧀ꦩꦱꦥꦼꦤꦾꦩꦂꦫꦤ꧀ꦠꦼꦭꦃꦲꦢꦶꦥꦸꦤ꧀ꦧꦼꦂꦲꦱꦶꦭ꧀ꦢꦶꦭꦸꦤꦮꦸ",
+                paragraf14: "ꦱꦼꦱꦸꦢꦸꦤ꧀ꦩꦱꦥꦔꦱꦶꦁꦔꦤ꧀ꦱꦼꦭꦼꦱꦺꦪꦸꦤ꧀ꦢ꧀ꦝꦶꦱ꧀ꦠꦶꦫꦚꦸꦮꦸꦤ꧀ꦲꦏ꧀ꦥꦲꦺꦴꦚꦶꦥꦸꦤ꧀ꦏꦏ꧀ꦱꦏꦸꦤꦂꦗꦱꦁꦥꦼꦤ꧀ꦱꦸꦲꦶꦤ꧀ꦥꦤ꧀ꦢꦮꦮꦺꦴꦤ꧀ꦤꦺꦉꦩ꧀ꦧꦸꦒꦏꦭꦶꦪꦤ꧀ꦑꦸꦫꦮꦩꦺꦤ꧀ꦠꦮꦏꦏ꧀ꦥꦼꦂꦢꦩꦶꦪꦤ꧀ꦏꦤ꧀ꦛꦶꦱꦾꦫꦠꦥꦤ꧀ꦢꦮꦚꦤꦁꦒꦮꦸꦠ꧀ꦠꦏ꧀ꦢꦺꦱꦏꦺꦕꦸꦭꦪꦺꦴꦢꦸꦂꦪꦺꦴꦢꦤꦢꦼꦔꦤ꧀ꦏꦼꦂꦱ꧀ꦏꦸꦭꦂꦲꦺꦴꦤ꧀ꦩꦸꦭ꧀ꦭꦺꦱꦸꦤꦥꦼꦩ꧀ꦧꦼꦤꦺꦴꦃꦏꦠꦭꦱꦭꦸꦮꦱꦸꦁꦗꦸꦩ꧀ꦥꦸꦤ꧀ꦏꦁꦒꦺꦪꦸꦥꦤ꧀ꦢꦮ",
+                paragraf15: "ꦱꦒꦭꦥꦸꦉꦴꦭꦁꦥꦼꦂꦢꦩꦶꦪꦤ꧀ꦒꦒꦭ꧀ꦧꦒꦮꦱ꧀ꦫꦤꦲꦶꦁꦏꦁꦠꦺꦏꦏꦁꦥꦢꦢꦶꦥꦼꦂꦢꦩꦶꦪꦤ꧀ꦮꦺꦴꦤ꧀ꦤꦺꦏꦢꦢꦶꦥꦼꦂꦕꦺꦴꦧꦤ꧀ꦥꦼꦤꦁꦏꦥꦼꦤ꧀ꦢꦼꦤꦶꦁꦢꦸꦂꦪꦺꦴꦢꦤꦧꦒꦮꦱ꧀ꦫꦤꦲꦶꦁꦏꦁꦔꦼꦂꦠꦶꦧꦣꦃꦏꦮꦸꦗꦺꦢ꧀ꦮꦶꦱ꧀ꦤꦸꦲꦶꦁꦏꦁꦱꦼꦗꦠꦶꦩꦼꦔꦲꦏꦏꦼꦤ꧀ꦱꦩꦧꦢꦤꦺꦲꦶꦁꦧꦭꦲꦶꦫꦸꦁꦏꦕꦭꦶꦥꦤ꧀ꦢꦮꦭꦤ꧀ꦱꦥꦺꦂꦠꦲꦺꦴꦤ꧀ꦒꦺꦴꦪꦥꦸꦤ꧀ꦠꦼꦂꦠꦸꦠꦸꦥ꧀ꦩꦠꦤꦺ",
+                paragraf16: "ꦥꦼꦫꦁꦠꦶꦢꦏ꧀ꦠꦼꦂꦲꦼꦭꦏꦤ꧀ꦩꦤꦶꦁꦏꦼꦢꦸꦧꦺꦭꦃꦥꦶꦃꦮꦺꦴꦤ꧀ꦤꦺꦩꦼꦤ꧀ꦏꦸꦩ꧀ꦥꦸꦭ꧀ꦱꦼꦏꦸꦠꦸꦢꦼꦁꦥꦶꦃꦥꦤ꧀ꦢꦮꦧꦺꦂꦒꦧꦸꦁꦏꦼꦏꦺꦴꦏꦲꦶꦱꦫꦤ꧀ꦥꦤ꧀ꦝꦾꦕ꧀ꦃꦭꦨꦺꦂꦥꦕꦼꦂꦤ꧀ꦕꦩ꧀ꦧꦺꦴꦗꦪꦮꦤꦱꦶꦤ꧀ꦲꦭꦭꦤ꧀ꦏꦫꦗꦤ꧀ꦭꦶꦪꦤ꧀ꦢꦼꦔꦤ꧀ꦥꦶꦃꦥꦑꦸꦫꦮꦧꦺꦂꦒꦧꦸꦁꦏꦒꦏꦫꦗꦤ꧀ꦄꦁꦒꦑꦭꦶꦁꦒꦱꦶꦤ꧀ꦢꦸꦒꦤ꧀ꦢꦲꦫꦭꦤ꧀ꦭꦶꦪꦤ꧀",
+                paragraf17: "ꦱꦧꦼꦢꦼꦂꦥꦼꦫꦁꦢꦶꦩꦸꦭꦦꦫꦗꦸꦤꦚꦚꦥꦺꦂꦫꦒꦸꦔꦤ꧀ꦢꦲꦶꦁꦩꦼꦢꦤ꧀ꦥꦼꦫꦁꦏꦸꦂꦸꦏ꧀ꦱꦺꦠꦿꦠꦩꦸꦫꦔꦸꦏꦁꦒꦺꦤꦩꦼꦂꦁꦥꦲꦶꦫꦔꦤ꧀ꦥꦧꦺꦪꦤ꧀ꦏꦸꦭꦮꦒꦒꦸꦫꦸꦭꦤ꧀ꦩꦶꦠꦿꦩꦶꦠꦿꦤꦶꦥꦸꦤ꧀ꦢꦲꦺꦴꦱꦼꦤ꧀ꦢꦶꦫꦶꦧꦒꦮꦱ꧀ꦫꦤꦠꦼꦂꦱꦺꦤꦠꦶꦩꦺꦤꦱꦂꦠꦥꦏꦼꦤ꧀ꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀ꦲꦶꦁꦏꦁꦢꦶꦏꦼꦤꦭ꧀ꦱꦕꦧꦒꦮꦢ꧀ꦒꦶꦠꦩꦼꦔꦗꦂꦏꦼꦤ꧀ꦧꦧꦢꦿꦩꦏꦂꦩꦭꦤ꧀ꦏꦮꦗꦶꦧꦤ꧀ꦱꦏꦺꦱꦠꦿꦶꦪ",
+                paragraf18: "ꦥꦼꦫꦁꦧꦼꦂꦭꦁꦱꦸꦁꦒꦸꦃꦱꦭꦩꦶꦤ꧀ꦔꦥꦸꦭꦸꦃꦠꦲꦸꦤ꧀ꦏꦤ꧀ꦛꦶꦠꦼꦠꦼꦤ꧀ꦠꦸꦭꦤ꧀ꦲꦶꦁꦏꦁꦢꦶꦱꦼꦥꦼꦏꦠ꧀ꦏꦏ꧀ꦏꦁꦒꦺꦴꦤ꧀ꦏꦭꦶꦃꦧꦺꦭꦃꦥꦶꦃꦱꦼꦠꦶꦥꦤ꧀ꦢꦶꦤ꧀ꦥꦼꦫꦁꦔꦤ꧀ꦲꦤ꧀ꦢꦃꦏꦩꦼꦤꦁꦔꦤ꧀ꦧꦺꦂꦒꦤ꧀ꦠꦶꦏꦒꦸꦭ꧀ꦒꦸꦭ꧀ꦏꦁꦒꦺꦴꦤ꧀ꦔꦤ꧀ꦢꦃꦕꦸꦏꦸꦥ꧀ꦥꦤ꧀ꦗꦒꦢꦸꦃꦩꦶꦥꦸꦤ꧀ꦮꦏ꧀ꦠꦸꦲꦤ꧀ꦲꦤ꧀ꦗꦒꦢ꧀ꦢꦸꦲ꧀ꦧꦸꦁꦧꦸꦁꦢꦶꦤꦲꦤ꧀ꦢꦃꦠꦲꦸꦤ꧀ꦠꦼꦫꦮꦶꦲꦶꦁꦥꦼꦫꦁꦔꦤ꧀ꦥꦸꦤ꧀ꦝꦺꦴꦧꦂꦒꦤ꧀ꦠꦶꦏꦲꦤ꧀ꦗꦒꦢ꧀ꦢꦸꦲ꧀ꦧꦸꦁꦧꦸꦁꦢꦶꦤꦲꦤ꧀ꦢꦃꦢꦂꦪꦤꦺꦧꦸꦁꦧꦸꦁꦢꦶꦤꦲꦤ꧀ꦢꦃꦕꦸꦏꦸꦥ꧀ꦥꦤ꧀ꦗꦒꦢ꧀ꦢꦸꦲ꧀ꦧꦸꦁꦧꦸꦁꦢꦶꦤꦏꦏꦁꦒꦺꦴꦤ꧀ꦥꦼꦂꦫꦁꦔꦤ꧀ꦲꦤ꧀ꦗꦒꦢ꧀ꦢꦸꦲ꧀ꦧꦸꦁꦧꦸꦁꦢꦶꦤꦏꦁꦒꦺꦴꦤ꧀ꦥꦼꦂꦫꦁꦔꦤ꧀ꦲꦤ꧀ꦗꦒꦢ꧀ꦢꦸꦲ꧀ꦧꦸꦁꦧꦸꦁꦢꦶꦤꦲꦤ꧀ꦢꦃꦕꦸꦏꦸꦥ꧀ꦥꦤ꧀ꦗꦒꦢ꧀ꦢꦸꦲ꧀ꦧꦸꦁꦧꦸꦁꦢꦶꦤꦲꦤ꧀ꦢꦃꦕꦸꦏꦸꦥ꧀ꦥꦤ꧀ꦗꦒꦢ꧀ꦢꦸꦲ꧀ꦧꦸꦁꦧꦸꦁꦢꦶꦤꦏꦁꦒꦺꦴꦤ꧀ꦥꦼꦂꦫꦁꦔꦤ꧀ꦥꦥꦁꦭꦶꦩ",
+                paragraf19: "ꦢꦭꦩ꧀ꦥꦼꦫꦁꦆꦤꦶꦱꦩꦤ꧀ꦪꦏ꧀ꦥꦲꦼꦭꦮꦤ꧀ꦏꦁꦒꦺꦴꦒꦸꦒꦸꦂꦱꦏꦶꦁꦏꦭꦶꦃꦧꦺꦭꦃꦥꦶꦃꦲꦤ꧀ꦗꦒꦢ꧀ꦢꦸꦲ꧀ꦧꦸꦁꦧꦸꦁꦢꦶꦤꦲꦤ꧀ꦢꦃꦕꦸꦏꦸꦥ꧀ꦥꦤ꧀ꦗꦒꦢ꧀ꦢꦸꦲ꧀ꦧꦸꦁꦧꦸꦁꦢꦶꦤꦲꦤ꧀ꦢꦃꦕꦸꦏꦸꦥ꧀ꦥꦤ꧀ꦗꦒꦢ꧀ꦢꦸꦲ꧀ꦧꦸꦁꦧꦸꦁꦢꦶꦤꦲꦤ꧀ꦢꦃꦕꦸꦏꦸꦥ꧀ꦥꦤ꧀ꦗꦒꦢ꧀ꦢꦸꦲ꧀ꦧꦸꦁꦧꦸꦁꦢꦶꦤꦲꦤ꧀ꦢꦃꦕꦸꦏꦸꦥ꧀ꦥꦤ꧀ꦗꦒꦢ꧀ꦢꦸꦲ꧀ꦧꦸꦁꦧꦸꦁꦢꦶꦤꦲꦤ꧀ꦢꦃꦕꦸꦏꦸꦥ꧀ꦥꦤ꧀ꦗꦒꦢ꧀ꦢꦸꦲ꧀ꦧꦸꦁꦧꦸꦁꦢꦶꦤꦲꦤ꧀ꦢꦃꦕꦸꦏꦸꦥ꧀ꦥꦤ꧀ꦗꦒꦢ꧀ꦢꦸꦲ꧀ꦧꦸꦁꦧꦸꦁꦢꦶꦤꦲꦤ꧀ꦢꦃꦕꦸꦏꦸꦥ꧀ꦥꦤ꧀ꦗꦒꦢ꧀ꦢꦸꦲ꧀ꦧꦸꦁꦧꦸꦁꦢꦶꦤꦲꦤ꧀ꦢꦃꦕꦸꦏꦸꦥ꧀ꦥꦤ꧀ꦗꦒꦢ꧀ꦢꦸꦲ꧀ꦧꦸꦁꦧꦸꦁꦢꦶꦤꦲꦤ꧀ꦢꦃꦕꦸꦏꦸꦥ꧀ꦥꦤ꧀ꦗꦒꦢ꧀ꦢꦸꦲ꧀ꦧꦸꦁꦧꦸꦁꦢꦶꦤꦏꦁꦒꦺꦴꦤ꧀ꦥꦼꦂꦫꦁꦔꦤ꧀ꦥꦥꦁꦭꦶꦩ",
+                paragraf20: "ꦱꦼꦱꦸꦢꦸꦤ꧀ꦥꦼꦫꦁꦪꦸꦱꦲꦶꦪꦸꦢ꧀ꦝꦶꦱ꧀ꦠꦶꦫꦢꦶꦤꦺꦴꦧꦠ꧀ꦏꦼꦤ꧀ꦱꦕꦫꦗꦲꦱ꧀ꦠꦶꦤꦥꦸꦫꦤꦔꦤ꧀ꦏꦩꦼꦤꦁꦠꦼꦫꦱꦥꦲꦶꦠ꧀ꦲꦩꦂꦒꦏꦸꦢꦸꦩꦼꦤ꧀ꦏꦺꦴꦂꦧꦤ꧀ꦏꦼꦤ꧀ꦱꦩꦤꦶꦁꦪꦏ꧀ꦩꦤꦶꦁꦔꦚꦺꦴꦢꦠꦤ꧀ꦥꦸꦠꦿꦥꦸꦠꦿꦤꦶꦥꦸꦤ꧀ꦢꦲꦺꦴꦱꦼꦤ꧀ꦢꦶꦫꦶꦒꦤ꧀ꦢꦫꦶꦔꦸꦠꦸꦏ꧀ꦧꦒꦮꦱ꧀ꦫꦤꦧꦃꦮꦏꦸꦭꦮꦒꦤꦺꦫꦠꦤ꧀ꦢꦲꦶꦁꦔꦥꦸꦭꦸꦃꦠꦲꦸꦤ꧀ꦱꦏꦼꦤ꧀ꦢꦢꦸꦱꦤ꧀ꦠꦺꦫꦗꦢꦶꦁꦥꦼꦂꦫꦁꦔꦤ꧀ꦲꦤ꧀ꦠꦮꦶꦱꦶꦥꦸꦤ꧀ꦮꦁꦱꦪꦢꦮ",
+                paragraf21: "ꦱꦼꦱꦸꦢꦸꦤ꧀ꦩꦼꦩꦺꦫꦺꦤ꧀ꦠꦲ꧀ꦱꦭꦩꦤ꧀ꦏꦲꦤꦺꦠꦲꦸꦤ꧀ꦥꦤ꧀ꦢꦮꦚꦸꦮꦸꦤ꧀ꦠꦏ꧀ꦛꦏꦏꦺꦤ꧀ꦥꦂꦏꦼꦱꦶꦠ꧀ꦕꦸꦕꦸꦄꦂꦗꦸꦤꦭꦤ꧀ꦤꦼꦤ꧀ꦢꦏꦏꦼꦤ꧀ꦭꦼꦭꦩ꧀ꦥꦲꦤ꧀ꦠꦼꦂꦥꦸꦁꦏꦱ꧀ꦢꦠꦼꦁꦲꦶꦩꦭꦪꦕꦁꦒꦺꦤꦩꦁꦒꦺꦪꦸꦃꦱꦸꦂꦒꦲꦶꦁꦭꦼꦭꦩ꧀ꦥꦲꦤ꧀ꦆꦤꦶꦱꦠꦸꦱꦠꦸꦱ꧀ꦱꦤꦺꦩꦼꦔꦶꦁꦒꦭ꧀ꦲꦤꦺꦗꦸꦢꦤꦺꦪꦸꦢ꧀ꦝꦶꦱ꧀ꦠꦶꦫꦲꦶꦁꦏꦁꦩꦁꦒꦺꦪꦸꦃꦱꦸꦂꦒꦲꦶꦁꦏꦮꦸꦗꦺꦢ꧀ꦩꦤꦸꦁꦱ",
+
+                // Highlight Box
+                nilaiFilosofis: "ꦤꦶꦭꦲꦶꦦ꦳ꦶꦭꦺꦴꦱꦺꦴꦦꦶꦱ꧀ꦩꦲꦧꦿꦠ",
+                nilaiDeskripsi: "ꦩꦲꦧꦿꦠꦔꦗꦂꦏꦏꦼꦤ꧀ꦧꦶꦧꦲꦺꦫꦏꦧꦼꦤꦂꦱꦤ꧀ꦭꦤ꧀ꦢꦿꦩꦠꦼꦠꦥ꧀ꦠꦼꦠꦼꦠꦼꦄꦥꦿꦪꦢꦥꦸꦤ꧀ꦔꦢꦼꦥ꧀ꦲꦸꦮꦚ꧀ꦗꦭꦚ꧀ꦫꦶꦤ꧀ꦠꦁꦔꦤ꧀ꦏꦶꦱꦃꦆꦤꦶꦪꦸꦒꦶꦤꦺꦢꦃꦏꦼꦤ꧀ꦏꦺꦴꦤ꧀ꦱꦺꦥ꧀ꦏꦂꦩꦧꦃꦮꦤ꧀ꦱꦒꦢꦥꦼꦂꦧꦸꦠꦤ꧀ꦪꦸꦏꦁꦒꦺꦤꦲꦏ꧀ꦧꦭꦱꦤꦺꦨꦒꦮꦢ꧀ꦒꦶꦠꦲꦱꦧꦒꦶꦪꦤ꧀ꦩꦲꦧꦿꦠꦩꦺꦤꦼꦮꦲꦶꦤ꧀ꦮꦸꦭꦁꦔꦤ꧀ꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀ꦧꦧꦏꦮꦗꦶꦧꦤ꧀ꦥꦼꦭꦺꦥꦱ꧀ꦱꦤ꧀ꦢꦫꦶꦲꦱꦶꦭ꧀ꦏꦂꦗꦭꦤ꧀ꦲꦸꦧꦸꦁꦔꦤ꧀ꦲꦤ꧀ꦠꦮꦶꦱꦶꦥꦸꦤ꧀ꦒꦸꦱ꧀ꦠꦶꦪꦁꦆꦭꦤ꧀ꦢꦼꦔꦤ꧀ꦠꦸꦃꦥꦼꦫꦁꦠꦺꦱꦤ꧀ꦩꦶꦤꦔꦏꦥꦶꦭꦶꦃꦤ꧀ꦩꦸꦠꦸꦲꦏ꧀ꦠꦼꦂꦥꦸꦁꦏꦱ꧀ꦱꦤꦼꦱꦸꦢꦸꦤ꧀ꦱꦒꦢꦥꦸꦉꦴꦭꦁꦥꦼꦂꦢꦩꦶꦪꦤ꧀ꦒꦒꦭ꧀"
+            }
+        };
+
+        // Text untuk language switcher button
+        const languageLabels = {
+            id: "Bahasa Indonesia",
+            jv: "Basa Jawa",
+            jv_script: "ꦲꦏ꧀ꦱꦫꦗꦮ"
+        };
+
+        // DOM Elements
+        const burgerMenu = document.getElementById('burgerMenu');
+        const navbar = document.getElementById('navbar');
+        const critaBtn = document.getElementById('critaWayangBtn');
+        const critaDropdown = document.getElementById('critaWayangDropdown');
+        const tokohBtn = document.getElementById('tokohWayangBtn');
+        const tokohDropdown = document.getElementById('tokohWayangDropdown');
+        const languageBtn = document.getElementById('languageBtn');
+        const languageDropdown = document.getElementById('languageDropdown');
+        const currentLanguage = document.getElementById('currentLanguage');
+
+        // Fungsi untuk mengganti bahasa
+        function changeLanguage(lang) {
+            const elements = document.querySelectorAll('[data-i18n]');
+
+            // Reset font mode dulu
+            document.body.classList.remove('aksara-jawa-mode');
+
+            elements.forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                let text = translations[lang]?.[key];
+
+                if (text) {
+                    element.textContent = text;
+                }
+            });
+
+            // Update language button text
+            currentLanguage.textContent = languageLabels[lang];
+
+            // Apply font khusus untuk aksara Jawa
+            if (lang === 'jv_script') {
+                document.body.classList.add('aksara-jawa-mode');
+            }
+
+            // Simpan preferensi bahasa
+            localStorage.setItem('preferredLanguage', lang);
+
+            // Tutup dropdown
+            languageDropdown.classList.remove('active');
+            languageBtn.querySelector('.language-arrow').classList.remove('open');
+        }
+
+        // Event Listeners untuk navigation
+        burgerMenu.addEventListener('click', function () {
+            this.classList.toggle('active');
+            navbar.classList.toggle('active');
+        });
+
+        critaBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            critaDropdown.classList.toggle('active');
+            this.querySelector('.dropdown-arrow').classList.toggle('open');
+            tokohDropdown.classList.remove('active');
+            if (tokohBtn.querySelector('.dropdown-arrow')) {
+                tokohBtn.querySelector('.dropdown-arrow').classList.remove('open');
+            }
+        });
+
+        tokohBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            tokohDropdown.classList.toggle('active');
+            this.querySelector('.dropdown-arrow').classList.toggle('open');
+            critaDropdown.classList.remove('active');
+            if (critaBtn.querySelector('.dropdown-arrow')) {
+                critaBtn.querySelector('.dropdown-arrow').classList.remove('open');
+            }
+        });
+
+        // Event Listeners untuk language switcher
+        languageBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            languageDropdown.classList.toggle('active');
+            this.querySelector('.language-arrow').classList.toggle('open');
+        });
+
+        document.querySelectorAll('.language-option').forEach(option => {
+            option.addEventListener('click', function () {
+                const lang = this.getAttribute('data-lang');
+                changeLanguage(lang);
+            });
+        });
+
+        // Tutup dropdown ketika klik di luar
+        document.addEventListener('click', function (e) {
+            if (!e.target.closest('#containernavbar')) {
+                critaDropdown.classList.remove('active');
+                tokohDropdown.classList.remove('active');
+                languageDropdown.classList.remove('active');
+
+                if (critaBtn.querySelector('.dropdown-arrow')) {
+                    critaBtn.querySelector('.dropdown-arrow').classList.remove('open');
+                }
+                if (tokohBtn.querySelector('.dropdown-arrow')) {
+                    tokohBtn.querySelector('.dropdown-arrow').classList.remove('open');
+                }
+                if (languageBtn.querySelector('.language-arrow')) {
+                    languageBtn.querySelector('.language-arrow').classList.remove('open');
+                }
+                navbar.classList.remove('active');
+                burgerMenu.classList.remove('active');
+            }
+        });
+
+        // Load bahasa yang disimpan
+        const savedLang = localStorage.getItem('preferredLanguage') || 'id';
+        changeLanguage(savedLang);
+    </script>
+</body>
+
+</html>

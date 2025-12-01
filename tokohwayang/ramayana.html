@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tokoh Ramayana - Wayang</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Chonburi&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @font-face {
+            font-family: 'nyk Ngayogyan Jejeg';
+            src: local('nyk Ngayogyan Jejeg'),
+                url('../fontnyk/nyk Ngayogyan Jejeg.ttf') format('truetype');
+        }
+
+        body {
+            font-family: sans-serif;
+            background-color: rgb(22, 22, 22);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        #containernavbar {
+            display: flex;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+            flex-direction: row;
+            align-items: center;
+            width: 100%;
+            height: 5rem;
+            background-color: rgba(22, 22, 22, 0.95);
+            backdrop-filter: blur(10px);
+            justify-content: space-between;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        #logo {
+            font-size: 1.875rem;
+            font-family: "nyk Ngayogyan Jejeg", sans-serif;
+            color: #FFFFFF;
+            cursor: pointer;
+        }
+
+        .burger-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 0.35rem;
+        }
+
+        .burger-menu span {
+            width: 1.75rem;
+            height: 0.2rem;
+            background-color: #ee792b;
+            border-radius: 0.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .burger-menu.active span:nth-child(1) {
+            transform: rotate(45deg) translate(0.5rem, 0.5rem);
+        }
+
+        .burger-menu.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .burger-menu.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(0.5rem, -0.5rem);
+        }
+
+        #navbar {
+            width: 40%;
+            height: 2.5rem;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        .btnavbar {
+            font-family: "Chonburi", serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        #btactivenavbar {
+            padding-left: 0.625rem;
+            padding-right: 0.625rem;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            text-decoration: none;
+            color: rgb(0, 0, 0);
+            background-color: orange;
+            border-radius: 0.3125rem;
+            font-size: 0.9375rem;
+        }
+
+        .btinactivenavbar {
+            padding-left: 0.625rem;
+            padding-right: 0.625rem;
+            font-size: 0.9375rem;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+            border-radius: 0.3125rem;
+            transition: 0.1s ease-in;
+        }
+
+        .btinactivenavbar:hover {
+            background-color: rgb(35, 35, 35);
+            color: orange;
+            transition: 0.1s ease-in;
+        }
+
+        .dropdown-arrow {
+            font-size: 0.75rem;
+            transition: transform 0.2s ease;
+        }
+
+        .dropdown-arrow.open {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: rgb(35, 35, 35);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.3125rem;
+            margin-top: 0.5rem;
+            min-width: 180px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .dropdown-menu.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: white;
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: all 0.1s ease-in;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item.active {
+            background-color: orange;
+            color: black;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgb(45, 45, 45);
+            color: orange;
+            padding-left: 1.25rem;
+        }
+
+        #containertokoh {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 6rem 2rem 2rem;
+            min-height: 100vh;
+        }
+
+        .tokoh-header {
+            background: rgba(35, 35, 35, 0.8);
+            border-radius: 0;
+            padding: 3rem 2rem 2rem;
+            color: white;
+            position: relative;
+            border-bottom: 2px solid orange;
+            margin-bottom: 2rem;
+        }
+
+        .tokoh-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-family: "EB Garamond", serif;
+            font-weight: 700;
+            background-image: linear-gradient(to right, #CC9900 0%, #FFCC66 50%, #FFD700 85%, #FFEB3B 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tokoh-header p {
+            font-size: 1.1rem;
+            color: rgb(180, 180, 180);
+            font-family: "EB Garamond", serif;
+        }
+
+        .tokoh-category {
+            margin-bottom: 3rem;
+        }
+
+        .category-title {
+            font-family: "Chonburi", serif;
+            font-size: 1.8rem;
+            color: orange;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid rgba(255, 165, 0, 0.3);
+        }
+
+        .tokoh-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .tokoh-card {
+            background: rgba(35, 35, 35, 0.8);
+            border-radius: 0.5rem;
+            padding: 2rem;
+            border-left: 4px solid orange;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .tokoh-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .tokoh-name {
+            font-family: "EB Garamond", serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: orange;
+            margin-bottom: 1rem;
+        }
+
+        .tokoh-role {
+            font-family: "Chonburi", serif;
+            font-size: 1rem;
+            color: #FFD700;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .tokoh-description {
+            color: rgb(180, 180, 180);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .tokoh-attributes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .attribute {
+            background: rgba(255, 165, 0, 0.1);
+            color: orange;
+            padding: 0.3rem 0.8rem;
+            border-radius: 1rem;
+            font-size: 0.85rem;
+            font-family: "EB Garamond", serif;
+        }
+
+        .highlight-box {
+            background: rgba(255, 165, 0, 0.1);
+            border-left: 3px solid orange;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0.3125rem;
+        }
+
+        .highlight-box h4 {
+            color: orange;
+            margin-bottom: 0.8rem;
+            font-family: "EB Garamond", serif;
+            font-size: 1.2rem;
+        }
+
+        .highlight-box p {
+            color: rgb(200, 200, 200);
+            margin-bottom: 0;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            #containernavbar {
+                padding-left: 1rem;
+                padding-right: 1rem;
+                height: 4rem;
+            }
+
+            #logo {
+                font-size: 1.5rem;
+            }
+
+            .burger-menu {
+                display: flex;
+            }
+
+            #navbar {
+                position: fixed;
+                top: 4rem;
+                right: -100%;
+                width: 100%;
+                height: calc(100vh - 4rem);
+                background-color: rgba(22, 22, 22, 0.98);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: stretch;
+                padding: 1.5rem 1rem;
+                gap: 0.75rem;
+                transition: right 0.3s ease;
+                overflow-y: auto;
+            }
+
+            #navbar.active {
+                right: 0;
+            }
+
+            .btnavbar {
+                width: 100%;
+                height: auto;
+                display: flex;
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            #btactivenavbar,
+            .btinactivenavbar {
+                width: 100%;
+                height: 2.5rem;
+                font-size: 1rem;
+            }
+
+            .dropdown-menu {
+                position: static;
+                margin-top: 0;
+                width: 100%;
+                margin-left: 0;
+                padding-left: 1rem;
+                transform: none;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease, opacity 0.2s ease;
+                background-color: rgba(35, 35, 35, 0.9);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 0.3125rem;
+            }
+
+            .dropdown-menu.active {
+                display: block;
+                max-height: 300px;
+                margin-top: 0.5rem;
+            }
+
+            .dropdown-item {
+                padding: 0.75rem 1rem;
+                font-size: 0.95rem;
+                background-color: transparent;
+            }
+
+            .dropdown-item.active {
+                background-color: orange !important;
+                color: black !important;
+            }
+
+            #containertokoh {
+                padding: 5rem 1rem 1rem;
+            }
+
+            .tokoh-header {
+                padding: 2rem 1rem;
+            }
+
+            .tokoh-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .tokoh-header p {
+                font-size: 1rem;
+            }
+
+            .tokoh-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .tokoh-card {
+                padding: 1.5rem;
+            }
+
+            .category-title {
+                font-size: 1.5rem;
+            }
+
+            .tokoh-name {
+                font-size: 1.3rem;
+            }
+        }
+
+        /* Media Query khusus untuk perangkat dengan lebar sangat kecil (Android portrait) */
+        @media (max-width: 480px) {
+            #containertokoh {
+                padding: 5rem 0.75rem 1rem;
+            }
+
+            .tokoh-card {
+                padding: 1.25rem;
+            }
+        }
+
+        /* Styles untuk Language Switcher */
+        .language-switcher {
+            position: relative;
+            display: inline-block;
+        }
+
+        .language-btn {
+            background: transparent;
+            border: 1px solid orange;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.3125rem;
+            cursor: pointer;
+            font-family: "Chonburi", serif;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .language-btn:hover {
+            background-color: rgba(255, 165, 0, 0.1);
+        }
+
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: rgb(35, 35, 35);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.3125rem;
+            margin-top: 0.5rem;
+            min-width: 160px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            z-index: 1001;
+            display: none;
+        }
+
+        .language-dropdown.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .language-option {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: white;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.1s ease-in;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            font-family: "Chonburi", serif;
+        }
+
+        .language-option[data-lang="jv_script"] {
+            font-family: "nyk Ngayogyan Jejeg", sans-serif;
+        }
+
+        .language-option:last-child {
+            border-bottom: none;
+        }
+
+        .language-option:hover {
+            background-color: rgb(45, 45, 45);
+            color: orange;
+            padding-left: 1.25rem;
+        }
+
+        .language-arrow {
+            font-size: 0.7rem;
+            transition: transform 0.2s ease;
+        }
+
+        .language-arrow.open {
+            transform: rotate(180deg);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Mode Aksara Jawa */
+        .aksara-jawa-mode .tokoh-header h1,
+        .aksara-jawa-mode .category-title,
+        .aksara-jawa-mode .tokoh-name,
+        .aksara-jawa-mode .tokoh-role,
+        .aksara-jawa-mode .highlight-box h4,
+        .aksara-jawa-mode .btnavbar,
+        .aksara-jawa-mode .btinactivenavbar,
+        .aksara-jawa-mode .dropdown-item,
+        .aksara-jawa-mode .language-btn,
+        .aksara-jawa-mode #logo {
+            font-family: 'nyk Ngayogyan Jejeg', sans-serif !important;
+        }
+
+        .aksara-jawa-mode .attribute {
+            font-family: 'nyk Ngayogyan Jejeg', sans-serif !important;
+            font-size: 0.8rem;
+        }
+
+        /* Untuk teks panjang biar mudah dibaca */
+        .aksara-jawa-mode .tokoh-description,
+        .aksara-jawa-mode .highlight-box p,
+        .aksara-jawa-mode .tokoh-header p {
+            font-family: 'nyk Ngayogyan Jejeg', sans-serif !important;
+            line-height: 2;
+        }
+
+        /* Mobile Responsive untuk Language Switcher */
+        @media (max-width: 768px) {
+            #containernavbar {
+                flex-wrap: wrap;
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+
+            .nav-left {
+                order: 1;
+                flex: 1;
+            }
+
+            .nav-right {
+                order: 2;
+                width: auto;
+                flex-direction: row;
+                gap: 0.5rem;
+            }
+
+            .language-switcher {
+                width: auto;
+                margin-top: 0;
+            }
+
+            .language-btn {
+                width: auto;
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+                min-width: 120px;
+            }
+
+            .language-dropdown {
+                position: absolute;
+                top: 100%;
+                right: 0;
+                width: 140px;
+                margin-top: 0.5rem;
+            }
+
+            #navbar {
+                order: 3;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Ganti bagian #containernavbar menjadi seperti ini -->
+    <div id="containernavbar">
+        <div class="nav-left">
+            <div id="logo">ꦱꦶꦗꦧꦺ</div>
+        </div>
+
+        <div class="nav-right">
+            <!-- Language Switcher -->
+            <div class="language-switcher">
+                <button class="language-btn" id="languageBtn">
+                    <span id="currentLanguage">Bahasa Indonesia</span>
+                    <span class="language-arrow">▼</span>
+                </button>
+                <div class="language-dropdown" id="languageDropdown">
+                    <button class="language-option" data-lang="id">Bahasa Indonesia</button>
+                    <button class="language-option" data-lang="jv">Basa Jawa</button>
+                    <button class="language-option" data-lang="jv_script">ꦲꦏ꧀ꦱꦫꦗꦮ</button>
+                </div>
+            </div>
+
+            <div class="burger-menu" id="burgerMenu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        <div id="navbar">
+            <div class="btnavbar">
+                <a href="/sijabewayang/index.html" class="btinactivenavbar" data-i18n="beranda">Beranda</a>
+            </div>
+            <div class="btnavbar" id="critaWayangNav">
+                <a href="#" class="btinactivenavbar" id="critaWayangBtn">
+                    <span data-i18n="critaWayang">Crita Wayang</span>
+                    <span class="dropdown-arrow">▼</span>
+                </a>
+                <div class="dropdown-menu" id="critaWayangDropdown">
+                    <a href="../critawayang/mahabharata.html" class="dropdown-item"
+                        data-i18n="mahabharata">Mahabharata</a>
+                    <a href="../critawayang/ramayana.html" class="dropdown-item" data-i18n="ramayana">Ramayana</a>
+                    <a href="../critawayang/dewaruci.html" class="dropdown-item" data-i18n="dewaruci">Dewa Ruci</a>
+                </div>
+            </div>
+            <div class="btnavbar" id="tokohWayangNav">
+                <a href="#" class="btinactivenavbar" id="tokohWayangBtn">
+                    <span data-i18n="tokohWayang">Tokoh Wayang</span>
+                    <span class="dropdown-arrow">▼</span>
+                </a>
+                <div class="dropdown-menu" id="tokohWayangDropdown">
+                    <a href="mahabharata.html" class="dropdown-item" data-i18n="mahabharata">Mahabharata</a>
+                    <a href="ramayana.html" class="dropdown-item active" data-i18n="ramayana">Ramayana</a>
+                    <a href="dewaruci.html" class="dropdown-item" data-i18n="dewaruci">Dewa Ruci</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="containertokoh">
+        <!-- Header -->
+        <div class="tokoh-header">
+            <h1 data-i18n="judulHalaman">Tokoh Ramayana</h1>
+            <p data-i18n="subJudul">Mengenal para pahlawan, dewa, dan tokoh penting dalam epos Ramayana</p>
+        </div>
+
+        <!-- Keluarga Utama -->
+        <div class="tokoh-category">
+            <h2 class="category-title" data-i18n="keluargaUtama">Keluarga Utama</h2>
+            <div class="tokoh-grid">
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="ramaNama">Rama</h3>
+                    <div class="tokoh-role" data-i18n="ramaPeran">Awatara Wisnu dan Pangeran Ayodhya</div>
+                    <p class="tokoh-description" data-i18n="ramaDeskripsi">Putra mahkota Kerajaan Kosala, awatara
+                        (penjelmaan) Dewa Wisnu yang turun ke bumi untuk membasmi kejahatan. Dikenal dengan sifatnya
+                        yang berbudi luhur, berani, dan selalu menjunjung tinggi dharma. Menjalani pengasingan 14 tahun
+                        di hutan dan memimpin pasukan untuk menyelamatkan Sinta dari Rahwana.</p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrKebijaksanaan">Kebijaksanaan</span>
+                        <span class="attribute" data-i18n="attrKeberanian">Keberanian</span>
+                        <span class="attribute" data-i18n="attrKesetiaan">Kesetiaan</span>
+                    </div>
+                </div>
+
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="sintaNama">Sinta</h3>
+                    <div class="tokoh-role" data-i18n="sintaPeran">Putri Mantili dan Permaisuri Rama</div>
+                    <p class="tokoh-description" data-i18n="sintaDeskripsi">Putri angkat Prabu Janaka, ditemukan saat
+                        membajak sawah sehingga dijuluki "Putri Bumi". Istri Rama yang cantik dan setia. Diculik oleh
+                        Rahwana dan ditawan di Alengka, namun tetap menjaga kesucian dan kesetiaannya kepada Rama.
+                        Melalui ujian api (Agni Pariksha) untuk membuktikan kesuciannya.</p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrKesetiaan">Kesetiaan</span>
+                        <span class="attribute" data-i18n="attrKesucian">Kesucian</span>
+                        <span class="attribute" data-i18n="attrKetabahan">Ketabahan</span>
+                    </div>
+                </div>
+
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="laksmanaNama">Laksmana</h3>
+                    <div class="tokoh-role" data-i18n="laksmanaPeran">Adik Rama dan Kesatria Setia</div>
+                    <p class="tokoh-description" data-i18n="laksmanaDeskripsi">Putra Dasarata dari permaisuri Sumitra,
+                        adik Rama yang sangat setia. Selalu mendampingi Rama dan Sinta dalam pengasingan ke hutan. Ahli
+                        dalam penggunaan panah dan senjata. Pernah melukai Surpanakha yang mengganggu Sinta, memicu
+                        kemarahan Rahwana.</p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrKesetiaan">Kesetiaan</span>
+                        <span class="attribute" data-i18n="attrKeberanian">Keberanian</span>
+                        <span class="attribute" data-i18n="attrKetabahan">Ketabahan</span>
+                    </div>
+                </div>
+
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="dasarataNama">Dasarata</h3>
+                    <div class="tokoh-role" data-i18n="dasarataPeran">Raja Ayodhya</div>
+                    <p class="tokoh-description" data-i18n="dasarataDeskripsi">Ayah Rama, raja Ayodhya yang bijaksana.
+                        Terpaksa mengasingkan Rama karena terikat janji pada permaisuri Kaikeyi. Meninggal karena broken
+                        heart setelah kepergian Rama. Pemerintahannya dikenal sebagai masa keemasan Ayodhya sebelum
+                        pengasingan Rama.</p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrKebijaksanaan">Kebijaksanaan</span>
+                        <span class="attribute" data-i18n="attrKeadilan">Keadilan</span>
+                        <span class="attribute" data-i18n="attrCintaKasih">Cinta Kasih</span>
+                    </div>
+                </div>
+
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="barataNama">Barata</h3>
+                    <div class="tokoh-role" data-i18n="barataPeran">Putra Kaikeyi</div>
+                    <p class="tokoh-description" data-i18n="barataDeskripsi">Putra Dasarata dari permaisuri Kaikeyi,
+                        seharusnya menjadi raja setelah Rama diasingkan. Namun menolak tahta dan memimpin pencarian Rama
+                        ke hutan. Memerintah Ayodhya sebagai wakil Rama selama 14 tahun pengasingan, meletakkan sandal
+                        Rama di singgasana sebagai simbol.</p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrKesetiaan">Kesetiaan</span>
+                        <span class="attribute" data-i18n="attrKehormatan">Kehormatan</span>
+                        <span class="attribute" data-i18n="attrKeadilan">Keadilan</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kerajaan Alengka -->
+        <div class="tokoh-category">
+            <h2 class="category-title" data-i18n="kerajaanAlengka">Kerajaan Alengka</h2>
+            <div class="tokoh-grid">
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="rahwanaNama">Rahwana</h3>
+                    <div class="tokoh-role" data-i18n="rahwanaPeran">Raja Alengka</div>
+                    <p class="tokoh-description" data-i18n="rahwanaDeskripsi">Raja raksasa dari Alengka yang memiliki
+                        sepuluh kepala dan dua puluh tangan. Memiliki kesaktian luar biasa karena memperoleh anugerah
+                        dari Brahma. Namun sifatnya angkara murka dan serakah. Menculik Sinta karena terpesona
+                        kecantikannya, yang akhirnya menyebabkan kehancuran kerajaannya.</p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrKesaktian">Kesaktian</span>
+                        <span class="attribute" data-i18n="attrKesombongan">Kesombongan</span>
+                        <span class="attribute" data-i18n="attrAngkaraMurka">Angkara Murka</span>
+                    </div>
+                </div>
+
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="wibisanaNama">Wibisana</h3>
+                    <div class="tokoh-role" data-i18n="wibisanaPeran">Adik Rahwana yang Bijaksana</div>
+                    <p class="tokoh-description" data-i18n="wibisanaDeskripsi">Adik Rahwana yang memiliki sifat
+                        bijaksana dan menjunjung tinggi kebenaran. Sering menasihati Rahwana untuk mengembalikan Sinta,
+                        namun tidak didengarkan. Akhirnya membelot dan bergabung dengan Rama, memberikan informasi
+                        penting tentang kelemahan Alengka. Menjadi raja Alengka setelah Rahwana tewas.</p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrKebijaksanaan">Kebijaksanaan</span>
+                        <span class="attribute" data-i18n="attrKeadilan">Keadilan</span>
+                        <span class="attribute" data-i18n="attrKetabahan">Ketabahan</span>
+                    </div>
+                </div>
+
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="kumbakarnaNama">Kumbakarna</h3>
+                    <div class="tokoh-role" data-i18n="kumbakarnaPeran">Raksasa Perkasa</div>
+                    <p class="tokoh-description" data-i18n="kumbakarnaDeskripsi">Adik Rahwana yang memiliki tubuh
+                        raksasa dan kekuatan luar biasa. Dikutuk untuk tidur selama enam bulan dan bangun hanya satu
+                        hari. Meski tahu perbuatan kakaknya salah, tetap bertaruh membela Alengka karena kesetiaan pada
+                        negara. Gugur secara heroik melawan Rama.</p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrKekuatan">Kekuatan</span>
+                        <span class="attribute" data-i18n="attrKesetiaan">Kesetiaan</span>
+                        <span class="attribute" data-i18n="attrPengorbanan">Pengorbanan</span>
+                    </div>
+                </div>
+
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="surpanakhaNama">Surpanakha</h3>
+                    <div class="tokoh-role" data-i18n="surpanakhaPeran">Adik Rahwana</div>
+                    <p class="tokoh-description" data-i18n="surpanakhaDeskripsi">Raksasi adik Rahwana yang jatuh cinta
+                        pada Rama. Karena ditolak, menyerang Sinta sehingga hidungnya dipotong oleh Laksmana. Kejadian
+                        ini memicu kemarahan Rahwana dan menjadi awal penculikan Sinta. Tokoh yang menjadi pemicu
+                        konflik utama dalam Ramayana.</p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrNafsu">Nafsu</span>
+                        <span class="attribute" data-i18n="attrDendam">Dendam</span>
+                        <span class="attribute" data-i18n="attrProvokator">Provokator</span>
+                    </div>
+                </div>
+
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="indrajeetNama">Indrajeet (Meganatha)</h3>
+                    <div class="tokoh-role" data-i18n="indrajeetPeran">Putra Mahkota Alengka</div>
+                    <p class="tokoh-description" data-i18n="indrajeetDeskripsi">Putra Rahwana yang sangat sakti, dikenal
+                        juga sebagai Meganatha. Memiliki senjata sakti Nagapasa yang mampu mengikat musuh. Berhasil
+                        membuat Rama dan Laksmana pingsan dalam pertempuran. Namun akhirnya gugur di tangan Laksmana
+                        setelah melakukan ritual pemujaan yang terputus.</p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrKesaktian">Kesaktian</span>
+                        <span class="attribute" data-i18n="attrKecerdikan">Kecerdikan</span>
+                        <span class="attribute" data-i18n="attrKesetiaan">Kesetiaan</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pasukan Kera -->
+        <div class="tokoh-category">
+            <h2 class="category-title" data-i18n="pasukanKera">Pasukan Kera</h2>
+            <div class="tokoh-grid">
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="hanomanNama">Hanoman</h3>
+                    <div class="tokoh-role" data-i18n="hanomanPeran">Kesatria Kera Putih</div>
+                    <p class="tokoh-description" data-i18n="hanomanDeskripsi">Putra Anjani dan Bayu, kesatria kera putih
+                        yang sangat sakti. Memiliki kemampuan terbang, mengubah ukuran tubuh, dan kekuatan luar biasa.
+                        Menjadi duta Rama untuk mencari Sinta di Alengka. Membakar kota Alengka dengan ekornya dan
+                        memainkan peran penting dalam penyelamatan Sinta.</p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrKesetiaan">Kesetiaan</span>
+                        <span class="attribute" data-i18n="attrKesaktian">Kesaktian</span>
+                        <span class="attribute" data-i18n="attrKecerdikan">Kecerdikan</span>
+                    </div>
+                </div>
+
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="sugriwaNama">Sugriwa</h3>
+                    <div class="tokoh-role" data-i18n="sugriwaPeran">Raja Kera</div>
+                    <p class="tokoh-description" data-i18n="sugriwaDeskripsi">Raja kera dari Kerajaan Kiskenda yang
+                        diusir oleh kakaknya, Subali. Dibantu Rama untuk merebut kembali kerajaannya, dan sebagai
+                        balasannya mengerahkan pasukan kera untuk membantu Rama mencari Sinta. Memimpin pasukan kera
+                        dalam penyerangan ke Alengka.</p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrKepemimpinan">Kepemimpinan</span>
+                        <span class="attribute" data-i18n="attrKesetiaan">Kesetiaan</span>
+                        <span class="attribute" data-i18n="attrStrategi">Strategi</span>
+                    </div>
+                </div>
+
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="subaliNama">Subali</h3>
+                    <div class="tokoh-role" data-i18n="subaliPeran">Mantan Raja Kera</div>
+                    <p class="tokoh-description" data-i18n="subaliDeskripsi">Kakak Sugriwa, raja Kiskenda yang memiliki
+                        kesaktian luar biasa. Terlibat perselisihan dengan adiknya karena kesalahpahaman. Gugur di
+                        tangan Rama saat membantu Sugriwa merebut kembali tahta. Sebelum meninggal, memaafkan Sugriwa
+                        dan mendukung perjuangan Rama.</p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrKekuatan">Kekuatan</span>
+                        <span class="attribute" data-i18n="attrKeberanian">Keberanian</span>
+                        <span class="attribute" data-i18n="attrKemurahanHati">Kemurahan Hati</span>
+                    </div>
+                </div>
+
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="anggadaNama">Anggada</h3>
+                    <div class="tokoh-role" data-i18n="anggadaPeran">Putra Subali</div>
+                    <p class="tokoh-description" data-i18n="anggadaDeskripsi">Putra Subali yang menjadi panglima pasukan
+                        kera. Memimpin pencarian Sinta ke selatan bersama Hanoman. Pemberani dan setia, memainkan peran
+                        penting dalam berbagai pertempuran melawan pasukan Alengka. Mewarisi kekuatan dan keberanian
+                        ayahnya.</p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrKeberanian">Keberanian</span>
+                        <span class="attribute" data-i18n="attrKesetiaan">Kesetiaan</span>
+                        <span class="attribute" data-i18n="attrKepemimpinan">Kepemimpinan</span>
+                    </div>
+                </div>
+
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="jembawanNama">Jembawan</h3>
+                    <div class="tokoh-role" data-i18n="jembawanPeran">Kera Tua Bijaksana</div>
+                    <p class="tokoh-description" data-i18n="jembawanDeskripsi">Kera tua yang bijaksana, penasihat
+                        Sugriwa. Memiliki pengetahuan tentang berbagai ilmu dan strategi. Memberikan nasihat penting
+                        dalam pencarian Sinta dan pembangunan jembatan ke Alengka. Dipercaya sebagai reinkarnasi Brahma
+                        dalam bentuk kera.</p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrKebijaksanaan">Kebijaksanaan</span>
+                        <span class="attribute" data-i18n="attrPengetahuan">Pengetahuan</span>
+                        <span class="attribute" data-i18n="attrStrategi">Strategi</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tokoh Pendukung -->
+        <div class="tokoh-category">
+            <h2 class="category-title" data-i18n="tokohPendukung">Tokoh Pendukung</h2>
+            <div class="tokoh-grid">
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="jatayuNama">Jatayu</h3>
+                    <div class="tokoh-role" data-i18n="jatayuPeran">Burung Perkasa</div>
+                    <p class="tokoh-description" data-i18n="jatayuDeskripsi">Burung perkasa sahabat Dasarata yang
+                        mencoba menyelamatkan Sinta dari Rahwana. Bertarung sengit dengan Rahwana namun kalah dan
+                        terluka parah. Sempat memberitahu Rama dan Laksmana tentang penculikan Sinta sebelum meninggal.
+                        Dimakamkan dengan penghormatan penuh.</p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrPengorbanan">Pengorbanan</span>
+                        <span class="attribute" data-i18n="attrKeberanian">Keberanian</span>
+                        <span class="attribute" data-i18n="attrKesetiaan">Kesetiaan</span>
+                    </div>
+                </div>
+
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="sampatiNama">Sampati</h3>
+                    <div class="tokoh-role" data-i18n="sampatiPeran">Saudara Jatayu</div>
+                    <p class="tokoh-description" data-i18n="sampatiDeskripsi">Saudara Jatayu yang kehilangan kemampuan
+                        terbang setelah menyelamatkan Jatayu dari matahari. Memberi informasi penting kepada Hanoman dan
+                        pasukan kera tentang keberadaan Sinta di Alengka. Memiliki penglihatan tajam yang dapat melihat
+                        jarak jauh.</p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrPengorbanan">Pengorbanan</span>
+                        <span class="attribute" data-i18n="attrPengetahuan">Pengetahuan</span>
+                        <span class="attribute" data-i18n="attrKetabahan">Ketabahan</span>
+                    </div>
+                </div>
+
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="janakaNama">Prabu Janaka</h3>
+                    <div class="tokoh-role" data-i18n="janakaPeran">Raja Mantili</div>
+                    <p class="tokoh-description" data-i18n="janakaDeskripsi">Raja Mantili yang menemukan Sinta saat
+                        membajak sawah. Mengadakan sayembara untuk menentukan siapa yang layak menikahi Sinta, dimana
+                        Rama berhasil memenangkannya. Ayah angkat Sinta yang bijaksana dan adil.</p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrKebijaksanaan">Kebijaksanaan</span>
+                        <span class="attribute" data-i18n="attrKeadilan">Keadilan</span>
+                        <span class="attribute" data-i18n="attrCintaKasih">Cinta Kasih</span>
+                    </div>
+                </div>
+
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="kaikeyiNama">Kaikeyi</h3>
+                    <div class="tokoh-role" data-i18n="kaikeyiPeran">Permaisuri Dasarata</div>
+                    <p class="tokoh-description" data-i18n="kaikeyiDeskripsi">Permaisuri termuda Dasarata, ibu Barata.
+                        Terpengaruh oleh pelayannya, Manthara, untuk meminta Dasarata mengasingkan Rama dan mengangkat
+                        Barata sebagai raja. Tindakannya menyebabkan penderitaan bagi keluarga kerajaan.</p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrAmbisi">Ambisi</span>
+                        <span class="attribute" data-i18n="attrNaif">Naif</span>
+                        <span class="attribute" data-i18n="attrProvokator">Provokator</span>
+                    </div>
+                </div>
+
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="mantharaNama">Manthara</h3>
+                    <div class="tokoh-role" data-i18n="mantharaPeran">Dayang Kaikeyi</div>
+                    <p class="tokoh-description" data-i18n="mantharaDeskripsi">Dayang tua Kaikeyi yang memiliki tubuh
+                        bungkuk. Meracuni pikiran Kaikeyi dengan hasutan agar Barata menjadi raja dan Rama diasingkan.
+                        Tokoh antagonis yang memicu konflik utama dalam keluarga kerajaan Ayodhya.</p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrDendam">Dendam</span>
+                        <span class="attribute" data-i18n="attrProvokator">Provokator</span>
+                        <span class="attribute" data-i18n="attrLicik">Licik</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Highlight Boxes -->
+        <div class="highlight-box">
+            <h4 data-i18n="karakteristikJudul">Karakteristik Tokoh Ramayana</h4>
+            <p data-i18n="karakteristikDeskripsi">Ramayana menampilkan tokoh-tokoh dengan karakter yang kuat dan jelas.
+                Setiap tokoh mewakili nilai-nilai tertentu: Rama (dharma dan kebenaran), Sinta (kesetiaan dan kesucian),
+                Laksmana (pengabdian), Hanoman (kesetiaan dan pengorbanan), dan Rahwana (angkara murka). Konflik antara
+                kebaikan dan kejahatan digambarkan dengan sangat jelas dalam epos ini.</p>
+        </div>
+
+        <div class="highlight-box">
+            <h4 data-i18n="nilaiJudul">Nilai-nilai dalam Ramayana</h4>
+            <p data-i18n="nilaiDeskripsi">Ramayana mengajarkan tentang pentingnya menjalankan dharma (kewajiban),
+                kesetiaan dalam perkawinan, bakti kepada orang tua, dan kepemimpinan yang adil. Kisah ini juga
+                menunjukkan bahwa kejahatan pada akhirnya akan dikalahkan oleh kebaikan. Hubungan antara Rama dan
+                Hanoman menjadi simbol kesetiaan dan pengabdian tanpa pamrih yang sempurna.</p>
+        </div>
+
+        <script>
+            // Data terjemahan untuk Tokoh Ramayana
+            const translations = {
+                id: {
+                    // Navbar
+                    beranda: "Beranda",
+                    critaWayang: "Crita Wayang",
+                    tokohWayang: "Tokoh Wayang",
+                    mahabharata: "Mahabharata",
+                    ramayana: "Ramayana",
+                    dewaruci: "Dewa Ruci",
+
+                    // Header
+                    judulHalaman: "Tokoh Ramayana",
+                    subJudul: "Mengenal para pahlawan, dewa, dan tokoh penting dalam epos Ramayana",
+
+                    // Kategori
+                    keluargaUtama: "Keluarga Utama",
+                    kerajaanAlengka: "Kerajaan Alengka",
+                    pasukanKera: "Pasukan Kera",
+                    tokohPendukung: "Tokoh Pendukung",
+
+                    // Tokoh - Keluarga Utama
+                    ramaNama: "Rama",
+                    ramaPeran: "Awatara Wisnu dan Pangeran Ayodhya",
+                    ramaDeskripsi: "Putra mahkota Kerajaan Kosala, awatara (penjelmaan) Dewa Wisnu yang turun ke bumi untuk membasmi kejahatan. Dikenal dengan sifatnya yang berbudi luhur, berani, dan selalu menjunjung tinggi dharma. Menjalani pengasingan 14 tahun di hutan dan memimpin pasukan untuk menyelamatkan Sinta dari Rahwana.",
+
+                    sintaNama: "Sinta",
+                    sintaPeran: "Putri Mantili dan Permaisuri Rama",
+                    sintaDeskripsi: "Putri angkat Prabu Janaka, ditemukan saat membajak sawah sehingga dijuluki \"Putri Bumi\". Istri Rama yang cantik dan setia. Diculik oleh Rahwana dan ditawan di Alengka, namun tetap menjaga kesucian dan kesetiaannya kepada Rama. Melalui ujian api (Agni Pariksha) untuk membuktikan kesuciannya.",
+
+                    laksmanaNama: "Laksmana",
+                    laksmanaPeran: "Adik Rama dan Kesatria Setia",
+                    laksmanaDeskripsi: "Putra Dasarata dari permaisuri Sumitra, adik Rama yang sangat setia. Selalu mendampingi Rama dan Sinta dalam pengasingan ke hutan. Ahli dalam penggunaan panah dan senjata. Pernah melukai Surpanakha yang mengganggu Sinta, memicu kemarahan Rahwana.",
+
+                    dasarataNama: "Dasarata",
+                    dasarataPeran: "Raja Ayodhya",
+                    dasarataDeskripsi: "Ayah Rama, raja Ayodhya yang bijaksana. Terpaksa mengasingkan Rama karena terikat janji pada permaisuri Kaikeyi. Meninggal karena broken heart setelah kepergian Rama. Pemerintahannya dikenal sebagai masa keemasan Ayodhya sebelum pengasingan Rama.",
+
+                    barataNama: "Barata",
+                    barataPeran: "Putra Kaikeyi",
+                    barataDeskripsi: "Putra Dasarata dari permaisuri Kaikeyi, seharusnya menjadi raja setelah Rama diasingkan. Namun menolak tahta dan memimpin pencarian Rama ke hutan. Memerintah Ayodhya sebagai wakil Rama selama 14 tahun pengasingan, meletakkan sandal Rama di singgasana sebagai simbol.",
+
+                    // Tokoh - Kerajaan Alengka
+                    rahwanaNama: "Rahwana",
+                    rahwanaPeran: "Raja Alengka",
+                    rahwanaDeskripsi: "Raja raksasa dari Alengka yang memiliki sepuluh kepala dan dua puluh tangan. Memiliki kesaktian luar biasa karena memperoleh anugerah dari Brahma. Namun sifatnya angkara murka dan serakah. Menculik Sinta karena terpesona kecantikannya, yang akhirnya menyebabkan kehancuran kerajaannya.",
+
+                    wibisanaNama: "Wibisana",
+                    wibisanaPeran: "Adik Rahwana yang Bijaksana",
+                    wibisanaDeskripsi: "Adik Rahwana yang memiliki sifat bijaksana dan menjunjung tinggi kebenaran. Sering menasihati Rahwana untuk mengembalikan Sinta, namun tidak didengarkan. Akhirnya membelot dan bergabung dengan Rama, memberikan informasi penting tentang kelemahan Alengka. Menjadi raja Alengka setelah Rahwana tewas.",
+
+                    kumbakarnaNama: "Kumbakarna",
+                    kumbakarnaPeran: "Raksasa Perkasa",
+                    kumbakarnaDeskripsi: "Adik Rahwana yang memiliki tubuh raksasa dan kekuatan luar biasa. Dikutuk untuk tidur selama enam bulan dan bangun hanya satu hari. Meski tahu perbuatan kakaknya salah, tetap bertarung membela Alengka karena kesetiaan pada negara. Gugur secara heroik melawan Rama.",
+
+                    surpanakhaNama: "Surpanakha",
+                    surpanakhaPeran: "Adik Rahwana",
+                    surpanakhaDeskripsi: "Raksasi adik Rahwana yang jatuh cinta pada Rama. Karena ditolak, menyerang Sinta sehingga hidungnya dipotong oleh Laksmana. Kejadian ini memicu kemarahan Rahwana dan menjadi awal penculikan Sinta. Tokoh yang menjadi pemicu konflik utama dalam Ramayana.",
+
+                    indrajeetNama: "Indrajeet (Meganatha)",
+                    indrajeetPeran: "Putra Mahkota Alengka",
+                    indrajeetDeskripsi: "Putra Rahwana yang sangat sakti, dikenal juga sebagai Meganatha. Memiliki senjata sakti Nagapasa yang mampu mengikat musuh. Berhasil membuat Rama dan Laksmana pingsan dalam pertempuran. Namun akhirnya gugur di tangan Laksmana setelah melakukan ritual pemujaan yang terputus.",
+
+                    // Tokoh - Pasukan Kera
+                    hanomanNama: "Hanoman",
+                    hanomanPeran: "Kesatria Kera Putih",
+                    hanomanDeskripsi: "Putra Anjani dan Bayu, kesatria kera putih yang sangat sakti. Memiliki kemampuan terbang, mengubah ukuran tubuh, dan kekuatan luar biasa. Menjadi duta Rama untuk mencari Sinta di Alengka. Membakar kota Alengka dengan ekornya dan memainkan peran penting dalam penyelamatan Sinta.",
+
+                    sugriwaNama: "Sugriwa",
+                    sugriwaPeran: "Raja Kera",
+                    sugriwaDeskripsi: "Raja kera dari Kerajaan Kiskenda yang diusir oleh kakaknya, Subali. Dibantu Rama untuk merebut kembali kerajaannya, dan sebagai balasannya mengerahkan pasukan kera untuk membantu Rama mencari Sinta. Memimpin pasukan kera dalam penyerangan ke Alengka.",
+
+                    subaliNama: "Subali",
+                    subaliPeran: "Mantan Raja Kera",
+                    subaliDeskripsi: "Kakak Sugriwa, raja Kiskenda yang memiliki kesaktian luar biasa. Terlibat perselisihan dengan adiknya karena kesalahpahaman. Gugur di tangan Rama saat membantu Sugriwa merebut kembali tahta. Sebelum meninggal, memaafkan Sugriwa dan mendukung perjuangan Rama.",
+
+                    anggadaNama: "Anggada",
+                    anggadaPeran: "Putra Subali",
+                    anggadaDeskripsi: "Putra Subali yang menjadi panglima pasukan kera. Memimpin pencarian Sinta ke selatan bersama Hanoman. Pemberani dan setia, memainkan peran penting dalam berbagai pertempuran melawan pasukan Alengka. Mewarisi kekuatan dan keberanian ayahnya.",
+
+                    jembawanNama: "Jembawan",
+                    jembawanPeran: "Kera Tua Bijaksana",
+                    jembawanDeskripsi: "Kera tua yang bijaksana, penasihat Sugriwa. Memiliki pengetahuan tentang berbagai ilmu dan strategi. Memberikan nasihat penting dalam pencarian Sinta dan pembangunan jembatan ke Alengka. Dipercaya sebagai reinkarnasi Brahma dalam bentuk kera.",
+
+                    // Tokoh - Pendukung
+                    jatayuNama: "Jatayu",
+                    jatayuPeran: "Burung Perkasa",
+                    jatayuDeskripsi: "Burung perkasa sahabat Dasarata yang mencoba menyelamatkan Sinta dari Rahwana. Bertarung sengit dengan Rahwana namun kalah dan terluka parah. Sempat memberitahu Rama dan Laksmana tentang penculikan Sinta sebelum meninggal. Dimakamkan dengan penghormatan penuh.",
+
+                    sampatiNama: "Sampati",
+                    sampatiPeran: "Saudara Jatayu",
+                    sampatiDeskripsi: "Saudara Jatayu yang kehilangan kemampuan terbang setelah menyelamatkan Jatayu dari matahari. Memberi informasi penting kepada Hanoman dan pasukan kera tentang keberadaan Sinta di Alengka. Memiliki penglihatan tajam yang dapat melihat jarak jauh.",
+
+                    janakaNama: "Prabu Janaka",
+                    janakaPeran: "Raja Mantili",
+                    janakaDeskripsi: "Raja Mantili yang menemukan Sinta saat membajak sawah. Mengadakan sayembara untuk menentukan siapa yang layak menikahi Sinta, dimana Rama berhasil memenangkannya. Ayah angkat Sinta yang bijaksana dan adil.",
+
+                    kaikeyiNama: "Kaikeyi",
+                    kaikeyiPeran: "Permaisuri Dasarata",
+                    kaikeyiDeskripsi: "Permaisuri termuda Dasarata, ibu Barata. Terpengaruh oleh pelayannya, Manthara, untuk meminta Dasarata mengasingkan Rama dan mengangkat Barata sebagai raja. Tindakannya menyebabkan penderitaan bagi keluarga kerajaan.",
+
+                    mantharaNama: "Manthara",
+                    mantharaPeran: "Dayang Kaikeyi",
+                    mantharaDeskripsi: "Dayang tua Kaikeyi yang memiliki tubuh bungkuk. Meracuni pikiran Kaikeyi dengan hasutan agar Barata menjadi raja dan Rama diasingkan. Tokoh antagonis yang memicu konflik utama dalam keluarga kerajaan Ayodhya.",
+
+                    // Atribut
+                    attrKebijaksanaan: "Kebijaksanaan",
+                    attrKeberanian: "Keberanian",
+                    attrKesetiaan: "Kesetiaan",
+                    attrKesucian: "Kesucian",
+                    attrKetabahan: "Ketabahan",
+                    attrPengorbanan: "Pengorbanan",
+                    attrKesaktian: "Kesaktian",
+                    attrKesombongan: "Kesombongan",
+                    attrAngkaraMurka: "Angkara Murka",
+                    attrKeadilan: "Keadilan",
+                    attrKehormatan: "Kehormatan",
+                    attrNafsu: "Nafsu",
+                    attrDendam: "Dendam",
+                    attrProvokator: "Provokator",
+                    attrKecerdikan: "Kecerdikan",
+                    attrKepemimpinan: "Kepemimpinan",
+                    attrKekuatan: "Kekuatan",
+                    attrKemurahanHati: "Kemurahan Hati",
+                    attrCintaKasih: "Cinta Kasih",
+                    attrPengetahuan: "Pengetahuan",
+                    attrStrategi: "Strategi",
+                    attrAmbisi: "Ambisi",
+                    attrNaif: "Naif",
+                    attrLicik: "Licik",
+
+                    // Highlight Box
+                    karakteristikJudul: "Karakteristik Tokoh Ramayana",
+                    karakteristikDeskripsi: "Ramayana menampilkan tokoh-tokoh dengan karakter yang kuat dan jelas. Setiap tokoh mewakili nilai-nilai tertentu: Rama (dharma dan kebenaran), Sinta (kesetiaan dan kesucian), Laksmana (pengabdian), Hanoman (kesetiaan dan pengorbanan), dan Rahwana (angkara murka). Konflik antara kebaikan dan kejahatan digambarkan dengan sangat jelas dalam epos ini.",
+
+                    nilaiJudul: "Nilai-nilai dalam Ramayana",
+                    nilaiDeskripsi: "Ramayana mengajarkan tentang pentingnya menjalankan dharma (kewajiban), kesetiaan dalam perkawinan, bakti kepada orang tua, dan kepemimpinan yang adil. Kisah ini juga menunjukkan bahwa kejahatan pada akhirnya akan dikalahkan oleh kebaikan. Hubungan antara Rama dan Hanoman menjadi simbol kesetiaan dan pengabdian tanpa pamrih yang sempurna."
+                },
+
+                jv: {
+                    // Navbar
+                    beranda: "Beranda",
+                    critaWayang: "Crita Wayang",
+                    tokohWayang: "Tokoh Wayang",
+                    mahabharata: "Mahabharata",
+                    ramayana: "Ramayana",
+                    dewaruci: "Dewa Ruci",
+
+                    // Header
+                    judulHalaman: "Tokoh Ramayana",
+                    subJudul: "Ngenal para pahlawan, dewa, lan tokoh penting ing epos Ramayana",
+
+                    // Kategori
+                    keluargaUtama: "Keluarga Utama",
+                    kerajaanAlengka: "Kerajaan Alengka",
+                    pasukanKera: "Pasukan Kera",
+                    tokohPendukung: "Tokoh Pendukung",
+
+                    // Tokoh - Keluarga Utama
+                    ramaNama: "Rama",
+                    ramaPeran: "Awatara Wisnu lan Pangeran Ayodhya",
+                    ramaDeskripsi: "Putra mahkota Karajan Kosala, awatara (penjelmaan) Dewa Wisnu sing tumurun menyang bumi kanggo numpes piawon. Dikenal kanthi sifat-sipate sing berbudi luhur, wani, lan tansah njunjung dhuwur dharma. Nglakoni pengasingan 14 taun ing alas lan mimpin pasukan kanggo nyelametake Sinta saka Rahwana.",
+
+                    sintaNama: "Sinta",
+                    sintaPeran: "Putri Mantili lan Permaisuri Rama",
+                    sintaDeskripsi: "Putri angkat Prabu Janaka, ditemokake nalika mbajak sawah saengga dijuluki \"Putri Bumi\". Bojo Rama sing ayu lan setia. Diculik dening Rahwana lan ditawan ing Alengka, nanging tetep njaga kasucian lan kasetyane marang Rama. Ngliwati ujian api (Agni Pariksha) kanggo mbuktekake kasuciahe.",
+
+                    laksmanaNama: "Laksmana",
+                    laksmanaPeran: "Adik Rama lan Kesatria Setia",
+                    laksmanaDeskripsi: "Putra Dasarata saka permaisuri Sumitra, adik Rama sing sangat setia. Tansah ndampingi Rama lan Sinta ing pengasingan menyang alas. Ahli ing panggunaan panah lan senjata. Pernah nglukani Surpanakha sing ngganggu Sinta, micu kemarahan Rahwana.",
+
+                    dasarataNama: "Dasarata",
+                    dasarataPeran: "Raja Ayodhya",
+                    dasarataDeskripsi: "Bapake Rama, raja Ayodhya sing bijaksana. Dipeksa ngasingake Rama amarga kuwajiban janji marang permaisuri Kaikeyi. Sedhah amarga kangelan ati sawise kepergian Rama. Pamerentahane dikenal minangka jaman keemasan Ayodhya sadurunge pengasingan Rama.",
+
+                    barataNama: "Barata",
+                    barataPeran: "Putra Kaikeyi",
+                    barataDeskripsi: "Putra Dasarata saka permaisuri Kaikeyi, mesthine dadi raja sawise Rama diasingke. Nanging nolak tahta lan mimpin panggolekan Rama menyang alas. Mrentah Ayodhya minangka wakil Rama sajrone 14 taun pengasingan, nyekel selop Rama ing singgasana minangka simbol.",
+
+                    // Tokoh - Kerajaan Alengka
+                    rahwanaNama: "Rahwana",
+                    rahwanaPeran: "Raja Alengka",
+                    rahwanaDeskripsi: "Raja raksasa saka Alengka sing nduweni sepuluh sirah lan rong puluh tangan. Ndhuweni kesaktian luar biasa amarga entuk anugerah saka Brahma. Nanging sifaté angkara murka lan serakah. Nculik Sinta amarga kepincut kaelokané, sing pungkasané njalari kerusakan kerajaane.",
+
+                    wibisanaNama: "Wibisana",
+                    wibisanaPeran: "Adik Rahwana sing Bijaksana",
+                    wibisanaDeskripsi: "Adik Rahwana sing nduweni sifat bijaksana lan njunjung dhuwur kabeneran. Sering nasehati Rahwana kanggo ngembalikake Sinta, nanging ora didhangu. Akhire mbalik lan gabung karo Rama, menehi informasi penting babagan kelemahan Alengka. Dadi raja Alengka sawise Rahwana tiwas.",
+
+                    kumbakarnaNama: "Kumbakarna",
+                    kumbakarnaPeran: "Raksasa Perkasa",
+                    kumbakarnaDeskripsi: "Adik Rahwana sing nduweni awak raksasa lan kekuatan luar biasa. Disumpah kanggo turu sajrone enem sasi lan tangi mung sedina. Sanajan ngerti tumindak kakange salah, tetep perang mbela Alengka amarga kesetiaan marang negara. Gugur kanthi heroik nglawan Rama.",
+
+                    surpanakhaNama: "Surpanakha",
+                    surpanakhaPeran: "Adik Rahwana",
+                    surpanakhaDeskripsi: "Raksasi adik Rahwana sing jatuh cinta marang Rama. Amarga ditolak, nyerang Sinta saengga irunge dipotong dening Laksmana. Kedadean iki micu kemarahan Rahwana lan dadi awal penculikan Sinta. Tokoh sing dadi pemicu konflik utama ing Ramayana.",
+
+                    indrajeetNama: "Indrajeet (Meganatha)",
+                    indrajeetPeran: "Putra Mahkota Alengka",
+                    indrajeetDeskripsi: "Putra Rahwana sing sangat sakti, dikenal uga minangka Meganatha. Ndhuweni senjata sakti Nagapasa sing bisa ngencengi mungsuh. Kasil nggawe Rama lan Laksmana pingsan ing pertempuran. Nanging pungkasane gugur ing tangan Laksmana sawise nglakoni ritual pemujaan sing putus.",
+
+                    // Tokoh - Pasukan Kera
+                    hanomanNama: "Hanoman",
+                    hanomanPeran: "Kesatria Kera Putih",
+                    hanomanDeskripsi: "Putra Anjani lan Bayu, kesatria kera putih sing sangat sakti. Ndhuweni kemampuan mabur, ngganti ukuran awak, lan kekuatan luar biasa. Dadi duta Rama kanggo golèk Sinta ing Alengka. Ngobong kutha Alengka nganggo buntute lan nduwe peran penting ing penyelamatan Sinta.",
+
+                    sugriwaNama: "Sugriwa",
+                    sugriwaPeran: "Raja Kera",
+                    sugriwaDeskripsi: "Raja kera saka Karajan Kiskenda sing diusir dening kakangé, Subali. Ditulungi Rama kanggo rebut manèh kerajaane, lan minangka balasane ngumpulake pasukan kera kanggo nulungi Rama golèk Sinta. Mimpin pasukan kera ing penyerangan menyang Alengka.",
+
+                    subaliNama: "Subali",
+                    subaliPeran: "Mantan Raja Kera",
+                    subaliDeskripsi: "Kakang Sugriwa, raja Kiskenda sing ndhuweni kesaktian luar biasa. Kena perselisihan karo adhine amarga salah paham. Gugur ing tangan Rama nalika nulungi Sugriwa rebut maneh tahta. Sadurunge seda, ngapura Sugriwa lan ndhukung perjuangan Rama.",
+
+                    anggadaNama: "Anggada",
+                    anggadaPeran: "Putra Subali",
+                    anggadaDeskripsi: "Putra Subali sing dadi panglima pasukan kera. Mimpin panggolekan Sinta menyang kidul bebarengan Hanoman. Pemberani lan setia, nduweni peran penting ing macem-macem pertempuran nglawan pasukan Alengka. Mewarisi kekuatan lan keberanian bapakne.",
+
+                    jembawanNama: "Jembawan",
+                    jembawanPeran: "Kera Tua Bijaksana",
+                    jembawanDeskripsi: "Kera tuwa sing bijaksana, penasihat Sugriwa. Ndhuweni pengetahuan babagan macem-macem ilmu lan strategi. Menehi nasehat penting ing panggolekan Sinta lan pembangunan kreteg menyang Alengka. Dipercaya minangka reinkarnasi Brahma ing wujud kera.",
+
+                    // Tokoh - Pendukung
+                    jatayuNama: "Jatayu",
+                    jatayuPeran: "Manuk Perkasa",
+                    jatayuDeskripsi: "Manuk perkasa kanca Dasarata sing nyoba nyelametake Sinta saka Rahwana. Perang sengit karo Rahwana nanging kalah lan tatu parah. Sempet ngandhani Rama lan Laksmana babagan penculikan Sinta sadurunge seda. Dimakamke kanthi penghormatan lengkap.",
+
+                    sampatiNama: "Sampati",
+                    sampatiPeran: "Saudara Jatayu",
+                    sampatiDeskripsi: "Saudara Jatayu sing ilang kemampuan mabur sawise nyelametake Jatayu saka srengenge. Menehi informasi penting marang Hanoman lan pasukan kera babagan anane Sinta ing Alengka. Ndhuweni penglihatan tajam sing bisa ndeleng adoh.",
+
+                    janakaNama: "Prabu Janaka",
+                    janakaPeran: "Raja Mantili",
+                    janakaDeskripsi: "Raja Mantili sing nemokake Sinta nalika mbajak sawah. Ngadakan sayembara kanggo nemtokake sapa sing pantes nikah karo Sinta, ingendi Rama kasil menangake. Bapak angkat Sinta sing bijaksana lan adil.",
+
+                    kaikeyiNama: "Kaikeyi",
+                    kaikeyiPeran: "Permaisuri Dasarata",
+                    kaikeyiDeskripsi: "Permaisuri paling enom Dasarata, ibu Barata. Terpengaruh dening pembantune, Manthara, kanggo njaluk Dasarata ngasingake Rama lan ngangkat Barata dadi raja. Tumindake njalari penderitaan kanggo keluarga kerajaan.",
+
+                    mantharaNama: "Manthara",
+                    mantharaPeran: "Dayang Kaikeyi",
+                    mantharaDeskripsi: "Dayang tuwa Kaikeyi sing ndhuweni awak bungkuk. Meracuni pikiran Kaikeyi nganggo hasutan supaya Barata dadi raja lan Rama diasingke. Tokoh antagonis sing micu konflik utama ing keluarga kerajaan Ayodhya.",
+
+                    // Atribut
+                    attrKebijaksanaan: "Kebijaksanaan",
+                    attrKeberanian: "Keberanian",
+                    attrKesetiaan: "Kesetiaan",
+                    attrKesucian: "Kesucian",
+                    attrKetabahan: "Ketabahan",
+                    attrPengorbanan: "Pengorbanan",
+                    attrKesaktian: "Kesaktian",
+                    attrKesombongan: "Kesombongan",
+                    attrAngkaraMurka: "Angkara Murka",
+                    attrKeadilan: "Keadilan",
+                    attrKehormatan: "Kehormatan",
+                    attrNafsu: "Nafsu",
+                    attrDendam: "Dendam",
+                    attrProvokator: "Provokator",
+                    attrKecerdikan: "Kecerdikan",
+                    attrKepemimpinan: "Kepemimpinan",
+                    attrKekuatan: "Kekuatan",
+                    attrKemurahanHati: "Kemurahan Hati",
+                    attrCintaKasih: "Cinta Kasih",
+                    attrPengetahuan: "Pengetahuan",
+                    attrStrategi: "Strategi",
+                    attrAmbisi: "Ambisi",
+                    attrNaif: "Naif",
+                    attrLicik: "Licik",
+
+                    // Highlight Box
+                    karakteristikJudul: "Karakteristik Tokoh Ramayana",
+                    karakteristikDeskripsi: "Ramayana nampilake tokoh-tokoh kanthi karakter sing kuwat lan jelas. Saben tokoh makili nilai-nilai tartamtu: Rama (dharma lan kabeneran), Sinta (kesetiaan lan kasucian), Laksmana (pambakti), Hanoman (kesetiaan lan pangorbanan), lan Rahwana (angkara murka). Konflik antarane kabecikan lan piawon digambarake kanthi sangat jelas ing epos iki.",
+
+                    nilaiJudul: "Nilai-nilai ing Ramayana",
+                    nilaiDeskripsi: "Ramayana mulangake babagan pentinge nglakoni dharma (kewajiban), kesetiaan ing pawiwahan, bakti marang wong tuwa, lan kepemimpinan sing adil. Kisah iki uga nuduhake manawa piawon ing pungkasane bakal dikalahake dening kabecikan. Hubungan antarane Rama lan Hanoman dadi simbol kesetiaan lan pambakti tanpa pamrih sing sampurna."
+                },
+
+                jv_script: {
+                    // Navbar
+                    beranda: "ꦧꦼꦫꦤ꧀ꦢ",
+                    critaWayang: "ꦕꦿꦶꦠꦮꦪꦁ",
+                    tokohWayang: "ꦠꦺꦴꦏꦺꦴꦲ꧀ꦮꦪꦁ",
+                    mahabharata: "ꦩꦲꦧꦿꦠ",
+                    ramayana: "ꦫꦩꦪꦤ",
+                    dewaruci: "ꦢꦺꦮꦫꦸꦕꦶ",
+
+                    // Header
+                    judulHalaman: "ꦠꦺꦴꦏꦺꦴꦲ꧀ꦫꦩꦪꦤ",
+                    subJudul: "ꦔꦼꦤꦭ꧀ꦥꦫꦥꦲꦭꦮꦤ꧀ꦢꦺꦮꦭꦤ꧀ꦠꦺꦴꦏꦺꦴꦲ꧀ꦥꦼꦤ꧀ꦠꦶꦁꦲꦶꦁꦆꦥꦺꦴꦱ꧀ꦫꦩꦪꦤ",
+
+                    // Kategori
+                    keluargaUtama: "ꦑꦼꦭꦸꦮꦂꦒꦲꦸꦠꦩ",
+                    kerajaanAlengka: "ꦑꦫꦗꦤ꧀ꦲꦭꦼꦁꦏ",
+                    pasukanKera: "ꦥꦱꦸꦏꦤ꧀ꦑꦼꦫ",
+                    tokohPendukung: "ꦠꦺꦴꦏꦺꦴꦲ꧀ꦥꦼꦤ꧀ꦢꦸꦏꦸꦁ",
+
+                    // Tokoh - Keluarga Utama
+                    ramaNama: "ꦫꦩ",
+                    ramaPeran: "ꦄꦮꦠꦫꦮꦶꦱ꧀ꦤꦸꦭꦤ꧀ꦦꦔꦺꦫꦤ꧀ꦲꦪꦺꦴꦢ꧀ꦢꦾ",
+                    ramaDeskripsi: "ꦦꦸꦠꦿꦩꦲꦏꦺꦴꦠꦏꦫꦗꦤ꧀ꦑꦺꦴꦱꦭꦄꦮꦠꦫꦥꦼꦤ꧀ꦗꦼꦭ꧀ꦩꦲꦤ꧀ꦢꦺꦮꦮꦶꦱ꧀ꦤꦸꦪꦺꦁꦠꦸꦂꦤꦸꦤ꧀ꦢꦠꦼꦁꦧꦸꦩꦶꦏꦁꦒꦺꦴꦤꦸꦩ꧀ꦥꦼꦱ꧀ꦥꦶꦲꦭꦢꦶꦑꦼꦤꦭ꧀ꦑꦤ꧀ꦛꦶꦱꦶꦥꦠ꧀ꦱꦶꦥꦠꦶꦤꦺꦪꦺꦁꦧꦼꦂꦧꦸꦢꦶꦭꦸꦲꦸꦂꦧꦼꦫꦤꦶꦭꦤ꧀ꦠꦤ꧀ꦱꦃꦤꦗꦸꦤ꧀ꦗꦸꦁꦢꦲꦸꦂꦢꦲꦂꦩꦤꦒꦼꦭꦤꦶꦥꦼꦔꦱꦶꦁꦔꦤ꧀ꦠꦼꦭꦸꦥꦸꦭꦸꦲꦤ꧀ꦠꦲꦸꦤ꧀ꦲꦶꦁꦲꦭꦱ꧀ꦭꦤ꧀ꦩꦶꦩ꧀ꦥꦶꦤ꧀ꦥꦱꦸꦏꦤ꧀ꦏꦁꦒꦺꦴꦤꦔꦭꦩꦠꦏꦤ꧀ꦱꦶꦤ꧀ꦠꦱꦏꦶꦁꦫꦲ꧀ꦮꦤ",
+
+                    sintaNama: "ꦱꦶꦤ꧀ꦠ",
+                    sintaPeran: "ꦦꦸꦠꦿꦶꦩꦤ꧀ꦠꦶꦭꦶꦭꦤ꧀ꦦꦼꦂꦩꦲꦶꦱꦻꦫꦩ",
+                    sintaDeskripsi: "ꦦꦸꦠꦿꦶꦲꦔ꧀ꦏꦠ꧀ꦦꦿꦧꦸꦗꦤꦏꦢꦶꦥꦸꦤ꧀ꦥꦔꦼꦤ꧀ꦒꦶꦲꦶꦤꦭꦶꦏꦩꦼꦩ꧀ꦧꦗꦏ꧀ꦱꦮꦃꦱꦲꦶꦁꦒꦼꦁꦢꦶꦗꦸꦭꦸꦏꦶꦥꦸꦠꦿꦶꦧꦸꦩꦶꦧꦺꦴꦗꦺꦴꦫꦩꦱꦶꦁꦲꦪꦸꦭꦤ꧀ꦱꦼꦠꦶꦪꦢꦶꦕꦸꦭꦶꦏ꧀ꦢꦼꦤꦶꦁꦫꦲ꧀ꦮꦤꦭꦤ꧀ꦢꦶꦠꦮꦤ꧀ꦲꦶꦁꦲꦭꦼꦁꦏꦤꦔꦤ꧀ꦠꦼꦠꦼꦥ꧀ꦤꦗꦒꦏꦱꦸꦕꦶꦪꦤ꧀ꦭꦤ꧀ꦏꦱꦼꦠꦾꦤꦤꦺꦴꦤ꧀ꦫꦩꦩꦼꦭꦭꦸꦈꦗꦶꦪꦤ꧀ꦄꦥꦶꦲꦒ꧀ꦤꦶꦦꦫꦶꦏ꧀ꦱꦲꦏꦁꦒꦺꦴꦤꦩ꧀ꦧꦸꦏ꧀ꦠꦺꦴꦏꦏꦱꦸꦕꦶꦪꦤꦺ",
+
+                    laksmanaNama: "ꦭꦏ꧀ꦱ꧀ꦩꦤ",
+                    laksmanaPeran: "ꦄꦢꦶꦏ꧀ꦫꦩꦭꦤ꧀ꦑꦼꦱꦠꦿꦶꦪꦱꦼꦠꦶꦪ",
+                    laksmanaDeskripsi: "ꦦꦸꦠꦿꦢꦱꦫꦠꦱꦏꦶꦁꦥꦼꦂꦩꦲꦶꦱꦻꦱꦸꦩꦶꦠꦿꦄꦢꦶꦏ꧀ꦫꦩꦱꦶꦁꦱꦁꦏꦼꦠ꧀ꦱꦼꦠꦶꦪꦱꦼꦭꦭꦸꦩꦼꦤ꧀ꦢꦩ꧀ꦥꦶꦁꦫꦩꦭꦤ꧀ꦱꦶꦤ꧀ꦠꦲꦶꦁꦥꦼꦔꦱꦶꦁꦔꦤ꧀ꦏꦲꦭꦱ꧀ꦄꦲꦭꦶꦲꦶꦁꦥꦼꦔꦒꦸꦤꦲꦏꦤ꧀ꦦꦤꦃꦭꦤ꧀ꦱꦼꦤ꧀ꦗꦠꦥꦼꦂꦤꦃꦩꦼꦭꦸꦏꦢꦶꦱꦸꦂꦥꦤꦏꦲꦶꦁꦩꦼꦔꦔꦒꦸꦱꦶꦤ꧀ꦠꦲꦩꦼꦩꦶꦕꦸꦏꦼꦩꦫꦃꦫꦲ꧀ꦮꦤ",
+
+                    dasarataNama: "ꦢꦱꦫꦠ",
+                    dasarataPeran: "ꦫꦗꦲꦪꦺꦴꦢ꧀ꦢꦾ",
+                    dasarataDeskripsi: "ꦧꦥꦏꦺꦫꦩꦫꦗꦲꦪꦺꦴꦢ꧀ꦢꦾꦱꦶꦁꦨꦶꦗꦏ꧀ꦱꦤꦢꦶꦥꦼꦏ꧀ꦱꦄꦔꦱꦶꦁꦏꦺꦫꦩꦲꦩꦂꦒꦏꦸꦮꦚꦶꦧꦤ꧀ꦗꦤ꧀ꦗꦶꦩꦂꦥꦼꦂꦩꦲꦶꦱꦻꦑꦲꦶꦏꦺꦪꦶꦩꦼꦤꦶꦁꦒꦭ꧀ꦧꦿꦺꦴꦏꦼꦤ꧀ꦲꦂꦠꦶꦱꦠꦼꦭꦱ꧀ꦏꦼꦥꦼꦂꦒꦶꦪꦤ꧀ꦫꦩꦥꦩꦼꦫꦺꦤ꧀ꦠꦃꦤꦺꦴꦁꦧꦏꦼꦤꦭ꧀ꦩꦩꦱꦏꦼꦩꦱꦤ꧀ꦲꦪꦺꦴꦢ꧀ꦢꦾꦱꦩꦼꦤꦁꦒꦺꦴꦥꦼꦔꦱꦶꦁꦔꦤ꧀ꦫꦩ",
+
+                    barataNama: "ꦧꦫꦠ",
+                    barataPeran: "ꦦꦸꦠꦿꦑꦲꦶꦏꦺꦪꦶ",
+                    barataDeskripsi: "ꦦꦸꦠꦿꦢꦱꦫꦠꦱꦏꦶꦁꦥꦼꦂꦩꦲꦶꦱꦻꦑꦲꦶꦏꦺꦪꦶꦩꦼꦱ꧀ꦛꦶꦤꦺꦢꦢꦶꦫꦗꦱꦺꦠꦼꦭꦱ꧀ꦫꦩꦢꦶꦲꦱꦶꦁꦏꦺꦤꦔꦤ꧀ꦠꦺꦴꦭꦏ꧀ꦠꦲꦠꦭꦤ꧀ꦩꦶꦩ꧀ꦥꦶꦤ꧀ꦥꦼꦔꦒꦺꦴꦭꦼꦏꦤ꧀ꦫꦩꦩꦼꦤ꧀ꦔꦤ꧀ꦱꦏꦸꦫꦶꦁꦩꦼꦫꦺꦤ꧀ꦠꦃꦲꦪꦺꦴꦢ꧀ꦢꦾꦩꦶꦤꦁꦏꦥꦮꦏꦶꦭ꧀ꦫꦩꦱꦗꦺꦴꦒꦺꦤꦼꦥꦸꦭꦸꦲꦤ꧀ꦲꦶꦁꦔꦤ꧀ꦔꦼꦠꦼꦏ꧀ꦱꦼꦭꦺꦴꦥ꧀ꦫꦩꦲꦶꦁꦱꦶꦁꦒꦱꦤ꧀ꦱꦭꦤ꧀ꦱꦶꦩ꧀ꦧꦺꦴꦭ꧀",
+
+                    // Tokoh - Kerajaan Alengka
+                    rahwanaNama: "ꦫꦲ꧀ꦮꦤ",
+                    rahwanaPeran: "ꦫꦗꦲꦭꦼꦁꦏ",
+                    rahwanaDeskripsi: "ꦫꦗꦫꦏ꧀ꦱꦱꦱꦏꦶꦁꦲꦭꦼꦁꦏꦪꦺꦁꦒꦢꦃꦱꦼꦥꦸꦭꦸꦲꦺꦴꦤꦺꦴꦭꦺꦴꦂꦭꦤ꧀ꦢꦮꦼꦭꦱ꧀ꦲꦤ꧀ꦠꦶꦩꦲꦤ꧀ꦢꦢꦃꦏꦼꦱꦏ꧀ꦠꦶꦪꦤ꧀ꦭꦸꦮꦂꦧꦶꦱꦲꦩꦼꦔꦒꦺꦴꦤꦤꦸꦒꦿꦲꦱꦏꦶꦁꦧꦿꦲ꧀ꦩꦤꦔꦤ꧀ꦱꦶꦥꦠꦶꦤꦺꦪꦺꦁꦲꦁꦏꦫꦩꦸꦂꦏꦭꦤ꧀ꦱꦼꦫꦏꦃꦩꦺꦤꦸꦕꦸꦭꦶꦏ꧀ꦱꦶꦤ꧀ꦠꦲꦩꦼꦫꦒꦤꦠꦼꦂꦥꦼꦱꦺꦴꦤꦏꦕꦤ꧀ꦠꦶꦏꦤꦺꦪꦺꦁꦲꦏꦶꦂꦤꦾꦩꦺꦚꦢꦧꦧꦧꦏꦼꦧꦤ꧀ꦕꦸꦫꦤꦺꦏꦫꦗꦤꦺ",
+
+                    wibisanaNama: "ꦮꦶꦨꦶꦱꦤ",
+                    wibisanaPeran: "ꦄꦢꦶꦏ꧀ꦫꦲ꧀ꦮꦤꦪꦺꦁꦨꦶꦗꦏ꧀ꦱꦤ",
+                    wibisanaDeskripsi: "ꦄꦢꦶꦏ꧀ꦫꦲ꧀ꦮꦤꦪꦺꦁꦒꦢꦃꦱꦶꦥꦠ꧀ꦨꦶꦗꦏ꧀ꦱꦤꦭꦤ꧀ꦤꦗꦸꦤ꧀ꦗꦸꦁꦢꦲꦸꦂꦏꦧꦼꦤꦂꦱꦼꦫꦶꦁꦩꦺꦤꦱꦶꦲꦠꦶꦫꦲ꧀ꦮꦤꦏꦁꦒꦺꦴꦤꦩ꧀ꦧꦭꦶꦏꦁꦱꦶꦤ꧀ꦠꦤꦔꦤ꧀ꦠꦢꦏ꧀ꦢꦶꦢꦼꦁꦔꦂꦲꦏꦶꦂꦤꦾꦩ꧀ꦧꦼꦭꦺꦴꦠ꧀ꦭꦤ꧀ꦧꦼꦒꦧꦸꦁꦏꦂꦫꦩꦩꦺꦩ꧀ꦧꦺꦫꦶꦏꦏꦼꦠꦼꦂꦁꦔꦤ꧀ꦥꦼꦤ꧀ꦠꦶꦁꦲꦶꦁꦏꦼꦭꦼꦩꦃꦲꦤ꧀ꦲꦭꦼꦁꦏꦩꦺꦚꦗꦢꦶꦫꦗꦲꦭꦼꦁꦏꦱꦺꦠꦼꦭꦤ꧀ꦫꦲ꧀ꦮꦤꦠꦼꦮꦱ꧀",
+
+                    kumbakarnaNama: "ꦑꦸꦩ꧀ꦨꦑꦂꦟ",
+                    kumbakarnaPeran: "ꦫꦏ꧀ꦱꦱꦥꦼꦂꦑꦱ",
+                    kumbakarnaDeskripsi: "ꦄꦢꦶꦏ꧀ꦫꦲ꧀ꦮꦤꦪꦺꦁꦒꦢꦃꦠꦸꦧꦸꦃꦫꦏ꧀ꦱꦱꦭꦤ꧀ꦏꦑꦸꦮꦠꦤ꧀ꦭꦸꦮꦂꦧꦶꦱꦢꦶꦏꦸꦠꦸꦏ꧀ꦏꦁꦒꦺꦴꦤꦠꦶꦢꦸꦂꦱꦼꦭꦩꦤꦩꦸꦭꦤ꧀ꦧꦔꦸꦤ꧀ꦲꦤꦶꦏ꧀ꦲꦫꦶꦱꦏꦢꦪꦁꦱꦭꦃꦠꦼꦠꦼꦥ꧀ꦧꦼꦂꦠꦫꦸꦁꦧꦼꦭꦲꦭꦼꦁꦏꦏꦫꦤꦺꦏꦱꦼꦠꦶꦪꦤ꧀ꦤꦺꦒꦤꦺꦒꦫꦔꦒꦸꦒꦸꦂꦱꦼꦕꦫꦲꦺꦫꦺꦴꦲꦶꦏ꧀ꦩꦼꦭꦮꦤ꧀ꦫꦩ",
+
+                    surpanakhaNama: "ꦱꦸꦂꦦꦤꦑ",
+                    surpanakhaPeran: "ꦄꦢꦶꦏ꧀ꦫꦲ꧀ꦮꦤ",
+                    surpanakhaDeskripsi: "ꦫꦏ꧀ꦱꦱꦶꦄꦢꦶꦏ꧀ꦫꦲ꧀ꦮꦤꦪꦺꦁꦗꦠꦸꦃꦕꦶꦤ꧀ꦠꦏꦁꦫꦩꦲꦩꦼꦫꦒꦤꦢꦶꦠꦺꦴꦭꦏ꧀ꦩꦺꦤꦺꦪꦼꦫꦁꦱꦶꦤ꧀ꦠꦱꦲꦶꦁꦒꦔꦶꦃꦲꦶꦢꦸꦁꦤꦺꦥꦿꦼꦠ꧀ꦢꦺꦴꦠꦺꦴꦁꦲꦺꦴꦭꦺꦃꦭꦏ꧀ꦱ꧀ꦩꦤꦏꦺꦗꦢꦶꦲꦤ꧀ꦩꦼꦩꦶꦕꦸꦏꦼꦩꦫꦃꦫꦲ꧀ꦮꦤꦭꦤ꧀ꦩꦺꦚꦢꦢꦶꦲꦮꦭ꧀ꦥꦼꦤꦸꦕꦸꦭꦶꦏꦤ꧀ꦱꦶꦤ꧀ꦠꦠꦺꦴꦏꦺꦴꦲ꧀ꦪꦺꦁꦩꦺꦚꦢꦢꦶꦥꦿꦺꦴꦮꦺꦴꦏꦠꦺꦴꦂꦩꦺꦴꦠ꧀ꦲꦸꦠꦩꦲꦶꦁꦫꦩꦪꦤ",
+
+                    indrajeetNama: "ꦆꦤ꧀ꦢꦿꦗꦺꦪꦼꦠ꧀ (ꦩꦼꦒꦤꦛ)",
+                    indrajeetPeran: "ꦦꦸꦠꦿꦩꦲꦏꦺꦴꦠꦲꦭꦼꦁꦏ",
+                    indrajeetDeskripsi: "ꦦꦸꦠꦿꦫꦲ꧀ꦮꦤꦱꦶꦁꦱꦁꦏꦼꦠ꧀ꦱꦏ꧀ꦠꦶꦑꦼꦤꦭ꧀ꦪꦸꦒꦏꦲꦶꦤꦺꦴꦒꦏꦩꦼꦒꦤꦛꦩꦔꦒꦺꦴꦤꦱꦼꦤ꧀ꦗꦠꦱꦏ꧀ꦠꦶꦤꦒꦥꦱꦪꦺꦁꦧꦶꦱꦔꦼꦤ꧀ꦕꦼꦁꦩꦸꦱꦸꦃꦏꦱꦶꦭ꧀ꦤꦒꦿꦏꦼꦱꦶꦭ꧀ꦢꦢꦶꦫꦩꦭꦤ꧀ꦭꦏ꧀ꦱ꧀ꦩꦤꦥꦶꦁꦱꦤ꧀ꦲꦶꦁꦥꦼꦂꦠꦼꦩ꧀ꦥꦸꦂꦭꦤ꧀ꦧꦤꦺꦲꦏꦶꦂꦤꦾꦒꦸꦒꦸꦂꦲꦶꦁꦠꦁꦔꦤ꧀ꦭꦏ꧀ꦱ꧀ꦩꦤꦱꦼꦠꦼꦭꦤ꧀ꦔꦼꦭꦏꦸꦏꦤ꧀ꦫꦶꦠꦸꦪꦭ꧀ꦥꦼꦩꦸꦗꦲꦤ꧀ꦪꦁꦠꦼꦂꦥꦸꦠꦸꦱ꧀",
+
+                    // Tokoh - Pasukan Kera
+                    hanomanNama: "ꦲꦤꦺꦴꦩꦤ꧀",
+                    hanomanPeran: "ꦑꦼꦱꦠꦿꦶꦪꦑꦼꦫꦥꦸꦠꦶꦃ",
+                    hanomanDeskripsi: "ꦦꦸꦠꦿꦄꦤ꧀ꦗꦤꦶꦭꦤ꧀ꦧꦪꦸꦑꦼꦱꦠꦿꦶꦪꦑꦼꦫꦥꦸꦠꦶꦃꦱꦶꦁꦱꦁꦏꦼꦠ꧀ꦱꦏ꧀ꦠꦶꦩꦔꦒꦺꦴꦤꦏꦩꦩ꧀ꦥꦸꦤꦼꦤ꧀ꦩꦧꦸꦂꦔꦒꦤ꧀ꦠꦸꦏꦸꦂꦏꦭꦤ꧀ꦏꦑꦸꦮꦠꦤ꧀ꦭꦸꦮꦂꦧꦶꦱꦢꦢꦶꦢꦸꦠꦫꦩꦏꦁꦒꦺꦴꦤꦒꦺꦴꦭꦼꦏ꧀ꦱꦶꦤ꧀ꦠꦲꦶꦁꦲꦭꦼꦁꦏꦩꦼꦚꦺꦴꦧꦺꦴꦁꦏꦸꦛꦲꦭꦼꦁꦏꦔꦔ꧀ꦒꦺꦴꦤꦧꦸꦤ꧀ꦠꦸꦠꦼꦭꦤ꧀ꦩꦩꦺꦴꦤ꧀ꦥꦼꦫꦤ꧀ꦥꦼꦤ꧀ꦠꦶꦁꦲꦶꦁꦥꦼꦚꦼꦭꦩꦠꦤ꧀ꦱꦶꦤ꧀ꦠ",
+
+                    sugriwaNama: "ꦱꦸꦒꦿꦶꦮ",
+                    sugriwaPeran: "ꦫꦗꦑꦼꦫ",
+                    sugriwaDeskripsi: "ꦫꦗꦑꦼꦫꦱꦏꦶꦁꦏꦫꦗꦤ꧀ꦑꦶꦱ꧀ꦏꦼꦤ꧀ꦢꦪꦺꦁꦢꦶꦈꦱꦶꦂꦢꦼꦤꦶꦁꦏꦏꦁꦤꦺꦱꦸꦧꦭꦶꦢꦶꦠꦸꦭꦸꦔꦤ꧀ꦫꦩꦏꦁꦒꦺꦴꦤꦉꦧꦸꦠ꧀ꦩꦤꦼꦃꦏꦫꦗꦤꦺꦭꦤ꧀ꦩꦶꦤꦁꦏꦥꦱꦶꦩ꧀ꦧꦭꦱꦤꦺꦔꦸꦩ꧀ꦥꦸꦭꦏꦺꦥꦱꦸꦏꦤ꧀ꦑꦼꦫꦏꦁꦒꦺꦴꦤꦠꦸꦭꦸꦔꦤ꧀ꦫꦩꦒꦺꦴꦭꦼꦏ꧀ꦱꦶꦤ꧀ꦠꦩꦶꦩ꧀ꦥꦶꦤ꧀ꦥꦱꦸꦏꦤ꧀ꦑꦼꦫꦲꦶꦁꦥꦼꦚꦼꦫꦁꦔꦤ꧀ꦩꦼꦔꦤ꧀ꦔꦲꦭꦼꦁꦏ",
+
+                    subaliNama: "ꦱꦸꦧꦭꦶ",
+                    subaliPeran: "ꦩꦤ꧀ꦠꦤꦫꦗꦑꦼꦫ",
+                    subaliDeskripsi: "ꦏꦏꦁꦱꦸꦒꦿꦶꦮꦫꦗꦑꦶꦱ꧀ꦏꦼꦤ꧀ꦢꦪꦺꦁꦒꦢꦃꦏꦼꦱꦏ꧀ꦠꦶꦪꦤ꧀ꦭꦸꦮꦂꦧꦶꦱꦏꦼꦤꦥꦼꦂꦱꦼꦭꦶꦱꦶꦃꦭꦤ꧀ꦏꦑꦶꦁꦲꦩꦂꦒꦏꦼꦱꦭꦃꦥꦃꦩꦸꦩꦤꦒꦸꦒꦸꦂꦲꦶꦁꦠꦁꦔꦤ꧀ꦫꦩꦤꦭꦶꦏꦤꦠꦸꦭꦸꦔꦤ꧀ꦱꦸꦒꦿꦶꦮꦉꦧꦸꦠ꧀ꦩꦤꦼꦃꦠꦲꦠꦱꦩꦼꦭꦤꦁꦧꦼꦂꦒꦼꦒꦫꦱꦸꦒꦿꦶꦮꦭꦤ꧀ꦤꦢ꧀ꦲꦸꦁꦥꦼꦂꦗꦔꦤ꧀ꦫꦩ",
+
+                    anggadaNama: "ꦄꦁꦒꦢ",
+                    anggadaPeran: "ꦦꦸꦠꦿꦱꦸꦧꦭꦶ",
+                    anggadaDeskripsi: "ꦦꦸꦠꦿꦱꦸꦧꦭꦶꦪꦺꦁꦢꦢꦶꦥꦁꦭꦶꦩꦥꦱꦸꦏꦤ꧀ꦑꦼꦫꦩꦶꦩ꧀ꦥꦶꦤ꧀ꦥꦼꦔꦒꦺꦴꦭꦼꦏꦤ꧀ꦱꦶꦤ꧀ꦠꦏꦲꦺꦴꦫꦭꦤ꧀ꦧꦼꦧꦼꦫꦺꦤ꧀ꦔꦤ꧀ꦲꦤꦺꦴꦩꦤ꧀ꦥꦼꦉꦤꦶꦁꦱꦼꦠꦶꦪꦩꦩꦺꦴꦤ꧀ꦥꦼꦫꦤ꧀ꦥꦼꦤ꧀ꦠꦶꦁꦲꦶꦁꦧꦼꦧꦼꦫꦤ꧀ꦥꦼꦂꦠꦼꦩ꧀ꦥꦸꦂꦭꦤ꧀ꦩꦼꦭꦮꦤ꧀ꦥꦱꦸꦏꦤ꧀ꦲꦭꦼꦁꦏꦩꦺꦮꦫꦶꦱꦶꦏꦑꦸꦮꦠꦤ꧀ꦭꦤ꧀ꦏꦼꦧꦼꦫꦤꦶꦪꦤ꧀ꦧꦥꦏ꧀ꦤꦺ",
+
+                    jembawanNama: "ꦗꦼꦩ꧀ꦧꦮꦤ꧀",
+                    jembawanPeran: "ꦑꦼꦫꦠꦸꦮꦨꦶꦗꦏ꧀ꦱꦤ",
+                    jembawanDeskripsi: "ꦑꦼꦫꦠꦸꦮꦨꦶꦗꦏ꧀ꦱꦤꦥꦼꦤꦱꦶꦲꦠ꧀ꦱꦸꦒꦿꦶꦮꦩꦔꦒꦺꦴꦤꦥꦼꦔꦼꦠꦲꦸꦲꦤ꧀ꦠꦼꦤ꧀ꦠꦁꦧꦲꦤꦶꦭꦩꦸꦭꦤ꧀ꦱꦼꦠꦿꦠꦼꦒꦶꦩꦺꦫꦺꦤ꧀ꦲꦶꦁꦥꦼꦔꦒꦺꦴꦭꦼꦏꦤ꧀ꦱꦶꦤ꧀ꦠꦭꦤ꧀ꦥꦼꦩ꧀ꦧꦔꦸꦤꦤ꧀ꦏꦽꦠꦼꦒꦏꦲꦭꦼꦁꦏꦢꦶꦥꦼꦂꦕꦪꦄꦱꦶꦪꦃꦲꦶꦔꦏꦤ꧀ꦫꦲꦶꦁꦏꦤꦱꦶꦧꦿꦲ꧀ꦩꦲꦶꦁꦮꦸꦗꦸꦢ꧀ꦏꦼꦫ",
+
+                    // Tokoh - Pendukung
+                    jatayuNama: "ꦗꦠꦪꦸ",
+                    jatayuPeran: "ꦩꦤꦸꦏ꧀ꦥꦼꦂꦑꦱ",
+                    jatayuDeskripsi: "ꦩꦤꦸꦏ꧀ꦥꦼꦂꦑꦱꦱꦲꦧꦠ꧀ꦢꦱꦫꦠꦪꦺꦁꦚꦺꦴꦧꦁꦚꦼꦭꦩꦠꦏꦏꦤ꧀ꦱꦶꦤ꧀ꦠꦱꦏꦶꦁꦫꦲ꧀ꦮꦤꦧꦼꦂꦠꦫꦸꦁꦱꦼꦔꦶꦏ꧀ꦏꦫꦺꦴꦫꦲ꧀ꦮꦤꦤꦔꦤ꧀ꦠꦢꦶꦏꦭꦃꦭꦤ꧀ꦠꦭꦸꦥꦫꦃꦱꦼꦩ꧀ꦥꦠ꧀ꦩꦺꦫꦺꦤ꧀ꦒꦏꦤ꧀ꦫꦩꦭꦤ꧀ꦭꦏ꧀ꦱ꧀ꦩꦤꦧꦧꦥꦼꦤꦸꦕꦸꦭꦶꦏꦤ꧀ꦱꦶꦤ꧀ꦠꦱꦩꦼꦭꦤꦁꦱꦺꦢꦲꦢꦶꦩꦏꦩ꧀ꦏꦤ꧀ꦢꦼꦁꦔꦤ꧀ꦥꦼꦤ꧀ꦔꦲꦺꦴꦫꦩꦠꦤ꧀ꦭꦼꦁꦏꦥ꧀",
+
+                    sampatiNama: "ꦱꦩ꧀ꦥꦠꦶ",
+                    sampatiPeran: "ꦱꦲꦸꦢꦫꦗꦠꦪꦸ",
+                    sampatiDeskripsi: "ꦱꦲꦸꦢꦫꦗꦠꦪꦸꦪꦺꦁꦏꦼꦲꦶꦭꦁꦏꦩꦩ꧀ꦥꦸꦤꦩꦧꦸꦂꦱꦼꦠꦼꦭꦤ꧀ꦚꦼꦭꦩꦠꦏꦤ꧀ꦗꦠꦪꦸꦱꦏꦶꦁꦱꦿꦺꦁꦔꦼꦤꦩꦺꦫꦺꦤ꧀ꦲꦶꦁꦧꦸꦩꦶꦲꦤꦺꦴꦩꦤ꧀ꦭꦤ꧀ꦥꦱꦸꦏꦤ꧀ꦑꦼꦫꦧꦧꦲꦤꦺꦴꦲꦤ꧀ꦱꦶꦤ꧀ꦠꦲꦶꦁꦲꦭꦼꦁꦏꦩꦔꦒꦺꦴꦤꦥꦼꦔꦼꦭꦶꦃꦠꦪꦩꦪꦺꦁꦧꦶꦱꦚꦼꦔꦤ꧀ꦢꦼꦭꦺꦁꦢꦺꦴꦃ",
+
+                    janakaNama: "ꦦꦿꦧꦸꦗꦤꦏ",
+                    janakaPeran: "ꦫꦗꦩꦤ꧀ꦠꦶꦭꦶ",
+                    janakaDeskripsi: "ꦫꦗꦩꦤ꧀ꦠꦶꦭꦶꦪꦺꦁꦤꦼꦩꦺꦴꦤꦏꦏꦤ꧀ꦱꦶꦤ꧀ꦠꦤꦭꦶꦏꦩꦼꦩ꧀ꦧꦗꦏ꧀ꦱꦮꦃꦔꦢꦤꦱꦪꦺꦩ꧀ꦧꦫꦏꦁꦒꦺꦴꦤꦤꦺꦩ꧀ꦠꦸꦠꦏꦲꦶꦤ꧀ꦱꦉꦱꦶꦁꦭꦪꦏ꧀ꦤꦶꦏꦲꦶꦁꦱꦶꦤ꧀ꦠꦲꦶꦁꦔꦤ꧀ꦢꦶꦫꦩꦏꦱꦶꦭ꧀ꦩꦼꦤꦁꦏꦲꦧꦥꦏ꧀ꦲꦔ꧀ꦏꦠ꧀ꦱꦶꦤ꧀ꦠꦱꦶꦁꦨꦶꦗꦏ꧀ꦱꦤꦭꦤ꧀ꦲꦢꦶꦭ꧀",
+
+                    kaikeyiNama: "ꦑꦲꦶꦑꦺꦪꦶ",
+                    kaikeyiPeran: "ꦥꦼꦂꦩꦲꦶꦱꦻꦢꦱꦫꦠ",
+                    kaikeyiDeskripsi: "ꦥꦼꦂꦩꦲꦶꦱꦻꦠꦼꦂꦩꦸꦱꦢꦱꦫꦠꦲꦶꦧꦸꦧꦫꦠꦠꦼꦂꦥꦼꦔꦫꦸꦲꦺꦴꦭꦼꦃꦥꦼꦩꦧꦤ꧀ꦠꦸꦤꦺꦩꦤ꧀ꦛꦫꦏꦁꦒꦺꦴꦤꦤ꧀ꦗꦭꦸꦏ꧀ꦢꦱꦫꦠꦔꦱꦶꦁꦏꦺꦫꦩꦭꦤ꧀ꦔꦁꦏꦠ꧀ꦧꦫꦠꦢꦢꦶꦫꦗꦠꦸꦩꦶꦤꦢꦏꦺꦤꦝꦢꦶꦁꦒꦸꦏꦠꦺꦴꦏꦸꦭꦤ꧀ꦒꦏꦼꦫꦗꦤ꧀",
+
+                    mantharaNama: "ꦩꦤ꧀ꦛꦫ",
+                    mantharaPeran: "ꦢꦪꦁꦑꦲꦶꦑꦺꦪꦶ",
+                    mantharaDeskripsi: "ꦢꦪꦁꦠꦸꦮꦑꦲꦶꦑꦺꦪꦶꦱꦶꦁꦒꦢꦃꦠꦸꦧꦸꦃꦧꦸꦁꦏꦸꦏ꧀ꦩꦼꦫꦕꦸꦤꦶꦥꦶꦏꦶꦂꦤꦤ꧀ꦑꦲꦶꦑꦺꦪꦶꦔꦁꦒꦺꦴꦤꦲꦱꦸꦠꦤ꧀ꦱꦸꦥꦪꦧꦫꦠꦢꦢꦶꦫꦗꦭꦤ꧀ꦫꦩꦢꦶꦲꦱꦶꦁꦏꦺꦠꦺꦴꦏꦺꦴꦲ꧀ꦄꦤ꧀ꦠꦒꦺꦴꦤꦶꦱ꧀ꦪꦺꦁꦩꦶꦕꦸꦏꦺꦴꦤ꧀ꦥꦿꦶꦏ꧀ꦲꦸꦠꦩꦲꦶꦁꦏꦼꦭꦸꦮꦂꦒꦏꦼꦫꦗꦤ꧀ꦲꦪꦺꦴꦢ꧀ꦢꦾ",
+
+                    // Atribut - SEMUA dalam Aksara Jawa
+                    attrKebijaksanaan: "ꦑꦼꦨꦶꦗꦏ꧀ꦱꦤꦤ꧀",
+                    attrKeberanian: "ꦑꦼꦨꦼꦫꦤꦶꦪꦤ꧀",
+                    attrKesetiaan: "ꦑꦼꦱꦼꦠꦾꦤ꧀",
+                    attrKesucian: "ꦑꦼꦱꦸꦕꦶꦪꦤ꧀",
+                    attrKetabahan: "ꦑꦼꦠꦧꦲꦤ꧀",
+                    attrPengorbanan: "ꦦꦼꦔꦺꦴꦂꦧꦤꦤ꧀",
+                    attrKesaktian: "ꦑꦼꦱꦑ꧀ꦠꦶꦪꦤ꧀",
+                    attrKesombongan: "ꦑꦼꦱꦺꦴꦩ꧀ꦧꦺꦴꦁꦔꦤ꧀",
+                    attrAngkaraMurka: "ꦄꦁꦑꦫꦩꦸꦂꦑ",
+                    attrKeadilan: "ꦑꦲꦢꦶꦭꦤ꧀",
+                    attrKehormatan: "ꦑꦲꦺꦴꦂꦩꦠꦤ꧀",
+                    attrNafsu: "ꦤꦥ꦳ꦸꦱꦸ",
+                    attrDendam: "ꦢꦼꦤ꧀ꦢꦩ꧀",
+                    attrProvokator: "ꦦꦿꦺꦴꦮꦺꦴꦑꦠꦺꦴꦂ",
+                    attrKecerdikan: "ꦑꦼꦕꦼꦂꦢꦶꦑꦤ꧀",
+                    attrKepemimpinan: "ꦑꦼꦦꦼꦩꦶꦩ꧀ꦥꦶꦤꦤ꧀",
+                    attrKekuatan: "ꦑꦼꦑꦸꦮꦠꦤ꧀",
+                    attrKemurahanHati: "ꦑꦼꦩꦸꦫꦲꦤ꧀ꦲꦠꦶ",
+                    attrCintaKasih: "ꦕꦶꦤ꧀ꦠꦑꦱꦶꦃ",
+                    attrPengetahuan: "ꦦꦼꦔꦼꦠ꦳ꦲꦸꦲꦤ꧀",
+                    attrStrategi: "ꦱ꧀ꦠꦿꦠꦼꦒꦶ",
+                    attrAmbisi: "ꦄꦩ꧀ꦨꦶꦱꦶ",
+                    attrNaif: "ꦤꦲꦶꦥ꦳꧀",
+                    attrLicik: "ꦭꦶꦕꦶꦑ꧀",
+
+                    // Highlight Box
+                    karakteristikJudul: "ꦑꦫꦏ꧀ꦠꦼꦫꦶꦱ꧀ꦠꦶꦏ꧀ꦠꦺꦴꦏꦺꦴꦲ꧀ꦫꦩꦪꦤ",
+                    karakteristikDeskripsi: "ꦫꦩꦪꦤꦩꦺꦚꦩ꧀ꦥꦶꦤ꧀ꦥ꦳ꦸꦭ꧀ꦠꦺꦴꦏꦺꦴꦲ꧀ꦠꦺꦴꦏꦺꦴꦲ꧀ꦢꦼꦁꦔꦤ꧀ꦏꦫꦏ꧀ꦠꦼꦂꦪꦺꦁꦏꦸꦠꦠ꧀ꦭꦤ꧀ꦗꦼꦭꦱ꧀ꦱꦧꦼꦤ꧀ꦠꦺꦴꦏꦺꦴꦲ꧀ꦩꦺꦮꦏꦶꦭꦶꦤꦶꦭꦲꦶꦤꦶꦭꦲꦶꦠꦼꦂꦠꦼꦤ꧀ꦠꦸꦫꦩꦢꦲꦂꦩꦭꦤ꧀ꦏꦧꦼꦤꦂꦱꦶꦤ꧀ꦠꦏꦱꦼꦠꦾꦤ꧀ꦭꦤ꧀ꦏꦱꦸꦕꦶꦪꦤ꧀ꦭꦏ꧀ꦱ꧀ꦩꦤꦥꦩ꧀ꦧꦏ꧀ꦠꦶꦲꦤ꧀ꦤꦺꦴꦩꦤ꧀ꦏꦱꦼꦠꦾꦤ꧀ꦭꦤ꧀ꦦꦼꦔꦺꦴꦂꦧꦤꦤ꧀ꦭꦤ꧀ꦫꦲ꧀ꦮꦤꦲꦁꦑꦫꦩꦸꦂꦏꦏꦺꦴꦤ꧀ꦥꦭꦶꦏ꧀ꦲꦤ꧀ꦠꦫꦏꦧꦼꦕꦶꦏꦤ꧀ꦭꦤ꧀ꦥꦶꦲꦭꦢꦶꦒꦩ꧀ꦧꦂꦏꦤ꧀ꦢꦼꦁꦔꦤ꧀ꦱꦁꦏꦼꦠ꧀ꦗꦼꦭꦱ꧀ꦲꦶꦁꦆꦥꦺꦴꦱ꧀ꦆꦤꦶ",
+
+                    nilaiJudul: "ꦤꦶꦭꦲꦶꦤꦶꦭꦲꦶꦲꦶꦁꦫꦩꦪꦤ",
+                    nilaiDeskripsi: "ꦫꦩꦪꦤꦔꦗꦂꦏꦏꦼꦤ꧀ꦧꦧꦥꦼꦤ꧀ꦠꦶꦁꦤꦶꦁꦔ꧀ꦭꦩ꧀ꦥꦃꦏꦢꦿꦩꦏꦮꦗꦶꦧꦤ꧀ꦑꦱꦼꦠꦾꦤ꧀ꦲꦶꦁꦥꦮꦶꦮꦲꦤ꧀ꦧꦏ꧀ꦠꦶꦢꦠꦼꦁꦠꦶꦪꦁꦱꦼꦥꦸꦲ꧀ꦭꦤ꧀ꦑꦥꦼꦩꦶꦩ꧀ꦥꦶꦤꦤ꧀ꦲꦶꦁꦏꦁꦲꦢꦶꦭ꧀ꦏꦶꦱꦃꦆꦤꦶꦪꦸꦒꦶꦤꦺꦢꦃꦏꦼꦤ꧀ꦪꦺꦤ꧀ꦥꦶꦲꦭꦏꦏꦢꦺꦱꦶꦁꦏꦁꦢꦶꦥꦸꦤ꧀ꦮꦏꦶꦭꦶꦢꦼꦤꦶꦁꦫꦲ꧀ꦮꦤꦥꦢꦥꦸꦁꦏꦱꦤꦶꦥꦸꦤ꧀ꦧꦢꦲꦺꦢꦶꦥꦸꦤ꧀ꦭꦃꦏꦼꦤ꧀ꦢꦼꦤꦶꦁꦑꦧꦼꦕꦶꦏꦤ꧀ꦲꦸꦧꦸꦁꦔꦤ꧀ꦲꦤ꧀ꦠꦮꦶꦱꦶꦥꦸꦤ꧀ꦫꦩꦭꦤ꧀ꦲꦤ꧀ꦤꦺꦴꦩꦤ꧀ꦩꦼꦭꦩ꧀ꦧꦁꦏꦼꦤ꧀ꦑꦱꦼꦠꦾꦤ꧀ꦭꦤ꧀ꦥꦩ꧀ꦧꦏ꧀ꦠꦶꦠꦤ꧀ꦥꦩ꧀ꦫꦶꦃꦪꦺꦁꦱꦩ꧀ꦥꦸꦂꦤ"
+                }
+            };
+
+            // Text untuk language switcher button
+            const languageLabels = {
+                id: "Bahasa Indonesia",
+                jv: "Basa Jawa",
+                jv_script: "ꦲꦏ꧀ꦱꦫꦗꦮ"
+            };
+
+            // DOM Elements
+            const burgerMenu = document.getElementById('burgerMenu');
+            const navbar = document.getElementById('navbar');
+            const critaBtn = document.getElementById('critaWayangBtn');
+            const critaDropdown = document.getElementById('critaWayangDropdown');
+            const tokohBtn = document.getElementById('tokohWayangBtn');
+            const tokohDropdown = document.getElementById('tokohWayangDropdown');
+            const languageBtn = document.getElementById('languageBtn');
+            const languageDropdown = document.getElementById('languageDropdown');
+            const currentLanguage = document.getElementById('currentLanguage');
+
+            // Fungsi untuk mengganti bahasa
+            function changeLanguage(lang) {
+                const elements = document.querySelectorAll('[data-i18n]');
+
+                // Reset font mode dulu
+                document.body.classList.remove('aksara-jawa-mode');
+
+                elements.forEach(element => {
+                    const key = element.getAttribute('data-i18n');
+                    let text = translations[lang]?.[key];
+
+                    if (text) {
+                        element.textContent = text;
+                    }
+                });
+
+                // Update language button text
+                currentLanguage.textContent = languageLabels[lang];
+
+                // Apply font khusus untuk aksara Jawa
+                if (lang === 'jv_script') {
+                    document.body.classList.add('aksara-jawa-mode');
+                }
+
+                // Simpan preferensi bahasa
+                localStorage.setItem('preferredLanguage', lang);
+
+                // Tutup dropdown
+                languageDropdown.classList.remove('active');
+                languageBtn.querySelector('.language-arrow').classList.remove('open');
+            }
+
+            // Event Listeners untuk navigation
+            burgerMenu.addEventListener('click', function () {
+                this.classList.toggle('active');
+                navbar.classList.toggle('active');
+            });
+
+            critaBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                critaDropdown.classList.toggle('active');
+                this.querySelector('.dropdown-arrow').classList.toggle('open');
+                tokohDropdown.classList.remove('active');
+                if (tokohBtn.querySelector('.dropdown-arrow')) {
+                    tokohBtn.querySelector('.dropdown-arrow').classList.remove('open');
+                }
+            });
+
+            tokohBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                tokohDropdown.classList.toggle('active');
+                this.querySelector('.dropdown-arrow').classList.toggle('open');
+                critaDropdown.classList.remove('active');
+                if (critaBtn.querySelector('.dropdown-arrow')) {
+                    critaBtn.querySelector('.dropdown-arrow').classList.remove('open');
+                }
+            });
+
+            // Event Listeners untuk language switcher
+            languageBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                languageDropdown.classList.toggle('active');
+                this.querySelector('.language-arrow').classList.toggle('open');
+            });
+
+            document.querySelectorAll('.language-option').forEach(option => {
+                option.addEventListener('click', function () {
+                    const lang = this.getAttribute('data-lang');
+                    changeLanguage(lang);
+                });
+            });
+
+            // Tutup dropdown ketika klik di luar
+            document.addEventListener('click', function (e) {
+                if (!e.target.closest('#containernavbar')) {
+                    critaDropdown.classList.remove('active');
+                    tokohDropdown.classList.remove('active');
+                    languageDropdown.classList.remove('active');
+
+                    if (critaBtn.querySelector('.dropdown-arrow')) {
+                        critaBtn.querySelector('.dropdown-arrow').classList.remove('open');
+                    }
+                    if (tokohBtn.querySelector('.dropdown-arrow')) {
+                        tokohBtn.querySelector('.dropdown-arrow').classList.remove('open');
+                    }
+                    if (languageBtn.querySelector('.language-arrow')) {
+                        languageBtn.querySelector('.language-arrow').classList.remove('open');
+                    }
+                    navbar.classList.remove('active');
+                    burgerMenu.classList.remove('active');
+                }
+            });
+
+            // Load bahasa yang disimpan
+            const savedLang = localStorage.getItem('preferredLanguage') || 'id';
+            changeLanguage(savedLang);
+        </script>
+</body>
+
+</html>

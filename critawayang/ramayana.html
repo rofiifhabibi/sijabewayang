@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ramayana - Crita Wayang</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Chonburi&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @font-face {
+            font-family: 'nyk Ngayogyan Jejeg';
+            src: local('nyk Ngayogyan Jejeg'),
+                url('../fontnyk/nyk Ngayogyan Jejeg.ttf') format('truetype');
+        }
+
+        body {
+            font-family: sans-serif;
+            background-color: rgb(22, 22, 22);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Styles untuk Language Switcher */
+        .language-switcher {
+            position: relative;
+            display: inline-block;
+        }
+
+        .language-btn {
+            background: transparent;
+            border: 1px solid orange;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.3125rem;
+            cursor: pointer;
+            font-family: "nyk Ngayogyan Jejeg", sans-serif;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .language-btn:hover {
+            background-color: rgba(255, 165, 0, 0.1);
+        }
+
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: rgb(35, 35, 35);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.3125rem;
+            margin-top: 0.5rem;
+            min-width: 180px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            z-index: 1001;
+            display: none;
+        }
+
+        .language-dropdown.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .language-option {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: all 0.1s ease-in;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+        }
+
+        .language-option[data-lang="id"] {
+            font-family: "Chonburi", serif;
+        }
+
+        .language-option[data-lang="jv"] {
+            font-family: "Chonburi", serif;
+        }
+
+        .language-option[data-lang="jv_script"] {
+            font-family: "nyk Ngayogyan Jejeg", sans-serif;
+        }
+
+        .language-option:last-child {
+            border-bottom: none;
+        }
+
+        .language-option:hover {
+            background-color: rgb(45, 45, 45);
+            color: orange;
+            padding-left: 1.25rem;
+        }
+
+        .language-arrow {
+            font-size: 0.75rem;
+            transition: transform 0.2s ease;
+        }
+
+        .language-arrow.open {
+            transform: rotate(180deg);
+        }
+
+        #containernavbar {
+            display: flex;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+            flex-direction: row;
+            align-items: center;
+            width: 100%;
+            height: 5rem;
+            background-color: rgba(22, 22, 22, 0.95);
+            backdrop-filter: blur(10px);
+            justify-content: space-between;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        #logo {
+            font-size: 1.875rem;
+            font-family: "nyk Ngayogyan Jejeg", sans-serif;
+            color: #FFFFFF;
+            cursor: pointer;
+        }
+
+        .burger-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 0.35rem;
+        }
+
+        .burger-menu span {
+            width: 1.75rem;
+            height: 0.2rem;
+            background-color: #ee792b;
+            border-radius: 0.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .burger-menu.active span:nth-child(1) {
+            transform: rotate(45deg) translate(0.5rem, 0.5rem);
+        }
+
+        .burger-menu.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .burger-menu.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(0.5rem, -0.5rem);
+        }
+
+        #navbar {
+            width: 40%;
+            height: 2.5rem;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        .btnavbar {
+            font-family: "Chonburi", serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        #btactivenavbar {
+            padding-left: 0.625rem;
+            padding-right: 0.625rem;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            text-decoration: none;
+            color: rgb(0, 0, 0);
+            background-color: orange;
+            border-radius: 0.3125rem;
+            font-size: 0.9375rem;
+        }
+
+        .btinactivenavbar {
+            padding-left: 0.625rem;
+            padding-right: 0.625rem;
+            font-size: 0.9375rem;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+            border-radius: 0.3125rem;
+            transition: 0.1s ease-in;
+        }
+
+        .btinactivenavbar:hover {
+            background-color: rgb(35, 35, 35);
+            color: orange;
+            transition: 0.1s ease-in;
+        }
+
+        .dropdown-arrow {
+            font-size: 0.75rem;
+            transition: transform 0.2s ease;
+        }
+
+        .dropdown-arrow.open {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: rgb(35, 35, 35);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.3125rem;
+            margin-top: 0.5rem;
+            min-width: 180px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .dropdown-menu.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: white;
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: all 0.1s ease-in;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item.active {
+            background-color: orange;
+            color: black;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgb(45, 45, 45);
+            color: orange;
+            padding-left: 1.25rem;
+        }
+
+        #containercerita {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 6rem 2rem 2rem;
+            min-height: 100vh;
+        }
+
+        .story-header {
+            background: rgba(35, 35, 35, 0.8);
+            border-radius: 0;
+            padding: 3rem 2rem 2rem;
+            color: white;
+            position: relative;
+            border-bottom: 2px solid orange;
+            margin-bottom: 0;
+        }
+
+        .story-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-family: "EB Garamond", serif;
+            font-weight: 700;
+            background-image: linear-gradient(to right, #CC9900 0%, #FFCC66 50%, #FFD700 85%, #FFEB3B 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .story-header p {
+            font-size: 1.1rem;
+            color: rgb(180, 180, 180);
+            font-family: "EB Garamond", serif;
+        }
+
+        .story-content {
+            background: rgba(35, 35, 35, 0.8);
+            border-radius: 0;
+            padding: 3rem;
+            max-height: 70vh;
+            overflow-y: auto;
+            margin-bottom: 2rem;
+        }
+
+        .story-content::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .story-content::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .story-content::-webkit-scrollbar-thumb {
+            background: orange;
+            border-radius: 5px;
+        }
+
+        .story-section h2 {
+            color: orange;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-family: "EB Garamond", serif;
+            font-weight: 700;
+            padding-bottom: 0.5rem;
+        }
+
+        .story-section h3 {
+            font-family: "Chonburi", serif;
+            font-size: 1.3rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            background-image: linear-gradient(to right, #CC9900, #FFD700);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .story-section p {
+            color: rgb(180, 180, 180);
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            text-align: justify;
+            font-family: sans-serif;
+        }
+
+        .highlight-box {
+            background: rgba(255, 165, 0, 0.1);
+            border-left: 3px solid orange;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0.3125rem;
+        }
+
+        .highlight-box h4 {
+            color: orange;
+            margin-bottom: 0.8rem;
+            font-family: "EB Garamond", serif;
+            font-size: 1.2rem;
+        }
+
+        .highlight-box p {
+            color: rgb(200, 200, 200);
+            margin-bottom: 0;
+        }
+
+        /* Mode Aksara Jawa - SEMUA TEKS MENGGUNAKAN FONT AKSARA JAWA */
+        .aksara-jawa-mode * {
+            font-family: 'nyk Ngayogyan Jejeg', sans-serif !important;
+        }
+
+        /* Untuk judul utama tetap menggunakan gradient */
+        .aksara-jawa-mode .story-header h1,
+        .aksara-jawa-mode .story-section h2,
+        .aksara-jawa-mode .story-section h3 {
+            background-image: linear-gradient(to right, #CC9900, #FFD700);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Untuk teks paragraf beri line-height lebih besar agar mudah dibaca */
+        .aksara-jawa-mode .story-section p,
+        .aksara-jawa-mode .highlight-box p,
+        .aksara-jawa-mode .story-header p {
+            line-height: 2.0 !important;
+            font-size: 1.1rem !important;
+        }
+
+        /* Mobile Responsive - NAVBAR MOBILE DIPERBAIKI */
+        @media (max-width: 768px) {
+            #containernavbar {
+                padding-left: 1rem;
+                padding-right: 1rem;
+                height: 4rem;
+                flex-wrap: wrap;
+            }
+
+            #logo {
+                font-size: 1.5rem;
+            }
+
+            .burger-menu {
+                display: flex;
+                order: 3;
+            }
+
+            .nav-left {
+                order: 1;
+                flex: 1;
+            }
+
+            .nav-right {
+                order: 2;
+                width: auto;
+                flex-direction: row;
+                gap: 0.5rem;
+            }
+
+            .language-switcher {
+                width: auto;
+                margin-top: 0;
+            }
+
+            .language-btn {
+                width: auto;
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
+                min-width: 120px;
+            }
+
+            .language-dropdown {
+                position: absolute;
+                top: 100%;
+                right: 0;
+                width: 180px;
+                margin-top: 0.5rem;
+                transform: none;
+                max-height: none;
+                background-color: rgb(35, 35, 35);
+            }
+
+            .language-dropdown.active {
+                max-height: none;
+            }
+
+            #navbar {
+                position: fixed;
+                top: 4rem;
+                right: -100%;
+                width: 100%;
+                height: calc(100vh - 4rem);
+                background-color: rgba(22, 22, 22, 0.98);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: stretch;
+                padding: 1.5rem 1rem;
+                gap: 0.75rem;
+                transition: right 0.3s ease;
+                overflow-y: auto;
+                order: 4;
+            }
+
+            #navbar.active {
+                right: 0;
+            }
+
+            .btnavbar {
+                width: 100%;
+                height: auto;
+                display: flex;
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            #btactivenavbar,
+            .btinactivenavbar {
+                width: 100%;
+                height: 2.5rem;
+                font-size: 1rem;
+            }
+
+            .dropdown-menu {
+                position: static;
+                margin-top: 0;
+                width: 100%;
+                margin-left: 0;
+                padding-left: 1rem;
+                transform: none;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease, opacity 0.2s ease;
+                background-color: rgba(35, 35, 35, 0.9);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 0.3125rem;
+            }
+
+            .dropdown-menu.active {
+                display: block;
+                max-height: 300px;
+                margin-top: 0.5rem;
+            }
+
+            .dropdown-item {
+                padding: 0.75rem 1rem;
+                font-size: 0.95rem;
+                background-color: transparent;
+            }
+
+            .dropdown-item.active {
+                background-color: orange !important;
+                color: black !important;
+            }
+
+            #containercerita {
+                padding: 5rem 1rem 1rem;
+            }
+
+            .story-header {
+                padding: 2rem 1rem;
+            }
+
+            .story-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .story-header p {
+                font-size: 1rem;
+            }
+
+            .story-content {
+                padding: 1.5rem;
+                max-height: 60vh;
+            }
+
+            .story-section h2 {
+                font-size: 1.5rem;
+            }
+
+            .story-section h3 {
+                font-size: 1.1rem;
+            }
+
+            .story-section p {
+                font-size: 0.95rem;
+            }
+
+            /* Mobile untuk aksara Jawa */
+            .aksara-jawa-mode .story-section p,
+            .aksara-jawa-mode .highlight-box p,
+            .aksara-jawa-mode .story-header p {
+                line-height: 1.8 !important;
+                font-size: 1rem !important;
+            }
+        }
+
+        /* Media Query khusus untuk perangkat dengan lebar sangat kecil (Android portrait) */
+        @media (max-width: 480px) {
+            #containercerita {
+                padding: 5rem 0.75rem 1rem;
+            }
+
+            .story-content {
+                max-height: 55vh;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="containernavbar">
+        <div class="nav-left">
+            <div id="logo">ꦱꦶꦗꦧꦺ</div>
+        </div>
+
+        <div class="nav-right">
+            <!-- Language Switcher -->
+            <div class="language-switcher">
+                <button class="language-btn" id="languageBtn">
+                    <span id="currentLanguage">Bahasa Indonesia</span>
+                    <span class="language-arrow">▼</span>
+                </button>
+                <div class="language-dropdown" id="languageDropdown">
+                    <button class="language-option" data-lang="id">Bahasa Indonesia</button>
+                    <button class="language-option" data-lang="jv">Basa Jawa</button>
+                    <button class="language-option" data-lang="jv_script">ꦲꦏ꧀ꦱꦫꦗꦮ</button>
+                </div>
+            </div>
+
+            <div class="burger-menu" id="burgerMenu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+
+        <div id="navbar">
+            <div class="btnavbar">
+                <a href="/sijabewayang/index.html" class="btinactivenavbar" data-i18n="beranda">Beranda</a>
+            </div>
+            <div class="btnavbar" id="critaWayangNav">
+                <a href="#" class="btinactivenavbar" id="critaWayangBtn">
+                    <span data-i18n="critaWayang">Crita Wayang</span>
+                    <span class="dropdown-arrow">▼</span>
+                </a>
+                <div class="dropdown-menu" id="critaWayangDropdown">
+                    <a href="mahabharata.html" class="dropdown-item" data-i18n="mahabharata">Mahabharata</a>
+                    <a href="ramayana.html" class="dropdown-item active" data-i18n="ramayana">Ramayana</a>
+                    <a href="dewaruci.html" class="dropdown-item" data-i18n="dewaruci">Dewa Ruci</a>
+                </div>
+            </div>
+            <div class="btnavbar" id="tokohWayangNav">
+                <a href="#" class="btinactivenavbar" id="tokohWayangBtn">
+                    <span data-i18n="tokohWayang">Tokoh Wayang</span>
+                    <span class="dropdown-arrow">▼</span>
+                </a>
+                <div class="dropdown-menu" id="tokohWayangDropdown">
+                    <a href="../tokohwayang/mahabharata.html" class="dropdown-item"
+                        data-i18n="mahabharata">Mahabharata</a>
+                    <a href="../tokohwayang/ramayana.html" class="dropdown-item" data-i18n="ramayana">Ramayana</a>
+                    <a href="../tokohwayang/dewaruci.html" class="dropdown-item" data-i18n="dewaruci">Dewa Ruci</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="containercerita">
+        <div class="story-header">
+            <h1 data-i18n="judulHalaman">Ramayana</h1>
+            <p data-i18n="subJudul">Kisah cinta dan kesetiaan Rama dan Sinta, serta perjuangan melawan Rahwana</p>
+        </div>
+
+        <div class="story-content">
+            <div class="story-section">
+                <h2 data-i18n="judulCerita">Ramayana</h2>
+                <p data-i18n="deskripsiCerita"><em>Kisah cinta dan kesetiaan Rama dan Sinta, serta perjuangan melawan
+                        Rahwana</em></p>
+
+                <h3 data-i18n="subJudul1">Latar Belakang dan Kelahiran Rama</h3>
+                <p data-i18n="paragraf1">
+                    Ramayana adalah wiracarita besar dari India yang ditulis oleh Walmiki. Kisah ini berpusat pada
+                    perjalanan hidup Rama, putra mahkota Kerajaan Kosala yang beribu kota di Ayodhya. Rama adalah
+                    penjelmaan (awatara) Dewa Wisnu yang turun ke dunia untuk membasmi kejahatan yang diwakili oleh
+                    Rahwana, raja raksasa dari Alengka.
+                </p>
+
+                <p data-i18n="paragraf2">
+                    Rama adalah putra tertua dari Prabu Dasarata, raja Ayodhya, yang memiliki tiga permaisuri: Kausalya
+                    (ibu Rama), Kaikeyi (ibu Barata), dan Sumitra (ibu Lakshmana dan Satrugna). Sejak kecil, Rama sudah
+                    menunjukkan sifat-sifat kesatria yang sempurna: berbudi luhur, berani, dan bijaksana.
+                </p>
+
+                <h3 data-i18n="subJudul2">Pernikahan Rama dan Sinta</h3>
+                <p data-i18n="paragraf3">
+                    Ketika dewasa, Rama mengikuti sayembara yang diadakan oleh Prabu Janaka dari Kerajaan Wideha.
+                    Sayembara tersebut adalah membentangkan busur pusaka pemberian Dewa Siwa. Banyak kesatria gagal,
+                    bahkan tidak mampu mengangkat busur tersebut. Namun Rama tidak hanya berhasil mengangkatnya, tetapi
+                    juga mematahkannya.
+                </p>
+
+                <p data-i18n="paragraf4">
+                    Sebagai hadiah kemenangan, Rama dinikahkan dengan Sinta, putri Prabu Janaka. Sinta sebenarnya bukan
+                    anak kandung Janaka, tetapi ditemukan saat membajak sawah, sehingga dijuluki "putri bumi".
+                    Pernikahan mereka dilaksanakan dengan megah, dan Rama membawa Sinta ke Ayodhya.
+                </p>
+
+                <h3 data-i18n="subJudul3">Pengasingan ke Hutan</h3>
+                <p data-i18n="paragraf5">
+                    Ketika Prabu Dasarata ingin menyerahkan tahta kepada Rama, muncul intrik dari permaisuri Kaikeyi
+                    yang
+                    didorong oleh dayangnya, Manthara. Kaikeyi mengingatkan Dasarata tentang dua janji yang pernah
+                    diucapkannya dahulu. Janji pertama: mengangkat Barata sebagai putra mahkota, dan janji kedua:
+                    mengasingkan Rama ke hutan selama 14 tahun.
+                </p>
+
+                <p data-i18n="paragraf6">
+                    Dengan berat hati, Dasarata terpaksa memenuhi janjinya. Rama dengan ikhlas menerima keputusan
+                    ayahnya
+                    dan berangkat ke hutan Dandaka. Sinta memutuskan untuk mengikuti suaminya, begitu pula Lakshmana
+                    yang setia menemani kakaknya. Kepergian Rama membuat Dasarata meninggal karena broken heart.
+                </p>
+
+                <h3 data-i18n="subJudul4">Penculikan Sinta oleh Rahwana</h3>
+                <p data-i18n="paragraf7">
+                    Di hutan Dandaka, Rama, Sinta, dan Lakshmana hidup sebagai pertapa. Suatu hari, muncul raksasi
+                    Surpanakha, adik Rahwana, yang jatuh cinta pada Rama. Karena ditolak, Surpanakha menyerang Sinta,
+                    namun hidungnya dipotong oleh Lakshmana. Surpanakha mengadu pada kakaknya, Rahwana.
+                </p>
+
+                <p data-i18n="paragraf8">
+                    Rahwana yang mendengar kecantikan Sinta menjadi bernafsu untuk memilikinya. Dengan siasat licik,
+                    Rahwana menyuruh Marica menyamar sebagai kijang kencana yang indah. Sinta tertarik dan meminta Rama
+                    menangkapnya. Saat Rama mengejar kijang, Lakshmana meninggalkan Sinta sendirian setelah mendengar
+                    teriakan minta tolong (yang sebenarnya suara Marica yang disamar).
+                </p>
+
+                <p data-i18n="paragraf9">
+                    Rahwana yang menyamar sebagai brahmana tua mendatangi Sinta dan menculiknya. Dalam perjalanan ke
+                    Alengka, burung Jatayu berusaha menolong Sinta namun gugur setelah bertaruh dengan Rahwana.
+                </p>
+
+                <h3 data-i18n="subJudul5">Pencarian Sinta dan Pertemuan dengan Hanoman</h3>
+                <p data-i18n="paragraf10">
+                    Rama dan Lakshmana yang kembali menemukan Sinta hilang, kemudian mencari jejaknya. Mereka bertemu
+                    dengan Sugriwa, raja kera yang diusir dari kerajaannya oleh kakaknya, Subali. Rama membantu Sugriwa
+                    merebut kembali kerajaannya, dan sebagai balasannya, Sugriwa mengerahkan pasukan kera untuk mencari
+                    Sinta.
+                </p>
+
+                <p data-i18n="paragraf11">
+                    Hanoman, panglima pasukan kera, berhasil menemukan Sinta di Taman Asoka, Alengka. Sinta ditawan di
+                    tengah halaman istana dan dijaga oleh raksasi-raksasi. Hanoman memberikan cincin Rama sebagai tanda
+                    dan menyampaikan bahwa Rama sedang menyusun pasukan untuk menyelamatkannya.
+                </p>
+
+                <p data-i18n="paragraf12">
+                    Sebelum kembali, Hanoman membakar kota Alengka dengan ekornya yang dibakar oleh Rahwana. Tindakan
+                    ini
+                    sebagai pembalasan karena dihina oleh Rahwana.
+                </p>
+
+                <h3 data-i18n="subJudul6">Pembangunan Jataka dan Penyerangan ke Alengka</h3>
+                <p data-i18n="paragraf13">
+                    Rama dan pasukan kera tiba di pantai selatan India, berhadapan dengan lautan yang memisahkan mereka
+                    dari Alengka. Atas usul Nala, putra Wiswakarma (dewa arsitektur), dibangunlah jembatan dari
+                    batu-batu yang ditulis "Rama" dan mengapung di atas air. Jembatan ini dikenal sebagai Jembatan Adam
+                    atau Rama Setu.
+                </p>
+
+                <p data-i18n="paragraf14">
+                    Perang besar pun terjadi antara pasukan Rama dan pasukan Alengka. Wibisana, adik Rahwana yang baik
+                    hati, membelot dan bergabung dengan Rama karena tidak setuju dengan perbuatan kakaknya. Dalam
+                    pertempuran sengit, banyak pahlawan dari kedua belah pihak yang gugur.
+                </p>
+
+                <h3 data-i18n="subJudul7">Pertempuran Akhir dan Kematian Rahwana</h3>
+                <p data-i18n="paragraf15">
+                    Pertempuran puncak terjadi antara Rama dan Rahwana. Rahwana memiliki kesaktian yang luar biasa
+                    karena
+                    memperoleh anugerah dari Brahma bahwa dia tidak bisa dibunuh oleh dewa atau makhluk gaib. Namun Rama
+                    sebagai manusia mampu mengalahkannya.
+                </p>
+
+                <p data-i18n="paragraf16">
+                    Setelah pertempuran yang sangat sengit, Rama akhirnya berhasil membunuh Rahwana dengan panah
+                    Brahmastra. Sebelum meninggal, Rahwana sadar akan kesalahannya dan meminta maaf. Rama memerintahkan
+                    penguburan yang layak untuk Rahwana, mengakui bahwa musuhnya pun adalah seorang raja yang agung.
+                </p>
+
+                <h3 data-i18n="subJudul8">Ujian Kesucian Sinta dan Kembali ke Ayodhya</h3>
+                <p data-i18n="paragraf17">
+                    Setelah Rahwana tewas, Rama menyelamatkan Sinta. Namun karena Sinta telah tinggal di rumah musuh
+                    yang
+                    bukan mahramnya, Rama meminta Sinta membuktikan kesuciannya dengan ujian api (Agni Pariksha). Sinta
+                    masuk ke dalam api suci dan kelur tanpa terluka, membuktikan kesuciannya selama dalam penawanan.
+                </p>
+
+                <p data-i18n="paragraf18">
+                    Rama, Sinta, dan Lakshmana kembali ke Ayodhya setelah 14 tahun pengasingan. Mereka disambut dengan
+                    sukacita oleh Barata dan seluruh rakyat Ayodhya. Rama dinobatkan sebagai raja dan memerintah dengan
+                    adil dalam masa yang disebut "Rama Rajya" - zaman keemasan dimana keadilan dan kemakmuran merata.
+                </p>
+
+                <h3 data-i18n="subJudul9">Pengasingan Sinta dan Akhir Kisah</h3>
+                <p data-i18n="paragraf19">
+                    Meski telah membuktikan kesuciannya, sebagian rakyat masih meragukan kesucian Sinta. Untuk menjaga
+                    stabilitas kerajaan, Rama dengan berat hati mengasingkan Sinta yang sedang hamil ke hutan. Sinta
+                    tinggal di pertapaan Walmiki dan melahirkan dua anak kembar: Kusa dan Lawa.
+                </p>
+
+                <p data-i18n="paragraf20">
+                    Bertahun-tahun kemudian, Kusa dan Lawa yang telah dewasa menyanyikan kisah Ramayana di hadapan Rama.
+                    Rama menyadari bahwa mereka adalah anaknya. Sinta dipanggil kembali untuk membuktikan kesuciannya
+                    sekali lagi. Sinta bersumpah atas nama Bumi Ibu, dan bumi pun terbuka menerimanya, membuktikan
+                    kesuciannya yang abadi.
+                </p>
+
+                <p data-i18n="paragraf21">
+                    Rama akhirnya menyelesaikan tugasnya sebagai awatara Wisnu dan kembali ke kahyangan, meninggalkan
+                    warisan kisah tentang dharma, kesetiaan, dan kebenaran.
+                </p>
+
+                <div class="highlight-box">
+                    <h4 data-i18n="nilaiFilosofis">Nilai Filosofis Ramayana</h4>
+                    <p data-i18n="nilaiDeskripsi">
+                        Ramayana mengajarkan tentang pentingnya menjalankan dharma (kewajiban), kesetiaan dalam
+                        perkawinan, bakti kepada orang tua, dan kepemimpinan yang adil. Kisah ini juga menunjukkan bahwa
+                        kejahatan seperti yang diwakili Rahwana pada akhirnya akan dikalahkan oleh kebaikan. Hubungan
+                        antara Rama dan Hanoman melambangkan kesetiaan dan pengabdian tanpa pamrih.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data terjemahan untuk halaman Ramayana - LENGKAP dengan semua teks
+        const translations = {
+            id: {
+                // Navbar
+                beranda: "Beranda",
+                critaWayang: "Crita Wayang",
+                tokohWayang: "Tokoh Wayang",
+                mahabharata: "Mahabharata",
+                ramayana: "Ramayana",
+                dewaruci: "Dewa Ruci",
+
+                // Header
+                judulHalaman: "Ramayana",
+                subJudul: "Kisah cinta dan kesetiaan Rama dan Sinta, serta perjuangan melawan Rahwana",
+
+                // Konten
+                judulCerita: "Ramayana",
+                deskripsiCerita: "Kisah cinta dan kesetiaan Rama dan Sinta, serta perjuangan melawan Rahwana",
+
+                // Subjudul
+                subJudul1: "Latar Belakang dan Kelahiran Rama",
+                subJudul2: "Pernikahan Rama dan Sinta",
+                subJudul3: "Pengasingan ke Hutan",
+                subJudul4: "Penculikan Sinta oleh Rahwana",
+                subJudul5: "Pencarian Sinta dan Pertemuan dengan Hanoman",
+                subJudul6: "Pembangunan Jataka dan Penyerangan ke Alengka",
+                subJudul7: "Pertempuran Akhir dan Kematian Rahwana",
+                subJudul8: "Ujian Kesucian Sinta dan Kembali ke Ayodhya",
+                subJudul9: "Pengasingan Sinta dan Akhir Kisah",
+
+                // Paragraf
+                paragraf1: "Ramayana adalah wiracarita besar dari India yang ditulis oleh Walmiki. Kisah ini berpusat pada perjalanan hidup Rama, putra mahkota Kerajaan Kosala yang beribu kota di Ayodhya. Rama adalah penjelmaan (awatara) Dewa Wisnu yang turun ke dunia untuk membasmi kejahatan yang diwakili oleh Rahwana, raja raksasa dari Alengka.",
+                paragraf2: "Rama adalah putra tertua dari Prabu Dasarata, raja Ayodhya, yang memiliki tiga permaisuri: Kausalya (ibu Rama), Kaikeyi (ibu Barata), dan Sumitra (ibu Lakshmana dan Satrugna). Sejak kecil, Rama sudah menunjukkan sifat-sifat kesatria yang sempurna: berbudi luhur, berani, dan bijaksana.",
+                paragraf3: "Ketika dewasa, Rama mengikuti sayembara yang diadakan oleh Prabu Janaka dari Kerajaan Wideha. Sayembara tersebut adalah membentangkan busur pusaka pemberian Dewa Siwa. Banyak kesatria gagal, bahkan tidak mampu mengangkat busur tersebut. Namun Rama tidak hanya berhasil mengangkatnya, tetapi juga mematahkannya.",
+                paragraf4: "Sebagai hadiah kemenangan, Rama dinikahkan dengan Sinta, putri Prabu Janaka. Sinta sebenarnya bukan anak kandung Janaka, tetapi ditemukan saat membajak sawah, sehingga dijuluki \"putri bumi\". Pernikahan mereka dilaksanakan dengan megah, dan Rama membawa Sinta ke Ayodhya.",
+                paragraf5: "Ketika Prabu Dasarata ingin menyerahkan tahta kepada Rama, muncul intrik dari permaisuri Kaikeyi yang didorong oleh dayangnya, Manthara. Kaikeyi mengingatkan Dasarata tentang dua janji yang pernah diucapkannya dahulu. Janji pertama: mengangkat Barata sebagai putra mahkota, dan janji kedua: mengasingkan Rama ke hutan selama 14 tahun.",
+                paragraf6: "Dengan berat hati, Dasarata terpaksa memenuhi janjinya. Rama dengan ikhlas menerima keputusan ayahnya dan berangkat ke hutan Dandaka. Sinta memutuskan untuk mengikuti suaminya, begitu pula Lakshmana yang setia menemani kakaknya. Kepergian Rama membuat Dasarata meninggal karena broken heart.",
+                paragraf7: "Di hutan Dandaka, Rama, Sinta, dan Lakshmana hidup sebagai pertapa. Suatu hari, muncul raksasi Surpanakha, adik Rahwana, yang jatuh cinta pada Rama. Karena ditolak, Surpanakha menyerang Sinta, namun hidungnya dipotong oleh Lakshmana. Surpanakha mengadu pada kakaknya, Rahwana.",
+                paragraf8: "Rahwana yang mendengar kecantikan Sinta menjadi bernafsu untuk memilikinya. Dengan siasat licik, Rahwana menyuruh Marica menyamar sebagai kijang kencana yang indah. Sinta tertarik dan meminta Rama menangkapnya. Saat Rama mengejar kijang, Lakshmana meninggalkan Sinta sendirian setelah mendengar teriakan minta tolong (yang sebenarnya suara Marica yang disamar).",
+                paragraf9: "Rahwana yang menyamar sebagai brahmana tua mendatangi Sinta dan menculiknya. Dalam perjalanan ke Alengka, burung Jatayu berusaha menolong Sinta namun gugur setelah bertaruh dengan Rahwana.",
+                paragraf10: "Rama dan Lakshmana yang kembali menemukan Sinta hilang, kemudian mencari jejaknya. Mereka bertemu dengan Sugriwa, raja kera yang diusir dari kerajaannya oleh kakaknya, Subali. Rama membantu Sugriwa merebut kembali kerajaannya, dan sebagai balasannya, Sugriwa mengerahkan pasukan kera untuk mencari Sinta.",
+                paragraf11: "Hanoman, panglima pasukan kera, berhasil menemukan Sinta di Taman Asoka, Alengka. Sinta ditawan di tengah halaman istana dan dijaga oleh raksasi-raksasi. Hanoman memberikan cincin Rama sebagai tanda dan menyampaikan bahwa Rama sedang menyusun pasukan untuk menyelamatkannya.",
+                paragraf12: "Sebelum kembali, Hanoman membakar kota Alengka dengan ekornya yang dibakar oleh Rahwana. Tindakan ini sebagai pembalasan karena dihina oleh Rahwana.",
+                paragraf13: "Rama dan pasukan kera tiba di pantai selatan India, berhadapan dengan lautan yang memisahkan mereka dari Alengka. Atas usul Nala, putra Wiswakarma (dewa arsitektur), dibangunlah jembatan dari batu-batu yang ditulis \"Rama\" dan mengapung di atas air. Jembatan ini dikenal sebagai Jembatan Adam atau Rama Setu.",
+                paragraf14: "Perang besar pun terjadi antara pasukan Rama dan pasukan Alengka. Wibisana, adik Rahwana yang baik hati, membelot dan bergabung dengan Rama karena tidak setuju dengan perbuatan kakaknya. Dalam pertempuran sengit, banyak pahlawan dari kedua belah pihak yang gugur.",
+                paragraf15: "Pertempuran puncak terjadi antara Rama dan Rahwana. Rahwana memiliki kesaktian yang luar biasa karena memperoleh anugerah dari Brahma bahwa dia tidak bisa dibunuh oleh dewa atau makhluk gaib. Namun Rama sebagai manusia mampu mengalahkannya.",
+                paragraf16: "Setelah pertempuran yang sangat sengit, Rama akhirnya berhasil membunuh Rahwana dengan panah Brahmastra. Sebelum meninggal, Rahwana sadar akan kesalahannya dan meminta maaf. Rama memerintahkan penguburan yang layak untuk Rahwana, mengakui bahwa musuhnya pun adalah seorang raja yang agung.",
+                paragraf17: "Setelah Rahwana tewas, Rama menyelamatkan Sinta. Namun karena Sinta telah tinggal di rumah musuh yang bukan mahramnya, Rama meminta Sinta membuktikan kesuciannya dengan ujian api (Agni Pariksha). Sinta masuk ke dalam api suci dan kelur tanpa terluka, membuktikan kesuciannya selama dalam penawanan.",
+                paragraf18: "Rama, Sinta, dan Lakshmana kembali ke Ayodhya setelah 14 tahun pengasingan. Mereka disambut dengan sukacita oleh Barata dan seluruh rakyat Ayodhya. Rama dinobatkan sebagai raja dan memerintah dengan adil dalam masa yang disebut \"Rama Rajya\" - zaman keemasan dimana keadilan dan kemakmuran merata.",
+                paragraf19: "Meski telah membuktikan kesuciannya, sebagian rakyat masih meragukan kesucian Sinta. Untuk menjaga stabilitas kerajaan, Rama dengan berat hati mengasingkan Sinta yang sedang hamil ke hutan. Sinta tinggal di pertapaan Walmiki dan melahirkan dua anak kembar: Kusa dan Lawa.",
+                paragraf20: "Bertahun-tahun kemudian, Kusa dan Lawa yang telah dewasa menyanyikan kisah Ramayana di hadapan Rama. Rama menyadari bahwa mereka adalah anaknya. Sinta dipanggil kembali untuk membuktikan kesuciannya sekali lagi. Sinta bersumpah atas nama Bumi Ibu, dan bumi pun terbuka menerimanya, membuktikan kesuciannya yang abadi.",
+                paragraf21: "Rama akhirnya menyelesaikan tugasnya sebagai awatara Wisnu dan kembali ke kahyangan, meninggalkan warisan kisah tentang dharma, kesetiaan, dan kebenaran.",
+
+                // Highlight Box
+                nilaiFilosofis: "Nilai Filosofis Ramayana",
+                nilaiDeskripsi: "Ramayana mengajarkan tentang pentingnya menjalankan dharma (kewajiban), kesetiaan dalam perkawinan, bakti kepada orang tua, dan kepemimpinan yang adil. Kisah ini juga menunjukkan bahwa kejahatan seperti yang diwakili Rahwana pada akhirnya akan dikalahkan oleh kebaikan. Hubungan antara Rama dan Hanoman melambangkan kesetiaan dan pengabdian tanpa pamrih."
+            },
+
+            jv: {
+                // Navbar
+                beranda: "Beranda",
+                critaWayang: "Crita Wayang",
+                tokohWayang: "Tokoh Wayang",
+                mahabharata: "Mahabharata",
+                ramayana: "Ramayana",
+                dewaruci: "Dewa Ruci",
+
+                // Header
+                judulHalaman: "Ramayana",
+                subJudul: "Kisah tresna lan kasetyan Rama lan Sinta, sarta perjuangan nglawan Rahwana",
+
+                // Konten
+                judulCerita: "Ramayana",
+                deskripsiCerita: "Kisah tresna lan kasetyan Rama lan Sinta, sarta perjuangan nglawan Rahwana",
+
+                // Subjudul
+                subJudul1: "Latar Mburi lan Lairipun Rama",
+                subJudul2: "Pawiwahan Rama lan Sinta",
+                subJudul3: "Pangasingan dhateng Alas",
+                subJudul4: "Panyulapan Sinta dening Rahwana",
+                subJudul5: "Panggolekan Sinta lan Pategolan kaliyan Hanoman",
+                subJudul6: "Pambangunan Jataka lan Penyerangan dhateng Alengka",
+                subJudul7: "Peperangan Pungkasan lan Pejahipun Rahwana",
+                subJudul8: "Ujian Kasucian Sinta lan Wangsul dhateng Ayodhya",
+                subJudul9: "Pangasingan Sinta lan Pungkasan Crita",
+
+                // Paragraf - SEMUA DITERJEMAHKAN LENGKAP
+                paragraf1: "ꦫꦩꦪꦤꦥꦸꦤꦶꦏꦮꦶꦫꦕꦫꦶꦠꦲꦒꦼꦁꦱꦏꦶꦁꦆꦤ꧀ꦢꦶꦪꦲꦶꦁꦏꦁꦢꦶꦥꦸꦤ꧀ꦱꦼꦫꦠ꧀ꦢꦼꦤꦶꦁꦮꦭ꧀ꦩꦶꦏꦶꦏꦶꦱꦃꦆꦤꦶꦮꦺꦴꦤ꧀ꦠꦼꦤ꧀ꦲꦶꦁꦭꦼꦭꦩ꧀ꦥꦲꦤ꧀ꦫꦩꦥꦸꦠꦿꦩꦲꦏꦺꦴꦠꦏꦫꦗꦤ꧀ꦑꦺꦴꦱꦭꦲꦶꦁꦏꦁꦲꦶꦧꦸꦏꦺꦴꦠꦤꦶꦥꦸꦤ꧀ꦲꦪꦺꦴꦢ꧀ꦢꦾꦫꦩꦥꦸꦤꦶꦏꦮꦠꦫꦱꦏꦶꦁꦢꦺꦮꦮꦶꦱ꧀ꦤꦸꦲꦶꦁꦏꦁꦠꦸꦫꦸꦤ꧀ꦢꦠꦼꦁꦢꦺꦴꦤꦾꦏꦁꦒꦺꦴꦤꦸꦩ꧀ꦥꦼꦱ꧀ꦥꦶꦲꦭꦲꦶꦁꦏꦁꦢꦶꦥꦸꦤ꧀ꦮꦏꦶꦭꦶꦢꦼꦤꦶꦁꦫꦲ꧀ꦮꦤꦫꦗꦫꦏ꧀ꦱꦱꦏꦶꦁꦲꦭꦼꦁꦏ",
+                paragraf2: "ꦫꦩꦥꦸꦤꦶꦏꦥꦸꦠꦿꦥꦭꦶꦁꦱꦼꦥꦸꦲ꧀ꦱꦏꦶꦁꦥꦿꦧꦸꦢꦱꦫꦠꦫꦗꦲꦪꦺꦴꦢ꧀ꦢꦾꦲꦶꦁꦏꦁꦒꦢꦃꦠꦶꦒꦥꦼꦂꦩꦲꦶꦱꦻꦑꦻꦴꦸꦱꦭꦾꦲꦶꦧꦸꦫꦩꦑꦺꦴꦪꦺꦼꦭꦶꦲꦶꦧꦸꦧꦫꦠꦭꦤ꧀ꦱꦸꦩꦶꦠꦿꦲꦶꦧꦸꦭꦏ꧀ꦱ꧀ꦩꦤꦭꦤ꧀ꦱꦠꦿꦸꦒ꧀ꦤꦱꦏꦶꦠꦭꦶꦠ꧀ꦫꦩꦱꦩ꧀ꦥꦸꦤ꧀ꦤꦺꦢꦃꦏꦼꦤ꧀ꦱꦶꦥꦠ꧀ꦱꦶꦥꦠ꧀ꦑꦼꦱꦠꦿꦶꦪꦲꦶꦁꦏꦁꦱꦩ꧀ꦥꦸꦂꦤꦧꦸꦢꦶꦭꦸꦲꦸꦂꦧꦼꦫꦤꦶꦭꦤ꧀ꦧꦶꦗꦏ꧀ꦱꦤ",
+                paragraf3: "ꦤꦭꦶꦏꦢꦺꦮꦱꦫꦩꦤ꧀ꦢꦼꦫꦺꦠ꧀ꦱꦪꦼꦩ꧀ꦧꦫꦲꦶꦁꦏꦁꦢꦶꦥꦸꦤ꧀ꦲꦢꦤꦶꦢꦼꦤꦶꦁꦥꦿꦧꦸꦗꦤꦏꦱꦏꦶꦁꦏꦫꦗꦤ꧀ꦮꦶꦢꦺꦲꦱꦪꦼꦩ꧀ꦧꦫꦥꦸꦤꦶꦏꦩꦼꦩ꧀ꦧꦼꦤ꧀ꦠꦁꦏꦤ꧀ꦧꦸꦱꦸꦂꦥꦸꦱꦏꦥꦼꦥꦂꦲꦶꦁꦏꦁꦢꦶꦥꦸꦤ꧀ꦩꦤꦃꦏꦏꦺꦢꦺꦮꦱꦶꦮꦧꦚꦏ꧀ꦏꦺꦱꦠꦿꦶꦪꦒꦒꦭ꧀ꦩꦭꦃꦠꦶꦢꦏ꧀ꦱꦒꦼꦠ꧀ꦔꦁꦏꦠ꧀ꦧꦸꦱꦸꦂꦥꦸꦤꦶꦏꦤꦔꦤ꧀ꦫꦩꦠꦶꦢꦏ꧀ꦤꦩꦸꦁꦏꦱꦶꦭꦔꦁꦏꦠ꧀ꦤꦔꦤ꧀ꦩꦠꦏꦏꦼꦤ꧀",
+                paragraf4: "ꦩꦶꦤꦔꦏꦧꦼꦧꦸꦔꦃꦏꦩꦼꦤꦁꦔꦤ꧀ꦫꦩꦢꦶꦥꦸꦤ꧀ꦥꦭꦏꦿꦩꦶꦏꦭꦶꦪꦤ꧀ꦱꦶꦤ꧀ꦠꦥꦸꦠꦿꦶꦥꦿꦧꦸꦗꦤꦏꦱꦶꦤ꧀ꦠꦱꦗꦠꦺꦴꦱꦶꦥꦸꦤ꧀ꦧꦸꦏꦤ꧀ꦥꦸꦠꦿꦶꦏꦤ꧀ꦢꦁꦗꦤꦏꦤꦔꦤ꧀ꦢꦶꦥꦸꦤ꧀ꦥꦼꦩꦸꦤꦒꦶꦤꦭꦶꦏꦮꦭꦶꦏꦩꦧꦗꦏ꧀ꦱꦮꦃꦱꦲꦶꦁꦒꦢꦶꦥꦸꦤ꧀ꦱꦼꦧꦸꦠ꧀ꦥꦸꦠꦿꦶꦧꦸꦩꦶꦥꦮꦶꦮꦲꦤꦶꦥꦸꦤ꧀ꦢꦶꦭꦏꦺꦴꦱꦏꦏꦤ꧀ꦩꦼꦒꦃꦭꦤ꧀ꦫꦩꦩꦼꦩ꧀ꦧꦮꦱꦶꦤ꧀ꦠꦢꦠꦼꦁꦲꦪꦺꦴꦢ꧀ꦢꦾ",
+                paragraf5: "ꦤꦭꦶꦏꦥꦿꦧꦸꦢꦱꦫꦠꦧꦢꦲꦤꦾꦺꦂꦱꦺꦫꦃꦏꦏꦠꦠꦢꦏꦺꦫꦩꦩꦸꦤ꧀ꦕꦸꦏꦶꦤ꧀ꦠꦿꦶꦏꦱꦏꦶꦁꦥꦼꦂꦩꦲꦶꦱꦻꦑꦻꦴꦼꦭꦶꦲꦶꦁꦏꦁꦢꦶꦥꦸꦤ꧀ꦢꦺꦴꦔꦺꦴꦔꦶꦢꦼꦤꦶꦁꦢꦪꦁꦤꦶꦥꦸꦤ꧀ꦩꦤ꧀ꦛꦫꦑꦻꦴꦼꦭꦶꦔꦶꦁꦏꦼꦠ꧀ꦢꦱꦫꦠꦧꦧꦏꦭꦶꦃꦗꦤ꧀ꦗꦶꦪꦺꦁꦤꦠꦼꦢꦶꦥꦸꦤ꧀ꦲꦸꦕꦥꦏꦼꦤ꧀ꦢꦲꦸꦭꦸꦗꦤ꧀ꦗꦶꦏꦥꦼꦂꦠꦩꦩꦔꦁꦏꦠ꧀ꦧꦫꦠꦲꦱꦺꦥꦸꦠꦿꦩꦲꦏꦺꦴꦠꦭꦤ꧀ꦗꦤ꧀ꦗꦶꦏꦼꦥꦶꦁꦏꦭꦶꦃꦩꦔꦱꦶꦁꦏꦼꦤ꧀ꦫꦩꦢꦠꦼꦁꦲꦭꦱ꧀ꦱꦭꦩꦶꦤ꧀ꦔꦥꦸꦭꦸꦃꦠꦲꦸꦤ꧀",
+                paragraf6: "ꦢꦼꦔꦤ꧀ꦏꦧꦼꦠꦃꦔꦤ꧀ꦢꦱꦫꦠꦠꦼꦂꦥꦏ꧀ꦱꦩꦼꦤꦸꦲꦶꦪꦤ꧀ꦗꦤ꧀ꦗꦶꦤꦶꦥꦸꦤ꧀ꦫꦩꦢꦼꦔꦤ꧀ꦲꦶꦏ꧀ꦲꦱ꧀ꦤꦼꦂꦩꦏꦸꦠꦸꦱꦤ꧀ꦲꦾꦁꦭꦤ꧀ꦧꦼꦫꦁꦏꦠ꧀ꦢꦠꦼꦁꦲꦭꦱ꧀ꦢꦤ꧀ꦢꦏꦱꦶꦤ꧀ꦠꦩꦸꦠꦸꦱ꧀ꦏꦤ꧀ꦩꦼꦤꦺꦴꦭꦸꦱꦸꦩꦶꦤꦶꦥꦸꦤ꧀ꦒꦺꦴꦠꦥꦭꦏ꧀ꦱꦲꦩꦤꦱꦺꦠꦾꦤꦺꦩꦼꦤꦺꦩ꧀ꦥꦤꦶꦏꦏꦏꦁꦤꦾꦥꦼꦫꦁꦕꦶꦤ꧀ꦠꦩꦼꦩ꧀ꦧꦮꦱꦶꦤ꧀ꦠꦥꦶꦪꦤ꧀ꦧꦏꦤ꧀ꦏꦧꦼꦥꦼꦂꦒꦶꦪꦤꦶꦥꦸꦤ꧀ꦫꦩꦩꦼꦔꦏꦏꦼꦤ꧀ꦢꦱꦫꦠꦩꦼꦔꦶꦁꦒꦭ꧀ꦏꦮꦤ꧀ꦠꦸꦁꦒꦭ꧀ꦲꦠꦶ",
+                paragraf7: "ꦢꦶꦲꦭꦱ꧀ꦢꦤ꧀ꦢꦏꦫꦩꦱꦶꦤ꧀ꦠꦭꦤ꧀ꦭꦏ꧀ꦱ꧀ꦩꦤꦒꦼꦱꦁꦩꦶꦤꦔꦏꦥꦼꦂꦠꦥꦱꦪꦨꦶꦤꦺꦴꦩꦸꦤ꧀ꦕꦸꦭ꧀ꦫꦏ꧀ꦱꦯꦶꦱꦸꦂꦥꦤꦏꦲꦢꦶꦏ꧀ꦫꦲ꧀ꦮꦤꦲꦶꦁꦏꦁꦗꦠꦸꦃꦕꦶꦤ꧀ꦠꦏꦺꦫꦩꦩꦕꦭꦩ꧀ꦢꦶꦠꦺꦴꦭꦏ꧀ꦱꦸꦂꦥꦤꦏꦲꦤꦺꦫꦁꦱꦶꦤ꧀ꦠꦤꦔꦤ꧀ꦲꦶꦢꦸꦁꦤꦶꦥꦸꦤ꧀ꦥꦼꦢꦺꦴꦠ꧀ꦢꦼꦤꦶꦁꦭꦏ꧀ꦱ꧀ꦩꦤꦱꦸꦂꦥꦤꦏꦲꦢꦸꦢꦢꦏꦏꦁꦤꦾꦫꦲ꧀ꦮꦤ",
+                paragraf8: "ꦫꦲ꧀ꦮꦤꦲꦶꦁꦏꦁꦔꦿꦸꦁꦺꦴꦏꦏꦺꦌꦪꦸꦤꦶꦁꦱꦶꦤ꧀ꦠꦢꦢꦶꦩꦺꦤꦢꦶꦧꦼꦂꦤꦥ꦳ꦸꦱꦸꦏꦁꦒꦺꦴꦔꦢꦃꦢꦼꦔꦤ꧀ꦱꦶꦲꦱꦠ꧀ꦭꦶꦕꦶꦏ꧀ꦫꦲ꧀ꦮꦤꦚꦸꦂꦨꦩꦫꦶꦕꦚꦩꦂꦩꦶꦤꦔꦏꦶꦗꦁꦏꦼꦤ꧀ꦕꦤꦲꦶꦁꦢꦃꦱꦶꦤ꧀ꦠꦠꦼꦂꦠꦂꦶꦏ꧀ꦭꦤ꧀ꦚꦸꦮꦸꦤ꧀ꦫꦩꦤꦺꦔꦥ꧀ꦱꦠꦭꦶꦏꦫꦩꦩꦼꦔꦗꦂꦏꦶꦗꦁꦭꦏ꧀ꦱ꧀ꦩꦤꦤꦶꦁꦒꦭꦏꦼꦤ꧀ꦱꦶꦤ꧀ꦠꦥꦶꦪꦤ꧀ꦧꦏꦤ꧀ꦱꦲꦺꦩꦼꦤꦢꦼꦔꦂꦠꦼꦫꦶꦪꦏꦤ꧀ꦩꦶꦤ꧀ꦠꦠꦸꦭꦺꦴꦁꦪꦺꦁꦱꦗꦠꦺꦴꦱꦶꦥꦸꦤ꧀ꦱꦮꦫꦩꦫꦶꦕꦲꦶꦁꦏꦁꦢꦶꦱꦩꦂ",
+                paragraf9: "ꦫꦲ꧀ꦮꦤꦲꦶꦁꦏꦁꦚꦩꦂꦩꦶꦤꦔꦧꦿꦲꦩꦤꦠꦶꦪꦁꦱꦼꦥꦸꦲ꧀ꦢꦠꦼꦁꦱꦶꦤ꧀ꦠꦭꦤ꧀ꦚꦸꦭꦥ꧀ꦲꦶꦤꦶꦁꦭꦼꦭꦩ꧀ꦥꦲꦤ꧀ꦢꦠꦼꦁꦲꦭꦼꦁꦏꦩꦤꦸꦏ꧀ꦗꦠꦪꦸꦚꦺꦴꦧꦶꦤꦸꦭꦺꦴꦁꦱꦶꦤ꧀ꦠꦤꦔꦤ꧀ꦒꦸꦒꦸꦂꦱꦲꦺꦩꦼꦤꦢꦼꦔꦂꦠꦠꦸꦱ꧀ꦏꦭꦶꦪꦤ꧀ꦫꦲ꧀ꦮꦤ",
+                paragraf10: "ꦫꦩꦭꦤ꧀ꦭꦏ꧀ꦱ꧀ꦩꦤꦲꦶꦁꦏꦁꦮꦁꦱꦸꦭ꧀ꦤꦼꦩꦺꦴꦤꦏꦼꦤ꧀ꦱꦶꦤ꧀ꦠꦲꦶꦭꦁꦭꦗꦼꦁꦩꦺꦢꦺꦱꦶꦗꦺꦗꦏꦶꦥꦸꦤ꧀ꦥꦶꦪꦩꦧꦏꦶꦤ꧀ꦥꦼꦠꦼꦒꦭꦤ꧀ꦏꦭꦶꦪꦤ꧀ꦱꦸꦒꦿꦶꦮꦫꦗꦏꦺꦛꦼꦏ꧀ꦲꦶꦁꦏꦁꦢꦶꦥꦸꦤ꧀ꦲꦸꦱꦶꦂꦱꦏꦶꦁꦏꦫꦗꦤꦶꦥꦸꦤ꧀ꦢꦼꦤꦶꦁꦏꦁꦏꦁꦤꦾꦱꦸꦧꦭꦶꦫꦩꦤꦸꦭꦸꦁꦰꦸꦒꦿꦶꦮꦔꦿꦺꦧꦸꦠ꧀ꦩꦭꦶꦃꦏꦫꦗꦤꦶꦥꦸꦤ꧀ꦭꦤ꧀ꦩꦶꦤꦔꦏꦧꦭꦱꦤꦶꦥꦸꦤ꧀ꦱꦸꦒꦿꦶꦮꦔꦔꦺꦂꦏꦏꦼꦤ꧀ꦧꦭꦏꦺꦛꦼꦏ꧀ꦏꦁꦒꦺꦴꦒꦺꦴꦭꦼꦏ꧀ꦱꦶꦤ꧀ꦠ",
+                paragraf11: "ꦲꦤ꧀ꦤꦺꦴꦩꦤ꧀ꦥꦁꦭꦶꦩꦧꦭꦏꦺꦛꦼꦏ꧀ꦏꦱꦶꦭꦤꦼꦩꦺꦴꦤꦏꦼꦤ꧀ꦱꦶꦤ꧀ꦠꦲꦶꦁꦠꦩꦤ꧀ꦲꦱꦺꦴꦏꦲꦭꦼꦁꦏꦱꦶꦤ꧀ꦠꦢꦶꦠꦮꦤ꧀ꦲꦶꦁꦠꦼꦔꦃꦲꦭꦤ꧀ꦥꦭꦠꦫꦤ꧀ꦲꦶꦱ꧀ꦠꦤꦭꦤ꧀ꦢꦶꦗꦒꦢꦺꦤꦶꦁꦫꦏ꧀ꦱꦯꦶꦫꦏ꧀ꦱꦶꦲꦤ꧀ꦤꦺꦴꦩꦤ꧀ꦩꦺꦤꦼꦲꦶꦕꦶꦤ꧀ꦕꦶꦤ꧀ꦫꦩꦩꦶꦤꦔꦏꦠꦤ꧀ꦢꦭꦤ꧀ꦱꦩ꧀ꦥꦼꦏꦤꦏꦺꦨꦶꦁꦫꦩꦤꦼꦩ꧀ꦧꦺꦴꦤ꧀ꦤꦺꦩ꧀ꦥꦸꦤ꧀ꦱꦸꦱꦸꦤ꧀ꦧꦭꦏꦁꦒꦺꦴꦱꦺꦭꦩꦼꦠ꧀ꦏꦼꦤ꧀",
+                paragraf12: "ꦱꦧꦼꦢꦼꦂꦫꦶꦥꦸꦤ꧀ꦮꦁꦱꦸꦭ꧀ꦲꦤ꧀ꦤꦺꦴꦩꦤ꧀ꦩꦼꦩ꧀ꦧꦏꦂꦏꦺꦴꦠꦲꦭꦼꦁꦏꦏꦭꦶꦪꦤ꧀ꦧꦸꦤ꧀ꦠꦸꦠ꧀ꦤꦶꦥꦸꦤ꧀ꦲꦶꦁꦏꦁꦢꦶꦥꦸꦤ꧀ꦲꦺꦴꦧꦺꦴꦁꦢꦼꦤꦶꦁꦫꦲ꧀ꦮꦤꦠꦶꦤ꧀ꦢꦏꦤ꧀ꦆꦤꦶꦩꦶꦤꦔꦏꦥꦩ꧀ꦧꦭꦱꦤꦩꦕꦭꦩ꧀ꦢꦶꦲꦶꦤꦢꦼꦤꦶꦁꦫꦲ꧀ꦮꦤ",
+                paragraf13: "ꦫꦩꦭꦤ꧀ꦧꦭꦏꦺꦛꦼꦏ꧀ꦢꦸꦒꦶꦲꦶꦁꦥꦤ꧀ꦠꦲꦶꦱꦼꦭꦠꦤ꧀ꦆꦤ꧀ꦢꦶꦪꦧꦼꦂꦲꦢꦥ꧀ꦥꦤ꧀ꦢꦼꦔꦤ꧀ꦱꦒꦫꦠꦲꦶꦁꦏꦁꦩꦺꦩꦶꦱꦃꦏꦼꦤ꧀ꦥꦶꦪꦩꦧꦏꦶꦤ꧀ꦱꦏꦶꦁꦲꦭꦼꦁꦏꦲꦠꦱꦸꦭ꧀ꦤꦭꦥꦸꦠꦿꦮꦶꦱ꧀ꦮꦏꦂꦩꦢꦺꦮꦲꦫ꧀ꦱꦶꦠꦼꦏ꧀ꦠꦸꦂꦢꦶꦥꦸꦤ꧀ꦧꦔꦸꦤ꧀ꦗꦼꦩ꧀ꦧꦠꦤ꧀ꦱꦏꦶꦁꦧꦠꦸꦧꦠꦸꦲꦶꦁꦏꦁꦢꦶꦥꦸꦤ꧀ꦱꦼꦫꦠ꧀ꦫꦩꦭꦤ꧀ꦩꦼꦔꦥꦸꦁꦲꦶꦁꦤ꧀ꦢꦲꦺꦴꦥꦺꦂꦠꦺꦴꦪꦗꦼꦩ꧀ꦧꦠꦤ꧀ꦆꦤꦶꦢꦶꦏꦼꦤꦭ꧀ꦱꦺꦧꦒꦲꦶꦗꦼꦩ꧀ꦧꦠꦤ꧀ꦲꦢꦩ꧀ꦲꦠꦮꦫꦩꦱꦺꦠꦸ",
+                paragraf14: "ꦥꦼꦫꦁꦲꦒꦼꦁꦥꦸꦤ꧀ꦏꦢꦺꦴꦱꦭꦤ꧀ꦲꦤ꧀ꦠꦮꦶꦱꦶꦥꦸꦤ꧀ꦧꦭꦫꦩꦭꦤ꧀ꦧꦭꦲꦭꦼꦁꦏꦮꦶꦧꦶꦱꦤꦢꦶꦏꦶꦫꦲ꧀ꦮꦤꦲꦶꦁꦏꦁꦱꦲꦼꦠꦶꦲꦠꦶꦩꦧꦭꦺꦴꦠ꧀ꦭꦤ꧀ꦒꦧꦸꦁꦏꦭꦶꦪꦤ꧀ꦫꦩꦲꦩꦂꦒꦧꦺꦴꦠꦼꦤ꧀ꦱꦠꦸꦗꦸꦏꦭꦶꦪꦤ꧀ꦠꦸꦩꦶꦤ꧀ꦢꦏꦏꦁꦏꦁꦤꦶꦥꦸꦤ꧀ꦥꦼꦂꦧꦸꦠꦤ꧀ꦏꦏꦁꦤꦶꦥꦸꦤ꧀ꦲꦶꦁꦥꦼꦂꦠꦼꦩ꧀ꦥꦸꦂꦱꦼꦔꦶꦠ꧀ꦏꦛꦃꦥꦲꦼꦭꦮꦤ꧀ꦱꦏꦶꦁꦏꦭꦶꦃꦧꦺꦭꦃꦥꦶꦃꦏꦁꦒꦺꦴꦒꦸꦒꦸꦂ",
+                paragraf15: "ꦥꦼꦥꦼꦫꦁꦔꦤ꧀ꦥꦸꦁꦏꦱꦤ꧀ꦏꦢꦺꦴꦱꦭꦤ꧀ꦲꦤ꧀ꦠꦮꦶꦱꦶꦥꦸꦤ꧀ꦫꦩꦭꦤ꧀ꦫꦲ꧀ꦮꦤꦫꦲ꧀ꦮꦤꦒꦢꦃꦏꦼꦱꦏ꧀ꦠꦶꦪꦤ꧀ꦲꦶꦁꦏꦁꦭꦸꦮꦂꦧꦶꦱꦲꦩꦕꦭꦩ꧀ꦏꦚꦺꦴꦒꦶꦲꦤꦸꦒꦼꦫꦃꦱꦏꦶꦁꦧꦿꦲ꧀ꦩꦧꦃꦮꦤꦢꦶꦥꦸꦤ꧀ꦠꦶꦢꦏ꧀ꦧꦶꦱꦩꦸꦤ꧀ꦢꦶꦥꦸꦤ꧀ꦥꦼꦗꦲꦶꦢꦼꦤꦶꦁꦢꦺꦮꦲꦠꦮꦩꦏ꧀ꦭꦸꦏ꧀ꦒꦲꦶꦧ꧀ꦤꦔꦤ꧀ꦫꦩꦩꦶꦤꦔꦏꦩꦤꦸꦁꦱꦲꦺꦩꦩ꧀ꦥꦸꦤ꧀ꦔꦭꦃꦏꦼꦤ꧀",
+                paragraf16: "ꦱꦼꦱꦩ꧀ꦥꦸꦤꦶꦥꦸꦤ꧀ꦥꦼꦥꦼꦫꦁꦔꦤ꧀ꦲꦶꦁꦏꦁꦱꦁꦏꦼꦠ꧀ꦱꦼꦔꦶꦠ꧀ꦫꦩꦦꦸꦁꦏꦱꦤꦶꦥꦸꦤ꧀ꦏꦱꦶꦭ꧀ꦩꦺꦗꦲꦶꦫꦲ꧀ꦮꦤꦏꦭꦶꦪꦤ꧀ꦥꦤꦃꦨꦿꦲ꧀ꦩꦱ꧀ꦠꦿꦱꦧꦼꦢꦼꦂꦩꦼꦔꦶꦁꦒꦭ꧀ꦫꦲ꧀ꦮꦤꦲꦺꦭꦶꦁꦧꦧꦏꦭꦺꦥꦠꦤꦶꦥꦸꦤ꧀ꦭꦤ꧀ꦚꦸꦮꦸꦤ꧀ꦩꦔꦥꦸꦤ꧀ꦫꦩꦩꦼꦔꦼꦂꦤ꧀ꦠꦃꦏꦼꦤ꧀ꦥꦼꦔꦼꦧꦸꦫꦤ꧀ꦲꦶꦁꦏꦁꦭꦪꦱ꧀ꦏꦁꦒꦺꦴꦫꦲ꧀ꦮꦤꦩꦼꦔꦏꦸꦤꦶꦧꦃꦮꦩꦸꦱꦸꦲꦶꦥꦸꦤ꧀ꦥꦸꦤ꧀ꦫꦗꦲꦶꦁꦏꦁꦲꦒꦸꦁ",
+                paragraf17: "ꦱꦼꦱꦩ꧀ꦥꦸꦤꦶꦥꦸꦤ꧀ꦫꦲ꧀ꦮꦤꦠꦼꦮꦱ꧀ꦫꦩꦱꦺꦭꦩꦼꦠ꧀ꦏꦼꦤ꧀ꦱꦶꦤ꧀ꦠꦤꦔꦤ꧀ꦲꦩꦂꦒꦱꦶꦤ꧀ꦠꦠꦼꦭꦃꦩꦔꦼꦤ꧀ꦒꦺꦴꦤ꧀ꦢꦫꦶꦥꦸꦤ꧀ꦒꦿꦶꦪꦩꦸꦱꦸꦲꦶꦁꦏꦁꦧꦸꦏꦤ꧀ꦩꦲꦂꦩꦶꦥꦸꦤ꧀ꦫꦩꦚꦸꦮꦸꦤ꧀ꦱꦶꦤ꧀ꦠꦩꦼꦩ꧀ꦧꦸꦏ꧀ꦠꦶꦏꦏꦱꦸꦕꦶꦪꦤꦶꦥꦸꦤ꧀ꦏꦭꦶꦪꦤ꧀ꦲꦸꦗꦶꦪꦤ꧀ꦄꦥꦶꦄꦒ꧀ꦤꦶꦥꦫꦶꦏ꧀ꦱꦱꦶꦤ꧀ꦠꦩꦼꦭꦺꦧꦼꦠ꧀ꦲꦶꦁꦤ꧀ꦗꦼꦫꦺꦴꦄꦥꦶꦱꦸꦕꦶꦭꦤ꧀ꦩꦼꦢꦭ꧀ꦠꦤ꧀ꦥꦠꦸꦏ꧀ꦩꦼꦩ꧀ꦧꦸꦏ꧀ꦠꦶꦏꦏꦱꦸꦕꦶꦪꦤꦶꦥꦸꦤ꧀ꦱꦭꦩꦶꦲꦶꦁꦥꦤꦮꦤꦤ꧀",
+                paragraf18: "ꦫꦩꦱꦶꦤ꧀ꦠꦭꦤ꧀ꦭꦏ꧀ꦱ꧀ꦩꦤꦮꦁꦱꦸꦭ꧀ꦢꦠꦼꦁꦲꦪꦺꦴꦢ꧀ꦢꦾꦱꦲꦺꦩꦼꦱꦩ꧀ꦥꦸꦤꦶꦥꦸꦤ꧀ꦠꦼꦭꦸꦱ꧀ꦥꦸꦭꦸꦃꦠꦲꦸꦤ꧀ꦧꦫꦠꦭꦤ꧀ꦱꦼꦢꦪꦫꦏꦾꦠꦲꦪꦺꦴꦢ꧀ꦢꦾꦫꦩꦢꦶꦤꦺꦴꦧꦠ꧀ꦏꦼꦤ꧀ꦱꦺꦧꦒꦲꦫꦗꦭꦤ꧀ꦩꦼꦩꦺꦫꦺꦤ꧀ꦠꦲ꧀ꦏꦢꦶꦭ꧀ꦲꦶꦁꦩꦱꦲꦶꦁꦏꦁꦢꦶꦥꦸꦤ꧀ꦱꦼꦧꦸꦠ꧀ꦫꦩꦫꦗꦾꦗꦩꦤ꧀ꦏꦼꦩꦱꦤ꧀ꦢꦶꦩꦤꦥꦺꦫꦗꦸꦱ꧀ꦠꦶꦭꦤ꧀ꦏꦩꦏ꧀ꦩꦸꦂꦲꦤ꧀ꦩꦼꦫꦠ",
+                paragraf19: "ꦩꦼꦱ꧀ꦏꦶꦠꦭꦃꦩꦼꦩ꧀ꦧꦸꦏ꧀ꦠꦶꦏꦏꦤ꧀ꦏꦱꦸꦕꦶꦪꦤꦶꦥꦸꦤ꧀ꦱꦥꦼꦂꦠꦲꦺꦴꦫꦏꦾꦠꦶꦱꦶꦃꦩꦼꦫꦒꦸꦏꦏꦱꦸꦕꦶꦪꦤ꧀ꦱꦶꦤ꧀ꦠꦏꦁꦒꦺꦴꦤꦗꦒꦱꦠꦧꦶꦭꦶꦠꦱ꧀ꦏꦫꦗꦤ꧀ꦫꦩꦢꦼꦔꦤ꧀ꦏꦧꦼꦠꦃꦲꦠꦶꦩꦔꦱꦶꦁꦏꦼꦤ꧀ꦱꦶꦤ꧀ꦠꦲꦶꦁꦏꦁꦤꦼꦩ꧀ꦧꦺꦔꦤ꧀ꦢꦸꦠꦲꦶꦁꦏꦁꦢꦠꦼꦁꦲꦭꦱ꧀ꦱꦶꦤ꧀ꦠꦩꦔꦼꦤ꧀ꦢꦶꦥꦼꦂꦠꦥꦺꦴꦤ꧀ꦮꦭ꧀ꦩꦶꦏꦶꦭꦤ꧀ꦩꦼꦭꦲꦶꦂꦏꦤ꧀ꦢꦮꦏꦁꦏꦸꦠꦸꦧꦔꦸꦤ꧀ꦏꦸꦱꦭꦤ꧀ꦭꦮ",
+                paragraf20: "ꦧꦼꦂꦠꦲꦸꦤ꧀ꦠꦲꦸꦤ꧀ꦱꦭꦗꦼꦁꦤꦶꦥꦸꦤ꧀ꦏꦸꦱꦭꦤ꧀ꦭꦮꦲꦶꦁꦏꦁꦱꦩ꧀ꦥꦸꦤ꧀ꦢꦺꦮꦱꦲꦤꦺꦏꦼꦱꦂꦏꦶꦱꦃꦫꦩꦪꦤꦲꦶꦁꦔꦗꦼꦁꦫꦩꦫꦩꦲꦺꦭꦶꦁꦧꦃꦮꦤꦶꦥꦸꦤ꧀ꦥꦸꦠꦿꦤꦶꦥꦸꦤ꧀ꦱꦶꦤ꧀ꦠꦢꦶꦥꦔꦶꦭ꧀ꦩꦭꦶꦃꦏꦁꦒꦺꦴꦧꦼꦂꦠꦶꦏꦤ꧀ꦏꦱꦸꦕꦶꦪꦤꦶꦥꦸꦤ꧀ꦱꦏꦭꦶꦭꦔꦶꦱꦶꦤ꧀ꦠꦧꦼꦂꦱꦸꦩ꧀ꦥꦲꦠꦱꦤꦩꦧꦸꦩꦶꦲꦶꦧꦸꦭꦤ꧀ꦧꦸꦩꦶꦥꦸꦤ꧀ꦧꦶꦏꦏ꧀ꦤꦼꦥꦶꦩꦭꦤ꧀ꦩꦼꦩ꧀ꦧꦸꦏ꧀ꦠꦶꦏꦏꦱꦸꦕꦶꦪꦤꦶꦥꦸꦤ꧀ꦲꦶꦁꦏꦁꦭꦔꦼꦁ",
+                paragraf21: "ꦫꦩꦦꦸꦁꦏꦱꦤꦶꦥꦸꦤ꧀ꦫꦩ꧀ꦥꦸꦁꦏꦤ꧀ꦠꦸꦒꦱꦶꦥꦸꦤ꧀ꦩꦶꦤꦔꦏꦮꦠꦫꦮꦶꦱ꧀ꦤꦸꦭꦤ꧀ꦮꦁꦱꦸꦭ꧀ꦢꦠꦼꦁꦑꦲꦾꦁꦔꦤ꧀ꦩꦶꦁꦒꦭꦏꦼꦤ꧀ꦮꦫꦶꦱꦤ꧀ꦏꦶꦱꦃꦧꦧꦢꦿꦩꦑꦱꦼꦠꦾꦤ꧀ꦭꦤ꧀ꦑꦱꦸꦚꦠꦤ꧀",
+
+                // Highlight Box
+                nilaiFilosofis: "ꦤꦶꦭꦲꦶꦦ꦳ꦶꦭꦺꦴꦱꦺꦴꦦꦶꦱ꧀ꦫꦩꦪꦤ",
+                nilaiDeskripsi: "ꦫꦩꦪꦤꦔꦗꦂꦏꦏꦼꦤ꧀ꦧꦧꦥꦼꦤ꧀ꦠꦶꦁꦤꦶꦁꦔ꧀ꦭꦩ꧀ꦥꦃꦏꦢꦿꦩꦏꦮꦗꦶꦧꦤ꧀ꦑꦱꦼꦠꦾꦤ꧀ꦲꦶꦁꦥꦮꦶꦮꦲꦤ꧀ꦧꦏ꧀ꦠꦶꦢꦠꦼꦁꦠꦶꦪꦁꦱꦼꦥꦸꦲ꧀ꦭꦤ꧀ꦑꦥꦼꦩꦶꦩ꧀ꦥꦶꦤꦤ꧀ꦲꦶꦁꦏꦁꦲꦢꦶꦭ꧀ꦏꦶꦱꦃꦆꦤꦶꦪꦸꦒꦶꦤꦺꦢꦃꦏꦼꦤ꧀ꦪꦺꦤ꧀ꦥꦶꦲꦭꦏꦏꦢꦺꦱꦶꦁꦏꦁꦢꦶꦥꦸꦤ꧀ꦮꦏꦶꦭꦶꦢꦼꦤꦶꦁꦫꦲ꧀ꦮꦤ꧀ꦥꦢꦥꦸꦁꦏꦱꦤꦶꦥꦸꦤ꧀ꦧꦢꦲꦺꦢꦶꦥꦸꦤ꧀ꦭꦃꦏꦼꦤ꧀ꦢꦼꦤꦶꦁꦑꦧꦼꦕꦶꦏꦤ꧀ꦲꦸꦧꦸꦁꦔꦤ꧀ꦲꦤ꧀ꦠꦮꦶꦱꦶꦥꦸꦤ꧀ꦫꦩꦭꦤ꧀ꦲꦤ꧀ꦤꦺꦴꦩꦤ꧀ꦩꦼꦭꦩ꧀ꦧꦁꦏꦼꦤ꧀ꦑꦱꦼꦠꦾꦤ꧀ꦭꦤ꧀ꦥꦩ꧀ꦧꦏ꧀ꦠꦶꦠꦤ꧀ꦥꦩ꧀ꦫꦶꦃ"
+            },
+
+            jv_script: {
+                // Navbar
+                beranda: "ꦧꦼꦫꦤ꧀ꦢ",
+                critaWayang: "ꦕꦿꦶꦠꦮꦪꦁ",
+                tokohWayang: "ꦠꦺꦴꦏꦺꦴꦲ꧀ꦮꦪꦁ",
+                mahabharata: "ꦩꦲꦧꦿꦠ",
+                ramayana: "ꦫꦩꦪꦤ",
+                dewaruci: "ꦢꦺꦮꦫꦸꦕꦶ",
+
+                // Header
+                judulHalaman: "ꦫꦩꦪꦤ",
+                subJudul: "ꦏꦶꦱꦃꦠꦿꦼꦱ꧀ꦤꦭꦤ꧀ꦑꦱꦼꦠꦾꦤ꧀ꦫꦩꦭꦤ꧀ꦱꦶꦤ꧀ꦠꦱꦂꦠꦥꦼꦂꦗꦸꦁꦔꦤ꧀ꦔ꧀ꦭꦮꦤ꧀ꦫꦲ꧀ꦮꦤ",
+
+                // Konten
+                judulCerita: "ꦫꦩꦪꦤ",
+                deskripsiCerita: "ꦏꦶꦱꦃꦠꦿꦼꦱ꧀ꦤꦭꦤ꧀ꦑꦱꦼꦠꦾꦤ꧀ꦫꦩꦭꦤ꧀ꦱꦶꦤ꧀ꦠꦱꦂꦠꦥꦼꦂꦗꦸꦁꦔꦤ꧀ꦔ꧀ꦭꦮꦤ꧀ꦫꦲ꧀ꦮꦤ",
+
+                // Subjudul - SEMUA DITERJEMAHKAN LENGKAP
+                subJudul1: "ꦭꦠꦂꦩꦼꦧꦸꦫꦶꦭꦤ꧀ꦭꦲꦶꦫꦶꦥꦸꦤ꧀ꦫꦩ",
+                subJudul2: "ꦥꦮꦶꦮꦲꦤ꧀ꦫꦩꦭꦤ꧀ꦱꦶꦤ꧀ꦠ",
+                subJudul3: "ꦥꦔꦱꦶꦁꦔꦤ꧀ꦢꦠꦼꦁꦲꦭꦱ꧀",
+                subJudul4: "ꦥꦚꦸꦭꦥꦤ꧀ꦱꦶꦤ꧀ꦠꦢꦼꦤꦶꦁꦫꦲ꧀ꦮꦤ",
+                subJudul5: "ꦥꦔ꧀ꦒꦺꦴꦭꦼꦏ꧀ꦱꦶꦤ꧀ꦠꦭꦤ꧀ꦥꦠꦼꦒꦺꦴꦭꦤ꧀ꦏꦭꦶꦪꦤ꧀ꦲꦤ꧀ꦤꦺꦴꦩꦤ꧀",
+                subJudul6: "ꦥꦩ꧀ꦧꦔꦸꦤꦤ꧀ꦗꦠꦏꦭꦤ꧀ꦥꦼꦚꦼꦫꦁꦔꦤ꧀ꦢꦠꦼꦁꦲꦭꦼꦁꦏ",
+                subJudul7: "ꦥꦼꦥꦼꦫꦁꦔꦤ꧀ꦥꦸꦁꦏꦱꦤ꧀ꦭꦤ꧀ꦥꦼꦗꦲꦶꦥꦸꦤ꧀ꦫꦲ꧀ꦮꦤ",
+                subJudul8: "ꦈꦗꦶꦪꦤ꧀ꦑꦱꦸꦕꦶꦪꦤ꧀ꦱꦶꦤ꧀ꦠꦭꦤ꧀ꦮꦁꦱꦸꦭ꧀ꦢꦠꦼꦁꦲꦪꦺꦴꦢ꧀ꦢꦾ",
+                subJudul9: "ꦥꦔꦱꦶꦁꦔꦤ꧀ꦱꦶꦤ꧀ꦠꦭꦤ꧀ꦥꦸꦁꦏꦱꦤ꧀ꦕꦿꦶꦠ",
+
+                // Paragraf - SEMUA DITERJEMAHKAN LENGKAP
+                paragraf1: "ꦫꦩꦪꦤꦥꦸꦤꦶꦏꦮꦶꦫꦕꦫꦶꦠꦲꦒꦼꦁꦱꦏꦶꦁꦆꦤ꧀ꦢꦶꦪꦲꦶꦁꦏꦁꦢꦶꦥꦸꦤ꧀ꦱꦼꦫꦠ꧀ꦢꦼꦤꦶꦁꦮꦭ꧀ꦩꦶꦏꦶꦏꦶꦱꦃꦆꦤꦶꦮꦺꦴꦤ꧀ꦠꦼꦤ꧀ꦲꦶꦁꦭꦼꦭꦩ꧀ꦥꦲꦤ꧀ꦫꦩꦥꦸꦠꦿꦩꦲꦏꦺꦴꦠꦏꦫꦗꦤ꧀ꦑꦺꦴꦱꦭꦲꦶꦁꦏꦁꦲꦶꦧꦸꦏꦺꦴꦠꦤꦶꦥꦸꦤ꧀ꦲꦪꦺꦴꦢ꧀ꦢꦾꦫꦩꦥꦸꦤꦶꦏꦮꦠꦫꦱꦏꦶꦁꦢꦺꦮꦮꦶꦱ꧀ꦤꦸꦲꦶꦁꦏꦁꦠꦸꦫꦸꦤ꧀ꦢꦠꦼꦁꦢꦺꦴꦤꦾꦏꦁꦒꦺꦴꦤꦸꦩ꧀ꦥꦼꦱ꧀ꦥꦶꦲꦭꦲꦶꦁꦏꦁꦢꦶꦥꦸꦤ꧀ꦮꦏꦶꦭꦶꦢꦼꦤꦶꦁꦫꦲ꧀ꦮꦤꦫꦗꦫꦏ꧀ꦱꦱꦏꦶꦁꦲꦭꦼꦁꦏ",
+                paragraf2: "ꦫꦩꦥꦸꦤꦶꦏꦥꦸꦠꦿꦥꦭꦶꦁꦱꦼꦥꦸꦲ꧀ꦱꦏꦶꦁꦥꦿꦧꦸꦢꦱꦫꦠꦫꦗꦲꦪꦺꦴꦢ꧀ꦢꦾꦲꦶꦁꦏꦁꦒꦢꦃꦠꦶꦒꦥꦼꦂꦩꦲꦶꦱꦻꦑꦻꦴꦸꦱꦭꦾꦲꦶꦧꦸꦫꦩꦑꦺꦴꦪꦺꦼꦭꦶꦲꦶꦧꦸꦧꦫꦠꦭꦤ꧀ꦱꦸꦩꦶꦠꦿꦲꦶꦧꦸꦭꦏ꧀ꦱ꧀ꦩꦤꦭꦤ꧀ꦱꦠꦿꦸꦒ꧀ꦤꦱꦏꦶꦠꦭꦶꦠ꧀ꦫꦩꦱꦩ꧀ꦥꦸꦤ꧀ꦤꦺꦢꦃꦏꦼꦤ꧀ꦱꦶꦥꦠ꧀ꦱꦶꦥꦠ꧀ꦑꦼꦱꦠꦿꦶꦪꦲꦶꦁꦏꦁꦱꦩ꧀ꦥꦸꦂꦤꦧꦸꦢꦶꦭꦸꦲꦸꦂꦧꦼꦫꦤꦶꦭꦤ꧀ꦧꦶꦗꦏ꧀ꦱꦤ",
+                paragraf3: "ꦤꦭꦶꦏꦢꦺꦮꦱꦫꦩꦤ꧀ꦢꦼꦫꦺꦠ꧀ꦱꦪꦼꦩ꧀ꦧꦫꦲꦶꦁꦏꦁꦢꦶꦥꦸꦤ꧀ꦲꦢꦤꦶꦢꦼꦤꦶꦁꦥꦿꦧꦸꦗꦤꦏꦱꦏꦶꦁꦏꦫꦗꦤ꧀ꦮꦶꦢꦺꦲꦱꦪꦼꦩ꧀ꦧꦫꦥꦸꦤꦶꦏꦩꦼꦩ꧀ꦧꦼꦤ꧀ꦠꦁꦏꦤ꧀ꦧꦸꦱꦸꦂꦥꦸꦱꦏꦥꦼꦥꦂꦲꦶꦁꦏꦁꦢꦶꦥꦸꦤ꧀ꦩꦤꦃꦏꦏꦺꦢꦺꦮꦱꦶꦮꦧꦚꦏ꧀ꦏꦺꦱꦠꦿꦶꦪꦒꦒꦭ꧀ꦩꦭꦃꦠꦶꦢꦏ꧀ꦱꦒꦼꦠ꧀ꦔꦁꦏꦠ꧀ꦧꦸꦱꦸꦂꦥꦸꦤꦶꦏꦤꦔꦤ꧀ꦫꦩꦠꦶꦢꦏ꧀ꦤꦩꦸꦁꦏꦱꦶꦭꦔꦁꦏꦠ꧀ꦤꦔꦤ꧀ꦩꦠꦏꦏꦼꦤ꧀",
+                paragraf4: "ꦩꦶꦤꦔꦏꦧꦼꦧꦸꦔꦃꦏꦩꦼꦤꦁꦔꦤ꧀ꦫꦩꦢꦶꦥꦸꦤ꧀ꦥꦭꦏꦿꦩꦶꦏꦭꦶꦪꦤ꧀ꦱꦶꦤ꧀ꦠꦥꦸꦠꦿꦶꦥꦿꦧꦸꦗꦤꦏꦱꦶꦤ꧀ꦠꦱꦗꦠꦺꦴꦱꦶꦥꦸꦤ꧀ꦧꦸꦏꦤ꧀ꦥꦸꦠꦿꦶꦏꦤ꧀ꦢꦁꦗꦤꦏꦤꦔꦤ꧀ꦢꦶꦥꦸꦤ꧀ꦥꦼꦩꦸꦤꦒꦶꦤꦭꦶꦏꦮꦭꦶꦏꦩꦧꦗꦏ꧀ꦱꦮꦃꦱꦲꦶꦁꦒꦢꦶꦥꦸꦤ꧀ꦱꦼꦧꦸꦠ꧀ꦥꦸꦠꦿꦶꦧꦸꦩꦶꦥꦮꦶꦮꦲꦤꦶꦥꦸꦤ꧀ꦢꦶꦭꦏꦺꦴꦱꦏꦏꦤ꧀ꦩꦼꦒꦃꦭꦤ꧀ꦫꦩꦩꦼꦩ꧀ꦧꦮꦱꦶꦤ꧀ꦠꦢꦠꦼꦁꦲꦪꦺꦴꦢ꧀ꦢꦾ",
+                paragraf5: "ꦤꦭꦶꦏꦥꦿꦧꦸꦢꦱꦫꦠꦧꦢꦲꦤꦾꦺꦂꦱꦺꦫꦃꦏꦏꦠꦠꦢꦏꦺꦫꦩꦩꦸꦤ꧀ꦕꦸꦏꦶꦤ꧀ꦠꦿꦶꦏꦱꦏꦶꦁꦥꦼꦂꦩꦲꦶꦱꦻꦑꦻꦴꦼꦭꦶꦲꦶꦁꦏꦁꦢꦶꦥꦸꦤ꧀ꦢꦺꦴꦔꦺꦴꦔꦶꦢꦼꦤꦶꦁꦢꦪꦁꦤꦶꦥꦸꦤ꧀ꦩꦤ꧀ꦛꦫꦑꦻꦴꦼꦭꦶꦔꦶꦁꦏꦼꦠ꧀ꦢꦱꦫꦠꦧꦧꦏꦭꦶꦃꦗꦤ꧀ꦗꦶꦪꦺꦁꦤꦠꦼꦢꦶꦥꦸꦤ꧀ꦲꦸꦕꦥꦏꦼꦤ꧀ꦢꦲꦸꦭꦸꦗꦤ꧀ꦗꦶꦏꦥꦼꦂꦠꦩꦩꦔꦁꦏꦠ꧀ꦧꦫꦠꦲꦱꦺꦥꦸꦠꦿꦩꦲꦏꦺꦴꦠꦭꦤ꧀ꦗꦤ꧀ꦗꦶꦏꦼꦥꦶꦁꦏꦭꦶꦃꦩꦔꦱꦶꦁꦏꦼꦤ꧀ꦫꦩꦢꦠꦼꦁꦲꦭꦱ꧀ꦱꦭꦩꦶꦤ꧀ꦔꦥꦸꦭꦸꦃꦠꦲꦸꦤ꧀",
+                paragraf6: "ꦢꦼꦔꦤ꧀ꦏꦧꦼꦠꦃꦔꦤ꧀ꦢꦱꦫꦠꦠꦼꦂꦥꦏ꧀ꦱꦼꦩꦼꦤꦸꦲꦶꦪꦤ꧀ꦗꦤ꧀ꦗꦶꦤꦶꦥꦸꦤ꧀ꦫꦩꦢꦼꦔꦤ꧀ꦲꦶꦏ꧀ꦲꦱ꧀ꦤꦼꦂꦩꦏꦸꦠꦸꦱꦤ꧀ꦲꦾꦁꦭꦤ꧀ꦧꦼꦫꦁꦏꦠ꧀ꦢꦠꦼꦁꦲꦭꦱ꧀ꦢꦤ꧀ꦢꦏꦱꦶꦤ꧀ꦠꦩꦸꦠꦸꦱ꧀ꦏꦤ꧀ꦩꦼꦤꦺꦴꦭꦸꦱꦸꦩꦶꦤꦶꦥꦸꦤ꧀ꦒꦺꦴꦠꦥꦭꦏ꧀ꦱꦲꦩꦤꦱꦺꦠꦾꦤꦺꦩꦼꦤꦺꦩ꧀ꦥꦤꦶꦏꦏꦏꦁꦤꦾꦥꦼꦫꦁꦕꦶꦤ꧀ꦠꦩꦼꦩ꧀ꦧꦮꦱꦶꦤ꧀ꦠꦥꦶꦪꦤ꧀ꦧꦏꦤ꧀ꦏꦧꦼꦥꦼꦂꦒꦶꦪꦤꦶꦥꦸꦤ꧀ꦫꦩꦩꦼꦔꦏꦏꦼꦤ꧀ꦢꦱꦫꦠꦩꦼꦔꦶꦁꦒꦭ꧀ꦏꦮꦤ꧀ꦠꦸꦁꦒꦭ꧀ꦲꦠꦶ",
+                paragraf7: "ꦢꦶꦲꦭꦱ꧀ꦢꦤ꧀ꦢꦏꦫꦩꦱꦶꦤ꧀ꦠꦭꦤ꧀ꦭꦏ꧀ꦱ꧀ꦩꦤꦒꦼꦱꦁꦩꦶꦤꦔꦏꦥꦼꦂꦠꦥꦱꦪꦨꦶꦤꦺꦴꦩꦸꦤ꧀ꦕꦸꦭ꧀ꦫꦏ꧀ꦱꦯꦶꦱꦸꦂꦥꦤꦏꦲꦢꦶꦏ꧀ꦫꦲ꧀ꦮꦤꦲꦶꦁꦏꦁꦗꦠꦸꦃꦕꦶꦤ꧀ꦠꦏꦺꦫꦩꦩꦕꦭꦩ꧀ꦢꦶꦠꦺꦴꦭꦏ꧀ꦱꦸꦂꦥꦤꦏꦲꦤꦺꦫꦁꦱꦶꦤ꧀ꦠꦤꦔꦤ꧀ꦲꦶꦢꦸꦁꦤꦶꦥꦸꦤ꧀ꦥꦼꦢꦺꦴꦠ꧀ꦢꦼꦤꦶꦁꦭꦏ꧀ꦱ꧀ꦩꦤꦱꦸꦂꦥꦤꦏꦲꦢꦸꦢꦢꦏꦏꦁꦤꦾꦫꦲ꧀ꦮꦤ",
+                paragraf8: "ꦫꦲ꧀ꦮꦤꦲꦶꦁꦏꦁꦔꦿꦸꦁꦺꦴꦏꦏꦺꦌꦪꦸꦤꦶꦁꦱꦶꦤ꧀ꦠꦢꦢꦶꦩꦺꦤꦢꦶꦧꦼꦂꦤꦥ꦳ꦸꦱꦸꦏꦁꦒꦺꦴꦔꦢꦃꦢꦼꦔꦤ꧀ꦱꦶꦲꦱꦠ꧀ꦭꦶꦕꦶꦏ꧀ꦫꦲ꧀ꦮꦤꦚꦸꦂꦨꦩꦫꦶꦕꦚꦩꦂꦩꦶꦤꦔꦏꦶꦗꦁꦏꦼꦤ꧀ꦕꦤꦲꦶꦁꦢꦃꦱꦶꦤ꧀ꦠꦠꦼꦂꦠꦂꦶꦏ꧀ꦭꦤ꧀ꦚꦸꦮꦸꦤ꧀ꦫꦩꦤꦺꦔꦥ꧀ꦱꦠꦭꦶꦏꦫꦩꦩꦼꦔꦗꦂꦏꦶꦗꦁꦭꦏ꧀ꦱ꧀ꦩꦤꦤꦶꦁꦒꦭꦏꦼꦤ꧀ꦱꦶꦤ꧀ꦠꦥꦶꦪꦤ꧀ꦧꦏꦤ꧀ꦱꦲꦺꦩꦼꦤꦢꦼꦔꦂꦠꦼꦫꦶꦪꦏꦤ꧀ꦩꦶꦤ꧀ꦠꦠꦸꦭꦺꦴꦁꦪꦺꦁꦱꦗꦠꦺꦴꦱꦶꦥꦸꦤ꧀ꦱꦮꦫꦩꦫꦶꦕꦲꦶꦁꦏꦁꦢꦶꦱꦩꦂ",
+                paragraf9: "ꦫꦲ꧀ꦮꦤꦲꦶꦁꦏꦁꦚꦩꦂꦩꦶꦤꦔꦧꦿꦲꦩꦤꦠꦶꦪꦁꦱꦼꦥꦸꦲ꧀ꦢꦠꦼꦁꦱꦶꦤ꧀ꦠꦭꦤ꧀ꦚꦸꦭꦥ꧀ꦲꦶꦤꦶꦁꦭꦼꦭꦩ꧀ꦥꦲꦤ꧀ꦢꦠꦼꦁꦲꦭꦼꦁꦏꦩꦤꦸꦏ꧀ꦗꦠꦪꦸꦚꦺꦴꦧꦶꦤꦸꦭꦺꦴꦁꦱꦶꦤ꧀ꦠꦤꦔꦤ꧀ꦒꦸꦒꦸꦂꦱꦲꦺꦩꦼꦤꦢꦼꦔꦂꦠꦠꦸꦱ꧀ꦏꦭꦶꦪꦤ꧀ꦫꦲ꧀ꦮꦤ",
+                paragraf10: "ꦫꦩꦭꦤ꧀ꦭꦏ꧀ꦱ꧀ꦩꦤꦲꦶꦁꦏꦁꦮꦁꦱꦸꦭ꧀ꦤꦼꦩꦺꦴꦤꦏꦼꦤ꧀ꦱꦶꦤ꧀ꦠꦲꦶꦭꦁꦭꦗꦼꦁꦩꦺꦢꦺꦱꦶꦗꦺꦗꦏꦶꦥꦸꦤ꧀ꦥꦶꦪꦩꦧꦶꦏꦶꦤ꧀ꦥꦼꦠꦼꦒꦭꦤ꧀ꦏꦭꦶꦪꦤ꧀ꦱꦸꦒꦿꦶꦮꦫꦗꦏꦺꦛꦼꦏ꧀ꦲꦶꦁꦏꦁꦢꦶꦥꦸꦤ꧀ꦲꦸꦱꦶꦂꦱꦏꦶꦁꦏꦫꦗꦤꦶꦥꦸꦤ꧀ꦢꦼꦤꦶꦁꦏꦁꦏꦁꦤꦾꦱꦸꦧꦭꦶꦫꦩꦤꦸꦭꦸꦁꦰꦸꦒꦿꦶꦮꦔꦿꦺꦧꦸꦠ꧀ꦩꦭꦶꦃꦏꦫꦗꦤꦶꦥꦸꦤ꧀ꦭꦤ꧀ꦩꦶꦤꦔꦏꦧꦭꦱꦤꦶꦥꦸꦤ꧀ꦱꦸꦒꦿꦶꦮꦔꦔꦺꦂꦏꦏꦼꦤ꧀ꦧꦭꦏꦺꦛꦼꦏ꧀ꦏꦁꦒꦺꦴꦒꦺꦴꦭꦼꦏ꧀ꦱꦶꦤ꧀ꦠ",
+                paragraf11: "ꦲꦤ꧀ꦤꦺꦴꦩꦤ꧀ꦥꦁꦭꦶꦩꦧꦭꦏꦺꦛꦼꦏ꧀ꦏꦱꦶꦭꦤꦼꦩꦺꦴꦤꦏꦼꦤ꧀ꦱꦶꦤ꧀ꦠꦲꦶꦁꦠꦩꦤ꧀ꦲꦱꦺꦴꦏꦲꦭꦼꦁꦏꦱꦶꦤ꧀ꦠꦢꦶꦠꦮꦤ꧀ꦲꦶꦁꦠꦼꦔꦃꦲꦭꦤ꧀ꦥꦭꦠꦫꦤ꧀ꦲꦶꦱ꧀ꦠꦤꦭꦤ꧀ꦢꦶꦗꦒꦢꦺꦤꦶꦁꦫꦏ꧀ꦱꦯꦶꦫꦏ꧀ꦱꦶꦲꦤ꧀ꦤꦺꦴꦩꦤ꧀ꦩꦺꦤꦼꦲꦶꦕꦶꦤ꧀ꦕꦶꦤ꧀ꦫꦩꦩꦶꦤꦔꦏꦠꦤ꧀ꦢꦭꦤ꧀ꦱꦩ꧀ꦥꦼꦏꦤꦏꦺꦨꦶꦁꦫꦩꦤꦼꦩ꧀ꦧꦺꦴꦤ꧀ꦤꦺꦩ꧀ꦥꦸꦤ꧀ꦱꦸꦱꦸꦤ꧀ꦧꦭꦏꦁꦒꦺꦴꦱꦺꦭꦩꦼꦠ꧀ꦏꦼꦤ꧀",
+                paragraf12: "ꦱꦧꦼꦢꦼꦂꦫꦶꦥꦸꦤ꧀ꦮꦁꦱꦸꦭ꧀ꦲꦤ꧀ꦤꦺꦴꦩꦤ꧀ꦩꦼꦩ꧀ꦧꦏꦂꦏꦺꦴꦠꦲꦭꦼꦁꦏꦏꦭꦶꦪꦤ꧀ꦧꦸꦤ꧀ꦠꦸꦠ꧀ꦤꦶꦥꦸꦤ꧀ꦲꦶꦁꦏꦁꦢꦶꦥꦸꦤ꧀ꦲꦺꦴꦧꦺꦴꦁꦢꦼꦤꦶꦁꦫꦲ꧀ꦮꦤꦠꦶꦤ꧀ꦢꦏꦤ꧀ꦆꦤꦶꦩꦶꦤꦔꦏꦥꦩ꧀ꦧꦭꦱꦤꦩꦕꦭꦩ꧀ꦢꦶꦲꦶꦤꦢꦼꦤꦶꦁꦫꦲ꧀ꦮꦤ",
+                paragraf13: "ꦫꦩꦭꦤ꧀ꦧꦭꦏꦺꦛꦼꦏ꧀ꦢꦸꦒꦶꦲꦶꦁꦥꦤ꧀ꦠꦲꦶꦱꦼꦭꦠꦤ꧀ꦆꦤ꧀ꦢꦶꦪꦧꦼꦂꦲꦢꦥ꧀ꦥꦤ꧀ꦢꦼꦔꦤ꧀ꦱꦒꦫꦠꦲꦶꦁꦏꦁꦩꦺꦩꦶꦱꦃꦏꦼꦤ꧀ꦥꦶꦪꦩꦧꦶꦏꦶꦤ꧀ꦱꦏꦶꦁꦲꦭꦼꦁꦏꦲꦠꦱꦸꦭ꧀ꦤꦭꦥꦸꦠꦿꦮꦶꦱ꧀ꦮꦏꦂꦩꦢꦺꦮꦲꦫ꧀ꦱꦶꦠꦼꦏ꧀ꦠꦸꦂꦢꦶꦥꦸꦤ꧀ꦧꦔꦸꦤ꧀ꦗꦼꦩ꧀ꦧꦠꦤ꧀ꦱꦏꦶꦁꦧꦠꦸꦧꦠꦸꦲꦶꦁꦏꦁꦢꦶꦥꦸꦤ꧀ꦱꦼꦫꦠ꧀ꦫꦩꦭꦤ꧀ꦩꦼꦔꦥꦸꦁꦲꦶꦁꦤ꧀ꦢꦲꦺꦴꦥꦺꦂꦠꦺꦴꦪꦗꦼꦩ꧀ꦧꦠꦤ꧀ꦆꦤꦶꦢꦶꦏꦼꦤꦭ꧀ꦱꦺꦧꦒꦲꦶꦗꦼꦩ꧀ꦧꦠꦤ꧀ꦲꦢꦩ꧀ꦲꦠꦮꦫꦩꦱꦺꦠꦸ",
+                paragraf14: "ꦥꦼꦫꦁꦲꦒꦼꦁꦥꦸꦤ꧀ꦏꦢꦺꦴꦱꦭꦤ꧀ꦲꦤ꧀ꦠꦮꦶꦱꦶꦥꦸꦤ꧀ꦧꦭꦫꦩꦭꦤ꧀ꦧꦭꦲꦭꦼꦁꦏꦮꦶꦧꦶꦱꦤꦢꦶꦏꦶꦫꦲ꧀ꦮꦤꦲꦶꦁꦏꦁꦱꦲꦼꦠꦶꦲꦠꦶꦩꦧꦭꦺꦴꦠ꧀ꦭꦤ꧀ꦒꦧꦸꦁꦏꦭꦶꦪꦤ꧀ꦫꦩꦲꦩꦂꦒꦧꦺꦴꦠꦼꦤ꧀ꦱꦠꦸꦗꦸꦏꦭꦶꦪꦤ꧀ꦠꦸꦩꦶꦤ꧀ꦢꦏꦏꦁꦏꦁꦤꦶꦥꦸꦤ꧀ꦥꦼꦂꦧꦸꦠꦤ꧀ꦏꦏꦁꦤꦶꦥꦸꦤ꧀ꦲꦶꦁꦥꦼꦂꦠꦼꦩ꧀ꦥꦸꦂꦱꦼꦔꦶꦠ꧀ꦏꦛꦃꦥꦲꦼꦭꦮꦤ꧀ꦱꦏꦶꦁꦏꦭꦶꦃꦧꦺꦭꦃꦥꦶꦃꦏꦁꦒꦺꦴꦒꦸꦒꦸꦂ",
+                paragraf15: "ꦥꦼꦥꦼꦫꦁꦔꦤ꧀ꦥꦸꦁꦏꦱꦤ꧀ꦏꦢꦺꦴꦱꦭꦤ꧀ꦲꦤ꧀ꦠꦮꦶꦱꦶꦥꦸꦤ꧀ꦫꦩꦭꦤ꧀ꦫꦲ꧀ꦮꦤꦫꦲ꧀ꦮꦤꦒꦢꦃꦏꦼꦱꦏ꧀ꦠꦶꦪꦤ꧀ꦲꦶꦁꦏꦁꦭꦸꦮꦂꦧꦶꦱꦲꦩꦕꦭꦩ꧀ꦏꦚꦺꦴꦒꦶꦲꦤꦸꦒꦼꦫꦃꦱꦏꦶꦁꦧꦿꦲ꧀ꦩꦧꦃꦮꦤꦢꦶꦥꦸꦤ꧀ꦠꦶꦢꦏ꧀ꦧꦶꦱꦩꦸꦤ꧀ꦢꦶꦥꦸꦤ꧀ꦥꦼꦗꦲꦶꦢꦼꦤꦶꦁꦢꦺꦮꦲꦠꦮꦩꦏ꧀ꦭꦸꦏ꧀ꦒꦲꦶꦧ꧀ꦤꦔꦤ꧀ꦫꦩꦩꦶꦤꦔꦏꦩꦤꦸꦁꦱꦲꦺꦩꦩ꧀ꦥꦸꦤ꧀ꦔꦭꦃꦏꦼꦤ꧀",
+                paragraf16: "ꦱꦼꦱꦩ꧀ꦥꦸꦤꦶꦥꦸꦤ꧀ꦥꦼꦥꦼꦫꦁꦔꦤ꧀ꦲꦶꦁꦏꦁꦱꦁꦏꦼꦠ꧀ꦱꦼꦔꦶꦠ꧀ꦫꦩꦦꦸꦁꦏꦱꦤꦶꦥꦸꦤ꧀ꦏꦱꦶꦭ꧀ꦩꦺꦗꦲꦶꦫꦲ꧀ꦮꦤꦏꦭꦶꦪꦤ꧀ꦥꦤꦃꦨꦿꦲ꧀ꦩꦱ꧀ꦠꦿꦱꦧꦼꦢꦼꦂꦩꦼꦔꦶꦁꦒꦭ꧀ꦫꦲ꧀ꦮꦤꦲꦺꦭꦶꦁꦧꦧꦏꦭꦺꦥꦠꦤꦶꦥꦸꦤ꧀ꦭꦤ꧀ꦚꦸꦮꦸꦤ꧀ꦩꦔꦥꦸꦤ꧀ꦫꦩꦩꦼꦔꦼꦂꦤ꧀ꦠꦃꦏꦼꦤ꧀ꦥꦼꦔꦼꦧꦸꦫꦤ꧀ꦲꦶꦁꦏꦁꦭꦪꦱ꧀ꦏꦁꦒꦺꦴꦫꦲ꧀ꦮꦤꦩꦼꦔꦏꦸꦤꦶꦧꦃꦮꦩꦸꦱꦸꦲꦶꦥꦸꦤ꧀ꦥꦸꦤ꧀ꦫꦗꦲꦶꦁꦏꦁꦲꦒꦸꦁ",
+                paragraf17: "ꦱꦼꦱꦩ꧀ꦥꦸꦤꦶꦥꦸꦤ꧀ꦫꦲ꧀ꦮꦤꦠꦼꦮꦱ꧀ꦫꦩꦱꦺꦭꦩꦼꦠ꧀ꦏꦼꦤ꧀ꦱꦶꦤ꧀ꦠꦤꦔꦤ꧀ꦲꦩꦂꦒꦱꦶꦤ꧀ꦠꦠꦼꦭꦃꦩꦔꦼꦤ꧀ꦒꦺꦴꦤ꧀ꦢꦫꦶꦥꦸꦤ꧀ꦒꦿꦶꦪꦩꦸꦱꦸꦲꦶꦁꦏꦁꦧꦸꦏꦤ꧀ꦩꦲꦂꦩꦶꦥꦸꦤ꧀ꦫꦩꦚꦸꦮꦸꦤ꧀ꦱꦶꦤ꧀ꦠꦩꦼꦩ꧀ꦧꦸꦏ꧀ꦠꦶꦏꦏꦱꦸꦕꦶꦪꦤꦶꦥꦸꦤ꧀ꦏꦭꦶꦪꦤ꧀ꦲꦸꦗꦶꦪꦤ꧀ꦄꦥꦶꦄꦒ꧀ꦤꦶꦥꦫꦶꦏ꧀ꦱꦱꦶꦤ꧀ꦠꦩꦼꦭꦺꦧꦼꦠ꧀ꦲꦶꦁꦤ꧀ꦗꦼꦫꦺꦴꦄꦥꦶꦱꦸꦕꦶꦭꦤ꧀ꦩꦼꦢꦭ꧀ꦠꦤ꧀ꦥꦠꦸꦏ꧀ꦩꦼꦩ꧀ꦧꦸꦏ꧀ꦠꦶꦏꦏꦱꦸꦕꦶꦪꦤꦶꦥꦸꦤ꧀ꦱꦭꦩꦶꦲꦶꦁꦥꦤꦮꦤꦤ꧀",
+                paragraf18: "ꦫꦩꦱꦶꦤ꧀ꦠꦭꦤ꧀ꦭꦏ꧀ꦱ꧀ꦩꦤꦮꦁꦱꦸꦭ꧀ꦢꦠꦼꦁꦲꦪꦺꦴꦢ꧀ꦢꦾꦱꦲꦺꦩꦼꦱꦩ꧀ꦥꦸꦤꦶꦥꦸꦤ꧀ꦠꦼꦭꦸꦱ꧀ꦥꦸꦭꦸꦃꦠꦲꦸꦤ꧀ꦧꦫꦠꦭꦤ꧀ꦱꦼꦢꦪꦫꦏꦾꦠꦲꦪꦺꦴꦢ꧀ꦢꦾꦫꦩꦢꦶꦤꦺꦴꦧꦠ꧀ꦏꦼꦤ꧀ꦱꦺꦧꦒꦲꦫꦗꦭꦤ꧀ꦩꦼꦩꦺꦫꦺꦤ꧀ꦠꦲ꧀ꦏꦢꦶꦭ꧀ꦲꦶꦁꦩꦱꦲꦶꦁꦏꦁꦢꦶꦥꦸꦤ꧀ꦱꦼꦧꦸꦠ꧀ꦫꦩꦫꦗꦾꦗꦩꦤ꧀ꦏꦼꦩꦱꦤ꧀ꦢꦶꦩꦤꦥꦺꦫꦗꦸꦱ꧀ꦠꦶꦭꦤ꧀ꦏꦩꦏ꧀ꦩꦸꦂꦲꦤ꧀ꦩꦼꦫꦠ",
+                paragraf19: "ꦩꦼꦱ꧀ꦏꦶꦠꦭꦃꦩꦼꦩ꧀ꦧꦸꦏ꧀ꦠꦶꦏꦏꦤ꧀ꦏꦱꦸꦕꦶꦪꦤꦶꦥꦸꦤ꧀ꦱꦥꦼꦂꦠꦲꦺꦴꦫꦏꦾꦠꦶꦱꦶꦃꦩꦼꦫꦒꦸꦏꦏꦱꦸꦕꦶꦪꦤ꧀ꦱꦶꦤ꧀ꦠꦏꦁꦒꦺꦴꦤꦗꦒꦱꦠꦧꦶꦭꦶꦠꦱ꧀ꦏꦫꦗꦤ꧀ꦫꦩꦢꦼꦔꦤ꧀ꦏꦧꦼꦠꦃꦲꦠꦶꦩꦔꦱꦶꦁꦏꦼꦤ꧀ꦱꦶꦤ꧀ꦠꦲꦶꦁꦏꦁꦤꦼꦩ꧀ꦧꦺꦔꦤ꧀ꦢꦸꦠꦲꦶꦁꦏꦁꦢꦠꦼꦁꦲꦭꦱ꧀ꦱꦶꦤ꧀ꦠꦩꦔꦼꦤ꧀ꦢꦶꦥꦼꦂꦠꦥꦺꦴꦤ꧀ꦮꦭ꧀ꦩꦶꦏꦶꦭꦤ꧀ꦩꦼꦭꦲꦶꦂꦏꦤ꧀ꦢꦮꦏꦁꦏꦸꦠꦸꦧꦔꦸꦤ꧀ꦏꦸꦱꦭꦤ꧀ꦭꦮ",
+                paragraf20: "ꦧꦼꦂꦠꦲꦸꦤ꧀ꦠꦲꦸꦤ꧀ꦱꦭꦗꦼꦁꦤꦶꦥꦸꦤ꧀ꦏꦸꦱꦭꦤ꧀ꦭꦮꦲꦶꦁꦏꦁꦱꦩ꧀ꦥꦸꦤ꧀ꦢꦺꦮꦱꦲꦤꦺꦏꦼꦱꦂꦏꦶꦱꦃꦫꦩꦪꦤꦲꦶꦁꦔꦗꦼꦁꦫꦩꦫꦩꦲꦺꦭꦶꦁꦧꦃꦮꦤꦶꦥꦸꦤ꧀ꦥꦸꦠꦿꦤꦶꦥꦸꦤ꧀ꦱꦶꦤ꧀ꦠꦢꦶꦥꦔꦶꦭ꧀ꦩꦭꦶꦃꦏꦁꦒꦺꦴꦧꦼꦂꦠꦶꦏꦤ꧀ꦏꦱꦸꦕꦶꦪꦤꦶꦥꦸꦤ꧀ꦱꦏꦭꦶꦭꦔꦶꦱꦶꦤ꧀ꦠꦧꦼꦂꦱꦸꦩ꧀ꦥꦲꦠꦱꦤꦩꦧꦸꦩꦶꦲꦶꦧꦸꦭꦤ꧀ꦧꦸꦩꦶꦥꦸꦤ꧀ꦧꦶꦏꦏ꧀ꦤꦼꦥꦶꦩꦭꦤ꧀ꦩꦼꦩ꧀ꦧꦸꦏ꧀ꦠꦶꦏꦏꦱꦸꦕꦶꦪꦤꦶꦥꦸꦤ꧀ꦲꦶꦁꦏꦁꦭꦔꦼꦁ",
+                paragraf21: "ꦫꦩꦦꦸꦁꦏꦱꦤꦶꦥꦸꦤ꧀ꦫꦩ꧀ꦥꦸꦁꦏꦤ꧀ꦠꦸꦒꦱꦶꦥꦸꦤ꧀ꦩꦶꦤꦔꦏꦮꦠꦫꦮꦶꦱ꧀ꦤꦸꦭꦤ꧀ꦮꦁꦱꦸꦭ꧀ꦢꦠꦼꦁꦑꦲꦾꦁꦔꦤ꧀ꦩꦶꦁꦒꦭꦏꦼꦤ꧀ꦮꦫꦶꦱꦤ꧀ꦏꦶꦱꦃꦧꦧꦢꦿꦩꦑꦱꦼꦠꦾꦤ꧀ꦭꦤ꧀ꦑꦱꦸꦚꦠꦤ꧀",
+
+                // Highlight Box
+                nilaiFilosofis: "ꦤꦶꦭꦲꦶꦦ꦳ꦶꦭꦺꦴꦱꦺꦴꦦꦶꦱ꧀ꦫꦩꦪꦤ",
+                nilaiDeskripsi: "ꦫꦩꦪꦤꦔꦗꦂꦏꦏꦼꦤ꧀ꦧꦧꦥꦼꦤ꧀ꦠꦶꦁꦤꦶꦁꦔ꧀ꦭꦩ꧀ꦥꦃꦏꦢꦿꦩꦏꦮꦗꦶꦧꦤ꧀ꦑꦱꦼꦠꦾꦤ꧀ꦲꦶꦁꦥꦮꦶꦮꦲꦤ꧀ꦧꦏ꧀ꦠꦶꦢꦠꦼꦁꦠꦶꦪꦁꦱꦼꦥꦸꦲ꧀ꦭꦤ꧀ꦑꦥꦼꦩꦶꦩ꧀ꦥꦶꦤꦤ꧀ꦲꦶꦁꦏꦁꦲꦢꦶꦭ꧀ꦏꦶꦱꦃꦆꦤꦶꦪꦸꦒꦶꦤꦺꦢꦃꦏꦼꦤ꧀ꦪꦺꦤ꧀ꦥꦶꦲꦭꦏꦏꦢꦺꦱꦶꦁꦏꦁꦢꦶꦥꦸꦤ꧀ꦮꦏꦶꦭꦶꦢꦼꦤꦶꦁꦫꦲ꧀ꦮꦤ꧀ꦥꦢꦥꦸꦁꦏꦱꦤꦶꦥꦸꦤ꧀ꦧꦢꦲꦺꦢꦶꦥꦸꦤ꧀ꦭꦃꦏꦼꦤ꧀ꦢꦼꦤꦶꦁꦑꦧꦼꦕꦶꦏꦤ꧀ꦲꦸꦧꦸꦁꦔꦤ꧀ꦲꦤ꧀ꦠꦮꦶꦱꦶꦥꦸꦤ꧀ꦫꦩꦭꦤ꧀ꦲꦤ꧀ꦤꦺꦴꦩꦤ꧀ꦩꦼꦭꦩ꧀ꦧꦁꦏꦼꦤ꧀ꦑꦱꦼꦠꦾꦤ꧀ꦭꦤ꧀ꦥꦩ꧀ꦧꦏ꧀ꦠꦶꦠꦤ꧀ꦥꦩ꧀ꦫꦶꦃ"
+            }
+        };
+
+        // Text untuk language switcher button
+        const languageLabels = {
+            id: "Bahasa Indonesia",
+            jv: "Basa Jawa",
+            jv_script: "ꦲꦏ꧀ꦱꦫꦗꦮ"
+        };
+
+        // DOM Elements
+        const burgerMenu = document.getElementById('burgerMenu');
+        const navbar = document.getElementById('navbar');
+        const critaBtn = document.getElementById('critaWayangBtn');
+        const critaDropdown = document.getElementById('critaWayangDropdown');
+        const tokohBtn = document.getElementById('tokohWayangBtn');
+        const tokohDropdown = document.getElementById('tokohWayangDropdown');
+        const languageBtn = document.getElementById('languageBtn');
+        const languageDropdown = document.getElementById('languageDropdown');
+        const currentLanguage = document.getElementById('currentLanguage');
+
+        // Fungsi untuk mengganti bahasa
+        function changeLanguage(lang) {
+            const elements = document.querySelectorAll('[data-i18n]');
+
+            // Reset font mode dulu
+            document.body.classList.remove('aksara-jawa-mode');
+
+            elements.forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                let text = translations[lang]?.[key];
+
+                if (text) {
+                    element.textContent = text;
+                }
+            });
+
+            // Update language button text
+            currentLanguage.textContent = languageLabels[lang];
+
+            // Apply font khusus untuk aksara Jawa
+            if (lang === 'jv_script') {
+                document.body.classList.add('aksara-jawa-mode');
+            }
+
+            // Simpan preferensi bahasa
+            localStorage.setItem('preferredLanguage', lang);
+
+            // Tutup dropdown
+            languageDropdown.classList.remove('active');
+            languageBtn.querySelector('.language-arrow').classList.remove('open');
+        }
+
+        // Event Listeners untuk navigation
+        burgerMenu.addEventListener('click', function () {
+            this.classList.toggle('active');
+            navbar.classList.toggle('active');
+        });
+
+        critaBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            critaDropdown.classList.toggle('active');
+            this.querySelector('.dropdown-arrow').classList.toggle('open');
+            tokohDropdown.classList.remove('active');
+            if (tokohBtn.querySelector('.dropdown-arrow')) {
+                tokohBtn.querySelector('.dropdown-arrow').classList.remove('open');
+            }
+        });
+
+        tokohBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            tokohDropdown.classList.toggle('active');
+            this.querySelector('.dropdown-arrow').classList.toggle('open');
+            critaDropdown.classList.remove('active');
+            if (critaBtn.querySelector('.dropdown-arrow')) {
+                critaBtn.querySelector('.dropdown-arrow').classList.remove('open');
+            }
+        });
+
+        // Event Listeners untuk language switcher
+        languageBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            languageDropdown.classList.toggle('active');
+            this.querySelector('.language-arrow').classList.toggle('open');
+        });
+
+        document.querySelectorAll('.language-option').forEach(option => {
+            option.addEventListener('click', function () {
+                const lang = this.getAttribute('data-lang');
+                changeLanguage(lang);
+            });
+        });
+
+        // Tutup dropdown ketika klik di luar
+        document.addEventListener('click', function (e) {
+            if (!e.target.closest('#containernavbar')) {
+                critaDropdown.classList.remove('active');
+                tokohDropdown.classList.remove('active');
+                languageDropdown.classList.remove('active');
+
+                if (critaBtn.querySelector('.dropdown-arrow')) {
+                    critaBtn.querySelector('.dropdown-arrow').classList.remove('open');
+                }
+                if (tokohBtn.querySelector('.dropdown-arrow')) {
+                    tokohBtn.querySelector('.dropdown-arrow').classList.remove('open');
+                }
+                if (languageBtn.querySelector('.language-arrow')) {
+                    languageBtn.querySelector('.language-arrow').classList.remove('open');
+                }
+                navbar.classList.remove('active');
+                burgerMenu.classList.remove('active');
+            }
+        });
+
+        // Load bahasa yang disimpan
+        const savedLang = localStorage.getItem('preferredLanguage') || 'id';
+        changeLanguage(savedLang);
+    </script>
+</body>
+
+</html>

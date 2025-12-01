@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tokoh Dewa Ruci - Wayang</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Chonburi&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @font-face {
+            font-family: 'nyk Ngayogyan Jejeg';
+            src: local('nyk Ngayogyan Jejeg'),
+                url('../fontnyk/nyk Ngayogyan Jejeg.ttf') format('truetype');
+        }
+
+        body {
+            font-family: sans-serif;
+            background-color: rgb(22, 22, 22);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Styles untuk Language Switcher */
+        .language-switcher {
+            position: relative;
+            display: inline-block;
+        }
+
+        .language-btn {
+            background: transparent;
+            border: 1px solid orange;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.3125rem;
+            cursor: pointer;
+            font-family: "nyk Ngayogyan Jejeg", sans-serif;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .language-btn:hover {
+            background-color: rgba(255, 165, 0, 0.1);
+        }
+
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: rgb(35, 35, 35);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.3125rem;
+            margin-top: 0.5rem;
+            min-width: 180px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            z-index: 1001;
+            display: none;
+        }
+
+        .language-dropdown.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .language-option {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: all 0.1s ease-in;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+        }
+
+        .language-option[data-lang="id"] {
+            font-family: "Chonburi", serif;
+        }
+
+        .language-option[data-lang="jv"] {
+            font-family: "Chonburi", serif;
+        }
+
+        .language-option[data-lang="jv_script"] {
+            font-family: "nyk Ngayogyan Jejeg", sans-serif;
+        }
+
+        .language-option:last-child {
+            border-bottom: none;
+        }
+
+        .language-option:hover {
+            background-color: rgb(45, 45, 45);
+            color: orange;
+            padding-left: 1.25rem;
+        }
+
+        .language-arrow {
+            font-size: 0.75rem;
+            transition: transform 0.2s ease;
+        }
+
+        .language-arrow.open {
+            transform: rotate(180deg);
+        }
+
+        #containernavbar {
+            display: flex;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+            flex-direction: row;
+            align-items: center;
+            width: 100%;
+            height: 5rem;
+            background-color: rgba(22, 22, 22, 0.95);
+            backdrop-filter: blur(10px);
+            justify-content: space-between;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        #logo {
+            font-size: 1.875rem;
+            font-family: "nyk Ngayogyan Jejeg", sans-serif;
+            color: #FFFFFF;
+            cursor: pointer;
+        }
+
+        .burger-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 0.35rem;
+        }
+
+        .burger-menu span {
+            width: 1.75rem;
+            height: 0.2rem;
+            background-color: #ee792b;
+            border-radius: 0.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .burger-menu.active span:nth-child(1) {
+            transform: rotate(45deg) translate(0.5rem, 0.5rem);
+        }
+
+        .burger-menu.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .burger-menu.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(0.5rem, -0.5rem);
+        }
+
+        #navbar {
+            width: 40%;
+            height: 2.5rem;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        .btnavbar {
+            font-family: "Chonburi", serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        #btactivenavbar {
+            padding-left: 0.625rem;
+            padding-right: 0.625rem;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            text-decoration: none;
+            color: rgb(0, 0, 0);
+            background-color: orange;
+            border-radius: 0.3125rem;
+            font-size: 0.9375rem;
+        }
+
+        .btinactivenavbar {
+            padding-left: 0.625rem;
+            padding-right: 0.625rem;
+            font-size: 0.9375rem;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+            border-radius: 0.3125rem;
+            transition: 0.1s ease-in;
+        }
+
+        .btinactivenavbar:hover {
+            background-color: rgb(35, 35, 35);
+            color: orange;
+            transition: 0.1s ease-in;
+        }
+
+        .dropdown-arrow {
+            font-size: 0.75rem;
+            transition: transform 0.2s ease;
+        }
+
+        .dropdown-arrow.open {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: rgb(35, 35, 35);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.3125rem;
+            margin-top: 0.5rem;
+            min-width: 180px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .dropdown-menu.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: white;
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: all 0.1s ease-in;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item.active {
+            background-color: orange;
+            color: black;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgb(45, 45, 45);
+            color: orange;
+            padding-left: 1.25rem;
+        }
+
+        #containertokoh {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 6rem 2rem 2rem;
+            min-height: 100vh;
+        }
+
+        .tokoh-header {
+            background: rgba(35, 35, 35, 0.8);
+            border-radius: 0;
+            padding: 3rem 2rem 2rem;
+            color: white;
+            position: relative;
+            border-bottom: 2px solid orange;
+            margin-bottom: 2rem;
+        }
+
+        .tokoh-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-family: "EB Garamond", serif;
+            font-weight: 700;
+            background-image: linear-gradient(to right, #CC9900 0%, #FFCC66 50%, #FFD700 85%, #FFEB3B 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tokoh-header p {
+            font-size: 1.1rem;
+            color: rgb(180, 180, 180);
+            font-family: "EB Garamond", serif;
+        }
+
+        .tokoh-category {
+            margin-bottom: 3rem;
+        }
+
+        .category-title {
+            font-family: "Chonburi", serif;
+            font-size: 1.8rem;
+            color: orange;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid rgba(255, 165, 0, 0.3);
+        }
+
+        .tokoh-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .tokoh-card {
+            background: rgba(35, 35, 35, 0.8);
+            border-radius: 0.5rem;
+            padding: 2rem;
+            border-left: 4px solid orange;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .tokoh-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .tokoh-name {
+            font-family: "EB Garamond", serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: orange;
+            margin-bottom: 1rem;
+        }
+
+        .tokoh-role {
+            font-family: "Chonburi", serif;
+            font-size: 1rem;
+            color: #FFD700;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .tokoh-description {
+            color: rgb(180, 180, 180);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .tokoh-attributes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .attribute {
+            background: rgba(255, 165, 0, 0.1);
+            color: orange;
+            padding: 0.3rem 0.8rem;
+            border-radius: 1rem;
+            font-size: 0.85rem;
+            font-family: "EB Garamond", serif;
+        }
+
+        .highlight-box {
+            background: rgba(255, 165, 0, 0.1);
+            border-left: 3px solid orange;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0.3125rem;
+        }
+
+        .highlight-box h4 {
+            color: orange;
+            margin-bottom: 0.8rem;
+            font-family: "EB Garamond", serif;
+            font-size: 1.2rem;
+        }
+
+        .highlight-box p {
+            color: rgb(200, 200, 200);
+            margin-bottom: 0;
+        }
+
+        /* Mode Aksara Jawa */
+        .aksara-jawa-mode .category-title,
+        .aksara-jawa-mode .tokoh-name,
+        .aksara-jawa-mode .tokoh-role,
+        .aksara-jawa-mode .attribute,
+        .aksara-jawa-mode .highlight-box h4,
+        .aksara-jawa-mode .btnavbar,
+        .aksara-jawa-mode #btactivenavbar,
+        .aksara-jawa-mode .btinactivenavbar,
+        .aksara-jawa-mode .dropdown-item,
+        .aksara-jawa-mode .language-btn,
+        .aksara-jawa-mode #logo {
+            font-family: 'nyk Ngayogyan Jejeg', sans-serif !important;
+        }
+
+        /* Untuk teks panjang biar mudah dibaca */
+        .aksara-jawa-mode .tokoh-description,
+        .aksara-jawa-mode .highlight-box p,
+        .aksara-jawa-mode .tokoh-header p {
+            font-family: 'nyk Ngayogyan Jejeg', sans-serif !important;
+            line-height: 2;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            #containernavbar {
+                padding-left: 1rem;
+                padding-right: 1rem;
+                height: 4rem;
+                flex-wrap: wrap;
+            }
+
+            #logo {
+                font-size: 1.5rem;
+            }
+
+            .burger-menu {
+                display: flex;
+                order: 3;
+            }
+
+            .nav-left {
+                order: 1;
+                flex: 1;
+            }
+
+            .nav-right {
+                order: 2;
+                width: auto;
+                flex-direction: row;
+                gap: 0.5rem;
+            }
+
+            .language-switcher {
+                width: auto;
+                margin-top: 0;
+            }
+
+            .language-btn {
+                width: auto;
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
+                min-width: 120px;
+            }
+
+            .language-dropdown {
+                position: absolute;
+                top: 100%;
+                right: 0;
+                width: 180px;
+                margin-top: 0.5rem;
+                transform: none;
+                max-height: none;
+                background-color: rgb(35, 35, 35);
+            }
+
+            .language-dropdown.active {
+                max-height: none;
+            }
+
+            #navbar {
+                position: fixed;
+                top: 4rem;
+                right: -100%;
+                width: 100%;
+                height: calc(100vh - 4rem);
+                background-color: rgba(22, 22, 22, 0.98);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: stretch;
+                padding: 1.5rem 1rem;
+                gap: 0.75rem;
+                transition: right 0.3s ease;
+                overflow-y: auto;
+                order: 4;
+            }
+
+            #navbar.active {
+                right: 0;
+            }
+
+            .btnavbar {
+                width: 100%;
+                height: auto;
+                display: flex;
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            #btactivenavbar,
+            .btinactivenavbar {
+                width: 100%;
+                height: 2.5rem;
+                font-size: 1rem;
+            }
+
+            .dropdown-menu {
+                position: static;
+                margin-top: 0;
+                width: 100%;
+                margin-left: 0;
+                transform: none;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease, opacity 0.2s ease;
+                background-color: transparent;
+            }
+
+            .dropdown-menu.active {
+                display: block;
+                max-height: 300px;
+                margin-top: 0.5rem;
+            }
+
+            .dropdown-item {
+                padding: 0.75rem 1rem;
+                font-size: 0.95rem;
+            }
+
+            #containertokoh {
+                padding: 5rem 1rem 1rem;
+            }
+
+            .tokoh-header {
+                padding: 2rem 1rem;
+            }
+
+            .tokoh-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .tokoh-header p {
+                font-size: 1rem;
+            }
+
+            .tokoh-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .tokoh-card {
+                padding: 1.5rem;
+            }
+
+            .category-title {
+                font-size: 1.5rem;
+            }
+
+            .tokoh-name {
+                font-size: 1.3rem;
+            }
+        }
+
+        /* Media Query khusus untuk perangkat dengan lebar sangat kecil (Android portrait) */
+        @media (max-width: 480px) {
+            #containertokoh {
+                padding: 5rem 0.75rem 1rem;
+            }
+
+            .tokoh-card {
+                padding: 1.25rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="containernavbar">
+        <div class="nav-left">
+            <div id="logo">ꦱꦶꦗꦧꦺ</div>
+        </div>
+
+        <div class="nav-right">
+            <!-- Language Switcher -->
+            <div class="language-switcher">
+                <button class="language-btn" id="languageBtn">
+                    <span id="currentLanguage">Bahasa Indonesia</span>
+                    <span class="language-arrow">▼</span>
+                </button>
+                <div class="language-dropdown" id="languageDropdown">
+                    <button class="language-option" data-lang="id">Bahasa Indonesia</button>
+                    <button class="language-option" data-lang="jv">Basa Jawa</button>
+                    <button class="language-option" data-lang="jv_script">ꦲꦏ꧀ꦱꦫꦗꦮ</button>
+                </div>
+            </div>
+
+            <div class="burger-menu" id="burgerMenu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+
+        <div id="navbar">
+            <div class="btnavbar">
+                <a href="/sijabewayang/index.html" class="btinactivenavbar" data-i18n="beranda">Beranda</a>
+            </div>
+            <div class="btnavbar" id="critaWayangNav">
+                <a href="#" class="btinactivenavbar" id="critaWayangBtn">
+                    <span data-i18n="critaWayang">Crita Wayang</span>
+                    <span class="dropdown-arrow">▼</span>
+                </a>
+                <div class="dropdown-menu" id="critaWayangDropdown">
+                    <a href="../critawayang/mahabharata.html" class="dropdown-item"
+                        data-i18n="mahabharata">Mahabharata</a>
+                    <a href="../critawayang/ramayana.html" class="dropdown-item" data-i18n="ramayana">Ramayana</a>
+                    <a href="../critawayang/dewaruci.html" class="dropdown-item" data-i18n="dewaruci">Dewa Ruci</a>
+                </div>
+            </div>
+            <div class="btnavbar" id="tokohWayangNav">
+                <a href="#" class="btinactivenavbar" id="tokohWayangBtn">
+                    <span data-i18n="tokohWayang">Tokoh Wayang</span>
+                    <span class="dropdown-arrow">▼</span>
+                </a>
+                <div class="dropdown-menu" id="tokohWayangDropdown">
+                    <a href="mahabharata.html" class="dropdown-item" data-i18n="mahabharata">Mahabharata</a>
+                    <a href="ramayana.html" class="dropdown-item" data-i18n="ramayana">Ramayana</a>
+                    <a href="dewaruci.html" class="dropdown-item active" data-i18n="dewaruci">Dewa Ruci</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="containertokoh">
+        <div class="tokoh-header">
+            <h1 data-i18n="judulHalaman">Tokoh Dewa Ruci</h1>
+            <p data-i18n="subJudul">Mengenal para tokoh dalam kisah spiritual pencarian jati diri Bima</p>
+        </div>
+
+        <!-- Tokoh Utama -->
+        <div class="tokoh-category">
+            <h2 class="category-title" data-i18n="tokohUtama">Tokoh Utama</h2>
+            <div class="tokoh-grid">
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="bimaNama">Bima</h3>
+                    <div class="tokoh-role" data-i18n="bimaPeran">Kesatria Pencari Kebenaran</div>
+                    <p class="tokoh-description" data-i18n="bimaDeskripsi">
+                        Putra kedua Pandu dan Kunti dari epos Mahabharata, dikenal dengan kekuatan fisiknya yang luar
+                        biasa.
+                        Dalam kisah Dewa Ruci, Bima digambarkan sebagai pencari kebenaran sejati yang merasa ada
+                        kekosongan
+                        spiritual meski telah memenangkan perang Bharatayuddha. Melakukan perjalanan spiritual untuk
+                        mencari
+                        "tirta perwitasari" (air kehidupan) atas perintah gurunya, Durna.
+                    </p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrKekuatan">Kekuatan Fisik</span>
+                        <span class="attribute" data-i18n="attrKetekunan">Ketekunan</span>
+                        <span class="attribute" data-i18n="attrSpiritual">Pencarian Spiritual</span>
+                    </div>
+                </div>
+
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="dewaruciNama">Dewa Ruci</h3>
+                    <div class="tokoh-role" data-i18n="dewaruciPeran">Perwujudan Jiwa Sejati</div>
+                    <p class="tokoh-description" data-i18n="dewaruciDeskripsi">
+                        Sosok kecil bercahaya yang merupakan representasi dari jiwa Bima yang sejati. Berwujud miniatur
+                        Bima sendiri dengan cahaya spiritual. Mengajarkan Bima tentang hakikat kehidupan, jati diri, dan
+                        makna sejati dari pencerahan spiritual. Membimbing Bima masuk ke dalam telinganya sendiri untuk
+                        menunjukkan bahwa kebenaran ada dalam diri.
+                    </p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrKebijaksanaan">Kebijaksanaan Spiritual</span>
+                        <span class="attribute" data-i18n="attrPengetahuan">Pengetahuan Hakikat</span>
+                        <span class="attribute" data-i18n="attrPencerahan">Pencerahan</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tokoh Pendukung -->
+        <div class="tokoh-category">
+            <h2 class="category-title" data-i18n="tokohPendukung">Tokoh Pendukung</h2>
+            <div class="tokoh-grid">
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="durnaNama">Resi Durna</h3>
+                    <div class="tokoh-role" data-i18n="durnaPeran">Guru Spiritual</div>
+                    <p class="tokoh-description" data-i18n="durnaDeskripsi">
+                        Guru Pandawa dan Kurawa dalam ilmu perang. Setelah perang Bharatayuddha, masih menyimpan dendam
+                        karena kematian putranya, Aswatama. Memberikan tugas mustahil kepada Bima untuk mencari "tirta
+                        perwitasari" di puncak Gunung Candramuka, yang sebenarnya adalah jebakan untuk menyingkirkan
+                        Bima.
+                        Namun tanpa disengaja, tugas ini justru membawa Bima pada pencerahan spiritual.
+                    </p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrKecerdikan">Kecerdikan</span>
+                        <span class="attribute" data-i18n="attrDendam">Dendam</span>
+                        <span class="attribute" data-i18n="attrGuru">Guru Ilmu Duniawi</span>
+                    </div>
+                </div>
+
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="nagaNama">Naga Penjaga Telaga</h3>
+                    <div class="tokoh-role" data-i18n="nagaPeran">Penjaga Tempat Suci</div>
+                    <p class="tokoh-description" data-i18n="nagaDeskripsi">
+                        Naga raksasa yang menjaga telaga suci di dasar Gunung Candramuka. Melambangkan hawa nafsu dan
+                        ego
+                        yang harus ditaklukkan sebelum mencapai pencerahan spiritual. Bima harus bertarung dan
+                        mengalahkan
+                        naga ini sebelum bisa bertemu dengan Dewa Ruci. Simbol dari rintangan batin yang harus diatasi
+                        dalam perjalanan spiritual.
+                    </p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrPenjaga">Penjaga</span>
+                        <span class="attribute" data-i18n="attrUjian">Ujian Spiritual</span>
+                        <span class="attribute" data-i18n="attrNafsu">Hawa Nafsu</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Makna Simbolis -->
+        <div class="tokoh-category">
+            <h2 class="category-title" data-i18n="maknaSimbolis">Makna Simbolis</h2>
+            <div class="tokoh-grid">
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="gunungNama">Gunung Candramuka</h3>
+                    <div class="tokoh-role" data-i18n="gunungPeran">Simbol Perjalanan Spiritual</div>
+                    <p class="tokoh-description" data-i18n="gunungDeskripsi">
+                        Gunung tinggi yang mustahil didaki, melambangkan tantangan dan kesulitan dalam perjalanan
+                        spiritual
+                        menuju pencerahan. Puncaknya yang tersembunyi di balik awan menggambarkan tujuan spiritual yang
+                        tidak kasat mata. Perjalanan mendaki gunung ini mewakili usaha keras dan ketekunan yang
+                        diperlukan
+                        untuk mencapai pemahaman spiritual.
+                    </p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrTantangan">Tantangan</span>
+                        <span class="attribute" data-i18n="attrKetekunan2">Ketekunan</span>
+                        <span class="attribute" data-i18n="attrTujuan">Tujuan Spiritual</span>
+                    </div>
+                </div>
+
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="telagaNama">Telaga di Puncak Gunung</h3>
+                    <div class="tokoh-role" data-i18n="telagaPeran">Simbol Kedalaman Jiwa</div>
+                    <p class="tokoh-description" data-i18n="telagaDeskripsi">
+                        Telaga jernih di puncak gunung yang sangat dalam, melambangkan kedalaman jiwa manusia.
+                        Penyebraman
+                        Bima ke dasar telaga merupakan simbol dari penyelaman ke dalam diri sendiri, menembus
+                        lapisan-lapisan
+                        kesadaran untuk menemukan hakikat sejati. Air yang jernih menggambarkan kemurnian hati dan
+                        pikiran.
+                    </p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrKedalaman">Kedalaman Jiwa</span>
+                        <span class="attribute" data-i18n="attrKemurnian">Kemurnian</span>
+                        <span class="attribute" data-i18n="attrIntrospeksi">Introspeksi</span>
+                    </div>
+                </div>
+
+                <div class="tokoh-card">
+                    <h3 class="tokoh-name" data-i18n="tirtaNama">Tirta Perwitasari</h3>
+                    <div class="tokoh-role" data-i18n="tirtaPeran">Simbol Pencerahan Spiritual</div>
+                    <p class="tokoh-description" data-i18n="tirtaDeskripsi">
+                        Air kehidupan yang secara harfiah dicari Bima, namun secara spiritual melambangkan pencerahan
+                        batin
+                        dan pemahaman tentang hakikat kehidupan. Bima tidak menemukan air fisik, tetapi menemukan
+                        pemahaman
+                        spiritual yang jauh lebih berharga. Mengajarkan bahwa kebahagiaan sejati bukan berasal dari
+                        luar,
+                        tetapi dari dalam diri sendiri.
+                    </p>
+                    <div class="tokoh-attributes">
+                        <span class="attribute" data-i18n="attrPencerahan2">Pencerahan</span>
+                        <span class="attribute" data-i18n="attrKebahagiaan">Kebahagiaan Sejati</span>
+                        <span class="attribute" data-i18n="attrPemahaman">Pemahaman Hakikat</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h4 data-i18n="transformasiJudul">Transformasi Spiritual Bima</h4>
+            <p data-i18n="transformasiDeskripsi">
+                Kisah Dewa Ruci menceritakan transformasi Bima dari kesatria yang hanya mengandalkan kekuatan fisik
+                menjadi manusia yang memahami makna spiritual kehidupan. Awalnya, Bima mencari "air kehidupan" secara
+                fisik, tetapi akhirnya menemukan bahwa pencerahan sejati ada dalam dirinya sendiri. Perjumpaan dengan
+                Dewa Ruci (jiwanya sendiri) mengajarkannya tentang "manunggaling kawula gusti" - persatuan antara hamba
+                dengan Tuhannya.
+            </p>
+        </div>
+
+        <div class="highlight-box">
+            <h4 data-i18n="ajaranJudul">Ajaran Filosofis Dewa Ruci</h4>
+            <p data-i18n="ajaranDeskripsi">
+                Kisah ini mengandung ajaran filosofis yang dalam tentang pencarian jati diri dan makna kehidupan.
+                Beberapa ajaran utama meliputi: "Sangkan Paraning Dumadi" (asal usul dan tujuan penciptaan),
+                "Manunggaling Kawula Gusti" (persatuan hamba dengan Tuhan), dan pentingnya mengenal diri sendiri sebelum
+                mencari kebenaran di luar. Ajaran-ajaran ini relevan dengan konsep spiritual Jawa tentang kehidupan dan
+                hubungan manusia dengan Sang Pencipta.
+            </p>
+        </div>
+
+        <div class="highlight-box">
+            <h4 data-i18n="relevansiJudul">Relevansi dalam Kehidupan Modern</h4>
+            <p data-i18n="relevansiDeskripsi">
+                Kisah Dewa Ruci tetap sangat relevan dalam kehidupan modern yang serba materialistik. Cerita ini
+                mengingatkan kita untuk tidak lupa melakukan introspeksi dan pencarian makna hidup. Seperti Bima,
+                manusia modern seringkali sibuk mencari kebahagiaan di luar diri - melalui harta, jabatan, atau
+                pengakuan sosial - padahal kebahagiaan sejati justru ada dalam diri sendiri melalui pemahaman spiritual
+                dan kedamaian batin.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Data terjemahan untuk halaman tokoh Dewa Ruci
+        const translations = {
+            id: {
+                // Navbar
+                beranda: "Beranda",
+                critaWayang: "Crita Wayang",
+                tokohWayang: "Tokoh Wayang",
+                mahabharata: "Mahabharata",
+                ramayana: "Ramayana",
+                dewaruci: "Dewa Ruci",
+
+                // Header
+                judulHalaman: "Tokoh Dewa Ruci",
+                subJudul: "Mengenal para tokoh dalam kisah spiritual pencarian jati diri Bima",
+
+                // Kategori
+                tokohUtama: "Tokoh Utama",
+                tokohPendukung: "Tokoh Pendukung",
+                maknaSimbolis: "Makna Simbolis",
+
+                // Tokoh Bima
+                bimaNama: "Bima",
+                bimaPeran: "Kesatria Pencari Kebenaran",
+                bimaDeskripsi: "Putra kedua Pandu dan Kunti dari epos Mahabharata, dikenal dengan kekuatan fisiknya yang luar biasa. Dalam kisah Dewa Ruci, Bima digambarkan sebagai pencari kebenaran sejati yang merasa ada kekosongan spiritual meski telah memenangkan perang Bharatayuddha. Melakukan perjalanan spiritual untuk mencari \"tirta perwitasari\" (air kehidupan) atas perintah gurunya, Durna.",
+
+                // Tokoh Dewa Ruci
+                dewaruciNama: "Dewa Ruci",
+                dewaruciPeran: "Perwujudan Jiwa Sejati",
+                dewaruciDeskripsi: "Sosok kecil bercahaya yang merupakan representasi dari jiwa Bima yang sejati. Berwujud miniatur Bima sendiri dengan cahaya spiritual. Mengajarkan Bima tentang hakikat kehidupan, jati diri, dan makna sejati dari pencerahan spiritual. Membimbing Bima masuk ke dalam telinganya sendiri untuk menunjukkan bahwa kebenaran ada dalam diri.",
+
+                // Tokoh Durna
+                durnaNama: "Resi Durna",
+                durnaPeran: "Guru Spiritual",
+                durnaDeskripsi: "Guru Pandawa dan Kurawa dalam ilmu perang. Setelah perang Bharatayuddha, masih menyimpan dendam karena kematian putranya, Aswatama. Memberikan tugas mustahil kepada Bima untuk mencari \"tirta perwitasari\" di puncak Gunung Candramuka, yang sebenarnya adalah jebakan untuk menyingkirkan Bima. Namun tanpa disengaja, tugas ini justru membawa Bima pada pencerahan spiritual.",
+
+                // Tokoh Naga
+                nagaNama: "Naga Penjaga Telaga",
+                nagaPeran: "Penjaga Tempat Suci",
+                nagaDeskripsi: "Naga raksasa yang menjaga telaga suci di dasar Gunung Candramuka. Melambangkan hawa nafsu dan ego yang harus ditaklukkan sebelum mencapai pencerahan spiritual. Bima harus bertarung dan mengalahkan naga ini sebelum bisa bertemu dengan Dewa Ruci. Simbol dari rintangan batin yang harus diatasi dalam perjalanan spiritual.",
+
+                // Makna Simbolis
+                gunungNama: "Gunung Candramuka",
+                gunungPeran: "Simbol Perjalanan Spiritual",
+                gunungDeskripsi: "Gunung tinggi yang mustahil didaki, melambangkan tantangan dan kesulitan dalam perjalanan spiritual menuju pencerahan. Puncaknya yang tersembunyi di balik awan menggambarkan tujuan spiritual yang tidak kasat mata. Perjalanan mendaki gunung ini mewakili usaha keras dan ketekunan yang diperlukan untuk mencapai pemahaman spiritual.",
+
+                telagaNama: "Telaga di Puncak Gunung",
+                telagaPeran: "Simbol Kedalaman Jiwa",
+                telagaDeskripsi: "Telaga jernih di puncak gunung yang sangat dalam, melambangkan kedalaman jiwa manusia. Penyebraman Bima ke dasar telaga merupakan simbol dari penyelaman ke dalam diri sendiri, menembus lapisan-lapisan kesadaran untuk menemukan hakikat sejati. Air yang jernih menggambarkan kemurnian hati dan pikiran.",
+
+                tirtaNama: "Tirta Perwitasari",
+                tirtaPeran: "Simbol Pencerahan Spiritual",
+                tirtaDeskripsi: "Air kehidupan yang secara harfiah dicari Bima, namun secara spiritual melambangkan pencerahan batin dan pemahaman tentang hakikat kehidupan. Bima tidak menemukan air fisik, tetapi menemukan pemahaman spiritual yang jauh lebih berharga. Mengajarkan bahwa kebahagiaan sejati bukan berasal dari luar, tetapi dari dalam diri sendiri.",
+
+                // Atribut
+                attrKekuatan: "Kekuatan Fisik",
+                attrKetekunan: "Ketekunan",
+                attrSpiritual: "Pencarian Spiritual",
+                attrKebijaksanaan: "Kebijaksanaan Spiritual",
+                attrPengetahuan: "Pengetahuan Hakikat",
+                attrPencerahan: "Pencerahan",
+                attrKecerdikan: "Kecerdikan",
+                attrDendam: "Dendam",
+                attrGuru: "Guru Ilmu Duniawi",
+                attrPenjaga: "Penjaga",
+                attrUjian: "Ujian Spiritual",
+                attrNafsu: "Hawa Nafsu",
+                attrTantangan: "Tantangan",
+                attrKetekunan2: "Ketekunan",
+                attrTujuan: "Tujuan Spiritual",
+                attrKedalaman: "Kedalaman Jiwa",
+                attrKemurnian: "Kemurnian",
+                attrIntrospeksi: "Introspeksi",
+                attrPencerahan2: "Pencerahan",
+                attrKebahagiaan: "Kebahagiaan Sejati",
+                attrPemahaman: "Pemahaman Hakikat",
+
+                // Highlight Box
+                transformasiJudul: "Transformasi Spiritual Bima",
+                transformasiDeskripsi: "Kisah Dewa Ruci menceritakan transformasi Bima dari kesatria yang hanya mengandalkan kekuatan fisik menjadi manusia yang memahami makna spiritual kehidupan. Awalnya, Bima mencari \"air kehidupan\" secara fisik, tetapi akhirnya menemukan bahwa pencerahan sejati ada dalam dirinya sendiri. Perjumpaan dengan Dewa Ruci (jiwanya sendiri) mengajarkannya tentang \"manunggaling kawula gusti\" - persatuan antara hamba dengan Tuhannya.",
+
+                ajaranJudul: "Ajaran Filosofis Dewa Ruci",
+                ajaranDeskripsi: "Kisah ini mengandung ajaran filosofis yang dalam tentang pencarian jati diri dan makna kehidupan. Beberapa ajaran utama meliputi: \"Sangkan Paraning Dumadi\" (asal usul dan tujuan penciptaan), \"Manunggaling Kawula Gusti\" (persatuan hamba dengan Tuhan), dan pentingnya mengenal diri sendiri sebelum mencari kebenaran di luar. Ajaran-ajaran ini relevan dengan konsep spiritual Jawa tentang kehidupan dan hubungan manusia dengan Sang Pencipta.",
+
+                relevansiJudul: "Relevansi dalam Kehidupan Modern",
+                relevansiDeskripsi: "Kisah Dewa Ruci tetap sangat relevan dalam kehidupan modern yang serba materialistik. Cerita ini mengingatkan kita untuk tidak lupa melakukan introspeksi dan pencarian makna hidup. Seperti Bima, manusia modern seringkali sibuk mencari kebahagiaan di luar diri - melalui harta, jabatan, atau pengakuan sosial - padahal kebahagiaan sejati justru ada dalam diri sendiri melalui pemahaman spiritual dan kedamaian batin."
+            },
+
+            jv: {
+                // Navbar
+                beranda: "Beranda",
+                critaWayang: "Crita Wayang",
+                tokohWayang: "Tokoh Wayang",
+                mahabharata: "Mahabharata",
+                ramayana: "Ramayana",
+                dewaruci: "Dewa Ruci",
+
+                // Header
+                judulHalaman: "Tokoh Dewa Ruci",
+                subJudul: "Ngenal para tokoh ing kisah spiritual panggolekan jati diri Bima",
+
+                // Kategori
+                tokohUtama: "Tokoh Utama",
+                tokohPendukung: "Tokoh Pendukung",
+                maknaSimbolis: "Makna Simbolis",
+
+                // Tokoh Bima
+                bimaNama: "Bima",
+                bimaPeran: "Kesatria Panggolekan Kasunyatan",
+                bimaDeskripsi: "Putra kaping loro Pandu lan Kunti saka epos Mahabharata, dikenal kanthi kekuwatan fisik sing luar biasa. Ing kisah Dewa Ruci, Bima digambarake minangka panggolek kasunyatan sejati sing ngrasa ana kekosongan spiritual sanadyan wis menang perang Bharatayuddha. Nindakake lelungan spiritual kanggo golek \"tirta perwitasari\" (banyu urip) miturut parentah gurune, Durna.",
+
+                // Tokoh Dewa Ruci
+                dewaruciNama: "Dewa Ruci",
+                dewaruciPeran: "Pratelan Jiwa Sejati",
+                dewaruciDeskripsi: "Wangun cilik sing sumorot minangka perwakilan saka jiwa Bima sing sejati. Awujud miniatur Bima dhewe kanthi cahya spiritual. Ngajarake Bima bab hakikat urip, jati diri, lan teges sejati saka pencerahan spiritual. Mbimbing Bima mlebu ing kupinge dhewe kanggo nuduhake yen kasunyatan ana ing njero awake.",
+
+                // Tokoh Durna
+                durnaNama: "Resi Durna",
+                durnaPeran: "Guru Spiritual",
+                durnaDeskripsi: "Guru Pandawa lan Kurawa ing ilmu perang. Sawise perang Bharatayuddha, isih nyimpen dendam amarga patine putrane, Aswatama. Menehi tugas mustahil marang Bima kanggo golek \"tirta perwitasari\" ing pucuk Gunung Candramuka, sing sebenere minangka jebakan kanggo nyingkiraké Bima. Nanging tanpa disengaja, tugas iki malah nggawa Bima marang pencerahan spiritual.",
+
+                // Tokoh Naga
+                nagaNama: "Naga Penjaga Telaga",
+                nagaPeran: "Penjaga Papan Suci",
+                nagaDeskripsi: "Naga raksasa sing njaga telaga suci ing dhasar Gunung Candramuka. Nglambangake hawa nafsu lan ego sing kudu dikalahake sadurunge tekan pencerahan spiritual. Bima kudu perang lan ngalahake naga iki sadurunge bisa ketemu karo Dewa Ruci. Simbol saka rintangan batin sing kudu diatasi ing lelungan spiritual.",
+
+                // Makna Simbolis
+                gunungNama: "Gunung Candramuka",
+                gunungPeran: "Simbol Lelungan Spiritual",
+                gunungDeskripsi: "Gunung dhuwur sing mustahil didaki, nglambangake tantangan lan kasulitan ing lelungan spiritual menyang pencerahan. Pucuke sing didhelikake ing balik mega nggambarke tujuan spiritual sing ora kasat mata. Lelungan mendaki gunung iki ngewakili usaha keras lan ketekunan sing diperlokake kanggo nggayuh pangerten spiritual.",
+
+                telagaNama: "Telaga ing Pucuk Gunung",
+                telagaPeran: "Simbol Kedalaman Jiwa",
+                telagaDeskripsi: "Telaga bening ing pucuk gunung sing banget jero, nglambangake kedalaman jiwa manungsa. Penyebraman Bima menyang dhasar telaga minangka simbol saka penyelaman menyang njero awake dhewe, nembus lapisan-lapisan kesadaran kanggo nemokake hakikat sejati. Banyu sing bening nggambarke kamurnian ati lan pikiran.",
+
+                tirtaNama: "Tirta Perwitasari",
+                tirtaPeran: "Simbol Pencerahan Spiritual",
+                tirtaDeskripsi: "Banyu urip sing sacara harfiah digoleki Bima, nanging sacara spiritual nglambangake pencerahan batin lan pangerten bab hakikat urip. Bima ora nemokake banyu fisik, nanging nemokake pangerten spiritual sing luwih larang regane. Ngajarake yen kabahagiaan sejati dudu asale saka njaba, nanging saka njero awake dhewe.",
+
+                // Atribut
+                attrKekuatan: "Kekuwatan Fisik",
+                attrKetekunan: "Ketekunan",
+                attrSpiritual: "Panggolekan Spiritual",
+                attrKebijaksanaan: "Kawicaksanan Spiritual",
+                attrPengetahuan: "Kawruh Hakikat",
+                attrPencerahan: "Pencerahan",
+                attrKecerdikan: "Kecerdikan",
+                attrDendam: "Dendam",
+                attrGuru: "Guru Ilmu Duniawi",
+                attrPenjaga: "Penjaga",
+                attrUjian: "Ujian Spiritual",
+                attrNafsu: "Hawa Nafsu",
+                attrTantangan: "Tantangan",
+                attrKetekunan2: "Ketekunan",
+                attrTujuan: "Tujuan Spiritual",
+                attrKedalaman: "Kedalaman Jiwa",
+                attrKemurnian: "Kamurnian",
+                attrIntrospeksi: "Introspeksi",
+                attrPencerahan2: "Pencerahan",
+                attrKebahagiaan: "Kabahagiaan Sejati",
+                attrPemahaman: "Pangerten Hakikat",
+
+                // Highlight Box
+                transformasiJudul: "Transformasi Spiritual Bima",
+                transformasiDeskripsi: "Kisah Dewa Ruci nyritakake transformasi Bima saka kesatria sing mung ngandelake kekuwatan fisik dadi manungsa sing mangerti teges spiritual urip. Wiwitane, Bima golek \"banyu urip\" sacara fisik, nanging pungkasane nemokake yen pencerahan sejati ana ing njero awake dhewe. Pategolan karo Dewa Ruci (jiwane dhewe) ngajarake dheweke bab \"manunggaling kawula gusti\" - persatuan antarane kawula lan Gustine.",
+
+                ajaranJudul: "Ajaran Filosofis Dewa Ruci",
+                ajaranDeskripsi: "Kisah iki ngandhut ajaran filosofis sing jero bab panggolekan jati diri lan teges urip. Sawetara ajaran utama kalebu: \"Sangkan Paraning Dumadi\" (asal usul lan tujuan panciptaan), \"Manunggaling Kawula Gusti\" (persatuan kawula lan Gusti), lan pentinge ngenal awake dhewe sadurunge golek kasunyatan ing njaba. Ajaran-ajaran iki relevan karo konsep spiritual Jawa bab urip lan hubungan manungsa karo Sang Pencipta.",
+
+                relevansiJudul: "Relevansi ing Urip Modern",
+                relevansiDeskripsi: "Kisah Dewa Ruci isih banget relevan ing urip modern sing serba materialistik. Crita iki ngingetake kita supaya ora lali nindakake introspeksi lan panggolekan teges urip. Kaya Bima, manungsa modern asring sibuk golek kabahagiaan ing njaba awake - liwat bandha, jabatan, utawa pengakuan sosial - padahal kabahagiaan sejati mung ana ing njero awake dhewe liwat pangerten spiritual lan katentreman batin."
+            },
+
+            jv_script: {
+                // Navbar
+                beranda: "ꦧꦼꦫꦤ꧀ꦢ",
+                critaWayang: "ꦕꦿꦶꦠꦮꦪꦁ",
+                tokohWayang: "ꦠꦺꦴꦏꦺꦴꦲ꧀ꦮꦪꦁ",
+                mahabharata: "ꦩꦲꦧꦿꦠ",
+                ramayana: "ꦫꦩꦪꦤ",
+                dewaruci: "ꦢꦺꦮꦫꦸꦕꦶ",
+
+                // Header
+                judulHalaman: "ꦠꦺꦴꦏꦺꦴꦲ꧀ꦢꦺꦮꦫꦸꦕꦶ",
+                subJudul: "ꦔꦼꦤꦭ꧀ꦥꦫꦠꦺꦴꦏꦺꦴꦲ꧀ꦲꦶꦁꦏꦶꦱꦃꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀ꦥꦔ꧀ꦒꦺꦴꦭꦼꦏ꧀ꦲꦤ꧀ꦗꦠꦶꦢꦶꦫꦶꦧꦶꦩ",
+
+                // Kategori
+                tokohUtama: "ꦠꦺꦴꦏꦺꦴꦲ꧀ꦲꦸꦠꦩ",
+                tokohPendukung: "ꦠꦺꦴꦏꦺꦴꦲ꧀ꦥꦼꦤ꧀ꦢꦸꦏꦸꦁ",
+                maknaSimbolis: "ꦩꦏ꧀ꦤꦱꦶꦩ꧀ꦧꦺꦴꦭꦶꦱ꧀",
+
+                // Tokoh Bima
+                bimaNama: "ꦨꦶꦩ",
+                bimaPeran: "ꦑꦼꦱꦠꦿꦶꦦꦔ꧀ꦒꦺꦴꦭꦼꦏ꧀ꦑꦱꦸꦚꦠꦤ꧀",
+                bimaDeskripsi: "ꦦꦸꦠꦿꦑꦥꦶꦁꦭꦺꦴꦫꦺꦴꦦꦤ꧀ꦢꦸꦭꦤ꧀ꦑꦸꦤ꧀ꦠꦶꦱꦏꦺꦌꦥꦺꦴꦱ꧀ꦩꦲꦧꦿꦠꦢꦶꦑꦼꦤꦭ꧀ꦑꦑꦸꦮꦠꦤ꧀ꦦ꦳ꦶꦱꦶꦏ꧀ꦔꦺꦴꦤ꧀ꦭꦸꦮꦂꦧꦶꦱꦲꦶꦁꦏꦶꦱꦃꦢꦺꦮꦫꦸꦕꦶꦨꦶꦩꦢꦶꦒꦩ꧀ꦧꦂꦏꦺꦩꦶꦤꦔꦏꦥꦔ꧀ꦒꦺꦴꦭꦼꦏ꧀ꦑꦱꦸꦚꦠꦤ꧀ꦱꦼꦗꦠꦶꦔꦺꦴꦤ꧀ꦫꦱꦲꦢꦏꦼꦏꦺꦴꦱꦺꦴꦁꦔꦤ꧀ꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀ꦩꦼꦱ꧀ꦏꦶꦠꦭꦃꦩꦼꦤꦁꦥꦼꦫꦁꦨꦫꦠꦪꦸꦢ꧀ꦢꦶꦤ꧀ꦢꦏꦏꦼꦤ꧀ꦭꦼꦭꦸꦁꦔꦤ꧀ꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀ꦏꦁꦒꦺꦴꦒꦺꦴꦭꦼꦏ꧀ꦠꦶꦂꦠꦥꦼꦂꦮꦶꦠꦱꦫꦶꦧꦤꦾꦸꦂꦲꦶꦢ꧀ꦒꦸꦫꦸꦤꦺꦢꦸꦂꦤ",
+
+                // Tokoh Dewa Ruci
+                dewaruciNama: "ꦢꦺꦮꦫꦸꦕꦶ",
+                dewaruciPeran: "ꦥꦿꦠꦼꦭꦤ꧀ꦗꦶꦮꦱꦼꦗꦠꦶ",
+                dewaruciDeskripsi: "ꦱꦺꦴꦱꦺꦴꦏ꧀ꦕꦶꦭꦶꦏ꧀ꦧꦼꦂꦕꦃꦪꦲꦺꦴꦔꦺꦴꦤ꧀ꦫꦺꦥꦿꦺꦱꦼꦤ꧀ꦠꦱꦶꦱꦶꦱꦏꦗꦶꦮꦨꦶꦩꦱꦼꦗꦠꦶꦲꦧꦮꦸꦗꦢ꧀ꦩꦶꦤꦶꦲꦠꦸꦂꦨꦶꦩꦢꦲꦺꦴꦑꦤ꧀ꦕꦃꦪꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀ꦔꦗꦫꦏꦺꦨꦶꦩꦧꦧ꦳ꦏꦶꦠꦼꦠꦼꦱꦸꦫꦶꦪꦥꦼꦁꦔꦤ꧀ꦗꦠꦶꦢꦶꦫꦶꦭꦤ꧀ꦠꦼꦒꦼꦱ꧀ꦱꦼꦗꦠꦶꦱꦏꦏꦱꦸꦚꦠꦤ꧀ꦩꦼꦩ꧀ꦧꦶꦩ꧀ꦧꦶꦁꦨꦶꦩꦩꦼꦭꦸꦧꦸꦲꦶꦁꦏꦸꦥꦶꦁꦤꦺꦴꦤ꧀ꦢꦸꦢꦸꦣꦸꦮꦺꦴꦤꦺꦴꦤ꧀ꦪꦺꦤ꧀ꦏꦱꦸꦚꦠꦤ꧀ꦲꦢꦲꦶꦁꦤ꧀ꦗꦼꦫꦺꦴꦲꦮꦏꦺ",
+
+                // Tokoh Durna
+                durnaNama: "ꦉꦯꦶꦢꦸꦂꦤ",
+                durnaPeran: "ꦒꦸꦫꦸꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀",
+                durnaDeskripsi: "ꦒꦸꦫꦸꦦꦤ꧀ꦢꦮꦭꦤ꧀ꦑꦸꦫꦮꦲꦶꦁꦲꦶꦭ꧀ꦩꦸꦥꦼꦫꦁꦱꦺꦠꦼꦭꦤ꧀ꦥꦼꦫꦁꦨꦫꦠꦪꦸꦢ꧀ꦢꦶꦤ꧀ꦢꦶꦱꦶꦩꦥꦼꦤ꧀ꦢꦼꦤ꧀ꦢꦩ꧀ꦲꦩꦂꦒꦥꦠꦶꦤꦺꦥꦸꦠꦿꦤꦺꦲꦱ꧀ꦮꦠꦩꦩꦺꦤꦺꦃꦠꦸꦒꦱ꧀ꦩꦸꦱ꧀ꦠꦲꦶꦭ꧀ꦩꦂꦔꦨꦶꦩꦏꦁꦒꦺꦴꦒꦺꦴꦭꦼꦏ꧀ꦠꦶꦂꦠꦥꦼꦂꦮꦶꦠꦱꦫꦶꦲꦶꦁꦥꦸꦕꦸꦏ꧀ꦒꦸꦤꦸꦁꦕꦤ꧀ꦢꦿꦩꦸꦑꦪꦺꦁꦱꦼꦧꦼꦤꦼꦂꦤꦺꦪꦤ꧀ꦗꦼꦧꦁꦏꦁꦒꦺꦴꦤꦶꦁꦏꦶꦂꦏꦏꦺꦨꦶꦩꦤꦔꦤ꧀ꦠꦤ꧀ꦥꦢꦼꦱꦼꦔꦒꦤ꧀ꦠꦸꦒꦱ꧀ꦆꦤ꧀ꦗꦸꦱ꧀ꦠꦿꦸꦩꦼꦩ꧀ꦧꦮꦨꦶꦩꦩꦫꦁꦥꦼꦤ꧀ꦕꦼꦫꦃꦤ꧀ꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀",
+
+                // Tokoh Naga
+                nagaNama: "ꦤꦒꦥꦼꦤ꧀ꦗꦒꦠꦼꦭꦒ",
+                nagaPeran: "ꦥꦼꦤ꧀ꦗꦒꦥꦥꦤ꧀ꦱꦸꦕꦶ",
+                nagaDeskripsi: "ꦤꦒꦫꦏ꧀ꦱꦱꦺꦪꦺꦁꦤ꧀ꦗꦒꦠꦼꦭꦒꦱꦸꦕꦶꦲꦶꦁꦢꦱꦂꦒꦸꦤꦸꦁꦕꦤ꧀ꦢꦿꦩꦸꦑꦩꦼꦭꦩ꧀ꦧꦁꦏꦺꦲꦮꦤꦥ꦳ꦸꦱꦸꦭꦤ꧀ꦲꦺꦒꦺꦴꦪꦺꦁꦏꦸꦢꦸꦏꦼꦭꦃꦏꦺꦱꦢꦸꦮꦸꦂꦤꦺꦠꦼꦗꦤ꧀ꦥꦼꦤ꧀ꦕꦼꦫꦃꦤ꧀ꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀ꦨꦶꦩꦏꦸꦢꦸꦥꦼꦫꦁꦭꦤ꧀ꦔꦭꦃꦏꦺꦤꦒꦆꦤꦶꦱꦢꦸꦮꦸꦂꦤꦺꦧꦶꦱꦏꦺꦠꦼꦩꦸꦏꦫꦺꦴꦢꦺꦮꦫꦸꦕꦶꦱꦶꦩ꧀ꦧꦺꦴꦭ꧀ꦱꦏꦫꦶꦤ꧀ꦠꦔꦤ꧀ꦧꦠꦶꦤ꧀ꦪꦺꦁꦏꦸꦢꦸꦢꦶꦲꦠꦱꦶꦲꦶꦁꦭꦼꦭꦸꦁꦔꦤ꧀ꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀",
+
+                // Makna Simbolis
+                gunungNama: "ꦒꦸꦤꦸꦁꦕꦤ꧀ꦢꦿꦩꦸꦑ",
+                gunungPeran: "ꦱꦶꦩ꧀ꦧꦺꦴꦭ꧀ꦭꦼꦭꦸꦁꦔꦤ꧀ꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀",
+                gunungDeskripsi: "ꦒꦸꦤꦸꦁꦢꦲꦸꦮꦺꦴꦂꦪꦺꦁꦩꦸꦱ꧀ꦠꦲꦶꦭ꧀ꦢꦶꦢꦏꦶꦩꦼꦭꦩ꧀ꦧꦁꦏꦺꦠꦤ꧀ꦠꦔꦤ꧀ꦭꦤ꧀ꦏꦱꦸꦭꦶꦠꦤ꧀ꦲꦶꦁꦭꦼꦭꦸꦁꦔꦤ꧀ꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀ꦩꦼꦤꦸꦗꦸꦥꦼꦤ꧀ꦕꦼꦫꦃꦤ꧀ꦥꦸꦕꦸꦏꦺꦤꦺꦪꦺꦁꦢꦶꦢꦼꦭꦶꦏꦏꦺꦲꦶꦁꦧꦭꦶꦏ꧀ꦩꦼꦒꦤꦒꦩ꧀ꦧꦂꦏꦺꦠꦸꦗꦸꦮꦤ꧀ꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀ꦪꦺꦁꦠꦢꦏꦏꦱꦠ꧀ꦩꦠꦭꦼꦭꦸꦁꦔꦤ꧀ꦩꦼꦤ꧀ꦢꦏꦶꦒꦸꦤꦸꦁꦆꦤꦶꦤꦺꦮꦏꦶꦭꦶꦲꦸꦱꦲꦏꦂꦱ꧀ꦭꦤ꧀ꦑꦼꦠꦼꦏꦸꦤꦤ꧀ꦪꦺꦁꦢꦶꦥꦼꦂꦭꦺꦴꦏꦏꦺꦏꦁꦒꦺꦴꦤꦒꦺꦪꦸꦃꦥꦔꦼꦂꦠ꦳ꦤ꧀ꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀",
+
+                telagaNama: "ꦠꦼꦭꦒꦲꦶꦁꦥꦸꦕꦸꦏ꧀ꦒꦸꦤꦸꦁ",
+                telagaPeran: "ꦱꦶꦩ꧀ꦧꦺꦴꦭ꧀ꦑꦼꦢꦭꦩꦤ꧀ꦗꦶꦮ",
+                telagaDeskripsi: "ꦠꦼꦭꦒꦗꦼꦂꦤꦶꦃꦲꦶꦁꦥꦸꦕꦸꦏ꧀ꦒꦸꦤꦸꦁꦪꦺꦁꦱꦁꦏꦺꦠ꧀ꦗꦼꦫꦺꦴꦩꦼꦭꦩ꧀ꦧꦁꦏꦺꦑꦼꦢꦭꦩꦤ꧀ꦗꦶꦮꦩꦤꦸꦁꦱꦺꦥꦺꦤꦾꦼꦧꦿꦩꦤ꧀ꦨꦶꦩꦩꦼꦤꦾꦔꦢꦱꦂꦠꦼꦭꦒꦩꦶꦤꦔꦏꦱꦶꦩ꧀ꦧꦺꦴꦭ꧀ꦱꦏꦥꦺꦤꦾꦼꦭꦩꦤ꧀ꦩꦼꦤꦾꦔꦤ꧀ꦗꦼꦫꦺꦴꦲꦮꦏꦺꦢꦲꦺꦴꦩꦼꦤꦺꦩꦧꦸꦱ꧀ꦭꦥꦶꦱꦤ꧀ꦭꦥꦶꦱꦤ꧀ꦏꦼꦱꦢꦂꦤ꧀ꦪꦺꦁꦏꦁꦒꦺꦴꦤꦔꦒꦺꦪꦸꦃꦲꦏꦶꦏꦠ꧀ꦱꦼꦗꦠꦶꦧꦤꦾꦸꦁꦗꦼꦂꦤꦶꦃꦤꦒꦩ꧀ꦧꦂꦏꦺꦏꦩꦸꦂꦤꦶꦪꦺꦴꦤ꧀ꦲꦠꦶꦭꦤ꧀ꦥꦶꦏꦶꦫꦤ꧀",
+
+                tirtaNama: "ꦠꦶꦂꦠꦥꦼꦂꦮꦶꦠꦱꦫꦶ",
+                tirtaPeran: "ꦱꦶꦩ꧀ꦧꦺꦴꦭ꧀ꦥꦼꦤ꧀ꦕꦼꦫꦃꦤ꧀ꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀",
+                tirtaDeskripsi: "ꦧꦚꦸꦈꦫꦶꦥꦺꦪꦺꦁꦱꦏꦫꦲꦫꦶꦥ꦳ꦶꦱꦶꦏ꧀ꦢꦶꦒꦺꦴꦭꦼꦏꦶꦨꦶꦩꦤꦔꦤ꧀ꦱꦏꦫꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀ꦩꦼꦭꦩ꧀ꦧꦁꦏꦺꦥꦼꦤ꧀ꦕꦼꦫꦃꦤ꧀ꦧꦠꦶꦤ꧀ꦭꦤ꧀ꦥꦔꦼꦂꦠ꦳ꦤ꧀ꦧꦧ꦳ꦏꦶꦠꦼꦠꦼꦱꦸꦫꦶꦪꦥꦼꦔꦤ꧀ꦨꦶꦩꦠꦢꦏ꧀ꦤꦼꦩꦺꦴꦤꦺꦤꦧꦚꦸꦦ꦳ꦶꦱꦶꦏ꧀ꦤꦔꦤ꧀ꦤꦼꦩꦺꦴꦤꦺꦤꦥꦔꦼꦂꦠ꦳ꦤ꧀ꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀ꦪꦺꦁꦭꦲꦸꦂꦭꦔꦤ꧀ꦫꦼꦒꦤꦺꦔꦗꦫꦏꦺꦪꦺꦤ꧀ꦏꦧꦲꦒꦶꦪꦤ꧀ꦱꦼꦗꦠꦶꦧꦸꦏꦤ꧀ꦲꦱꦭꦺꦱꦏꦤꦗꦧꦭꦤꦩꦸꦤ꧀ꦲꦱꦭꦺꦱꦏꦤꦗꦼꦫꦺꦴꦲꦮꦏꦺꦢꦲꦺꦴ",
+
+                // Atribut
+                attrKekuatan: "ꦑꦑꦸꦮꦠꦤ꧀ꦦ꦳ꦶꦱꦶꦏ꧀",
+                attrKetekunan: "ꦑꦼꦠꦼꦑꦸꦤꦤ꧀",
+                attrSpiritual: "ꦦꦔ꧀ꦒꦺꦴꦭꦼꦏ꧀ꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀",
+                attrKebijaksanaan: "ꦑꦼꦨꦶꦗꦏ꧀ꦱꦤꦤ꧀ꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀",
+                attrPengetahuan: "ꦑꦮꦿꦸꦲꦏꦶꦏꦠ꧀",
+                attrPencerahan: "ꦦꦼꦤ꧀ꦕꦼꦫꦃꦤ꧀",
+                attrKecerdikan: "ꦑꦼꦕꦼꦂꦢꦶꦑꦤ꧀",
+                attrDendam: "ꦢꦼꦤ꧀ꦢꦩ꧀",
+                attrGuru: "ꦒꦸꦫꦸꦲꦶꦭ꧀ꦩꦸꦢꦸꦤꦾꦮꦶ",
+                attrPenjaga: "ꦥꦼꦤ꧀ꦗꦒ",
+                attrUjian: "ꦈꦗꦶꦪꦤ꧀ꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀",
+                attrNafsu: "ꦲꦮꦤꦥ꦳ꦸꦱꦸ",
+                attrTantangan: "ꦠꦤ꧀ꦠꦔꦤ꧀",
+                attrKetekunan2: "ꦑꦼꦠꦼꦑꦸꦤꦤ꧀",
+                attrTujuan: "ꦠꦸꦗꦸꦮꦤ꧀ꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀",
+                attrKedalaman: "ꦑꦼꦢꦭꦩꦤ꧀ꦗꦶꦮ",
+                attrKemurnian: "ꦑꦩꦸꦂꦤꦶꦪꦺꦴꦤ꧀",
+                attrIntrospeksi: "ꦆꦤ꧀ꦠꦿꦺꦴꦱ꧀ꦥꦼꦏ꧀ꦱꦶ",
+                attrPencerahan2: "ꦦꦼꦤ꧀ꦕꦼꦫꦃꦤ꧀",
+                attrKebahagiaan: "ꦑꦧꦲꦒꦶꦪꦤ꧀ꦱꦼꦗꦠꦶ",
+                attrPemahaman: "ꦦꦼꦩꦲꦩꦤ꧀ꦲꦏꦶꦏꦠ꧀",
+
+                // Highlight Box
+                transformasiJudul: "ꦠꦿꦤ꧀ꦱꦼꦦꦺꦴꦫꦩꦱꦶꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀ꦨꦶꦩ",
+                transformasiDeskripsi: "ꦏꦶꦱꦃꦢꦺꦮꦫꦸꦕꦶꦚꦫꦶꦠꦏꦏꦺꦠꦿꦤ꧀ꦱꦼꦦꦺꦴꦫꦩꦱꦶꦨꦶꦩꦱꦏꦏꦼꦱꦠꦿꦶꦪꦺꦁꦩꦸꦁꦔꦔꦤ꧀ꦢꦼꦭꦏꦼꦏꦑꦸꦮꦠꦤ꧀ꦦ꦳ꦶꦱꦶꦏ꧀ꦢꦢꦶꦩꦤꦸꦁꦱꦺꦪꦺꦁꦩꦔꦼꦂꦠ꦳ꦶꦩꦏ꧀ꦤꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀ꦈꦫꦶꦥꦲꦮꦭꦺꦤꦺꦨꦶꦩꦒꦺꦴꦭꦼꦏ꧀ꦧꦚꦸꦈꦫꦶꦥꦱꦏꦫꦦ꦳ꦶꦱꦶꦏ꧀ꦤꦔꦤ꧀ꦥꦸꦔꦏꦱꦤꦺꦤꦼꦩꦺꦴꦤꦺꦤꦪꦺꦤ꧀ꦥꦼꦤ꧀ꦕꦼꦫꦃꦤ꧀ꦱꦼꦗꦠꦶꦲꦢꦲꦶꦁꦤ꧀ꦗꦼꦫꦺꦴꦲꦮꦏꦺꦢꦲꦺꦴꦥꦼꦂꦗꦸꦩ꧀ꦥꦤ꧀ꦏꦫꦺꦴꦢꦺꦮꦫꦸꦕꦶꦗꦶꦮꦤꦺꦢꦲꦺꦴꦔꦗꦫꦏꦺꦢꦲꦺꦴꦧꦧꦩꦤꦸꦁꦒꦭꦶꦁꦑꦮꦸꦭꦒꦸꦱ꧀ꦠꦶꦥꦼꦂꦱꦠꦸꦮꦤ꧀ꦲꦤ꧀ꦠꦫꦲꦩ꧀ꦧꦭꦁꦏꦂꦱꦤ꧀ꦒꦸꦱ꧀ꦠꦶꦤꦺ",
+
+                ajaranJudul: "ꦄꦗꦫꦤ꧀ꦦ꦳ꦶꦭꦺꦴꦱꦺꦴꦦꦶꦱ꧀ꦢꦺꦮꦫꦸꦕꦶ",
+                ajaranDeskripsi: "ꦏꦶꦱꦃꦆꦤꦶꦔꦤ꧀ꦢꦸꦠ꧀ꦲꦗꦫꦤ꧀ꦦ꦳ꦶꦭꦺꦴꦱꦺꦴꦦꦶꦱ꧀ꦪꦺꦁꦗꦼꦫꦺꦴꦧꦧꦦꦔ꧀ꦒꦺꦴꦭꦼꦏ꧀ꦲꦤ꧀ꦗꦠꦶꦢꦶꦫꦶꦭꦤ꧀ꦩꦏ꧀ꦤꦈꦫꦶꦥꦱꦏꦼꦨꦧꦮꦲꦗꦫꦤ꧀ꦲꦸꦠꦩꦏꦼꦭꦶꦥꦸꦠ꧀ꦱꦔ꧀ꦑꦤ꧀ꦥꦫꦤꦶꦁꦢꦸꦩꦢꦶꦲꦱꦭ꧀ꦲꦸꦱꦸꦭ꧀ꦭꦤ꧀ꦠꦸꦗꦸꦮꦤ꧀ꦥꦤ꧀ꦕꦶꦥ꧀ꦠꦤ꧀ꦩꦤꦸꦁꦒꦭꦶꦁꦑꦮꦸꦭꦒꦸꦱ꧀ꦠꦶꦥꦼꦂꦱꦠꦸꦮꦤ꧀ꦲꦩ꧀ꦧꦭꦁꦏꦂꦱꦤ꧀ꦒꦸꦱ꧀ꦠꦶꦭꦤ꧀ꦥꦼꦤ꧀ꦠꦶꦁꦤꦾꦔꦼꦤꦭ꧀ꦲꦮꦏꦺꦢꦲꦺꦴꦱꦢꦸꦮꦸꦂꦤꦺꦒꦺꦴꦭꦼꦏ꧀ꦏꦱꦸꦚꦠꦤ꧀ꦲꦶꦁꦚꦧꦲꦗꦫꦤ꧀ꦗꦫꦤ꧀ꦆꦤꦶꦫꦼꦭꦮꦤ꧀ꦏꦁꦒꦺꦴꦤ꧀ꦱꦼꦥ꧀ꦦꦼꦂꦠ꦳ꦤ꧀ꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀ꦗꦮꦧꦧꦈꦫꦶꦥꦭꦤ꧀ꦲꦸꦧꦸꦁꦔꦤ꧀ꦩꦤꦸꦁꦱꦲꦁꦏꦫꦺꦴꦱꦁꦥꦼꦤ꧀ꦕꦶꦥ꧀ꦠ",
+
+                relevansiJudul: "ꦉꦊꦮꦤ꧀ꦱꦶꦲꦶꦁꦈꦫꦶꦥꦩꦺꦴꦢꦼꦂꦤ꧀",
+                relevansiDeskripsi: "ꦏꦶꦱꦃꦢꦺꦮꦫꦸꦕꦶꦠꦼꦠꦼꦥ꧀ꦱꦁꦏꦼꦠ꧀ꦉꦊꦮꦤ꧀ꦲꦶꦁꦈꦫꦶꦥꦩꦺꦴꦢꦼꦂꦤ꧀ꦪꦺꦁꦱꦼꦂꦧꦩꦠꦼꦫꦶꦪꦭꦶꦱ꧀ꦠꦶꦏ꧀ꦕꦫꦶꦠꦆꦤꦶꦔꦶꦁꦏꦼꦠ꧀ꦏꦶꦠꦲꦸꦠꦢꦏ꧀ꦭꦸꦥꦲꦶꦁꦠꦿꦺꦴꦱ꧀ꦥꦼꦏ꧀ꦱꦶꦭꦤ꧀ꦦꦔ꧀ꦒꦺꦴꦭꦼꦏ꧀ꦩꦏ꧀ꦤꦈꦫꦶꦥꦏꦪꦨꦶꦩꦩꦤꦸꦁꦱꦩꦺꦴꦢꦼꦂꦤ꧀ꦱꦼꦂꦶꦁꦱꦶꦧꦸꦏ꧀ꦒꦺꦴꦭꦼꦏ꧀ꦏꦧꦲꦒꦶꦪꦤ꧀ꦲꦶꦁꦚꦧꦲꦮꦏꦺꦭꦶꦮꦠ꧀ꦧꦤ꧀ꦢꦲꦗꦧꦠꦤ꧀ꦲꦠꦮꦥꦼꦔꦏꦸꦮꦤ꧀ꦱꦺꦴꦱꦶꦪꦭ꧀ꦥꦢꦲꦢꦴꦤ꧀ꦏꦧꦲꦒꦶꦪꦤ꧀ꦱꦼꦗꦠꦶꦗꦸꦱ꧀ꦠꦿꦸꦲꦢꦲꦶꦁꦤ꧀ꦗꦼꦫꦺꦴꦲꦮꦤꦺꦢꦲꦺꦴꦭꦶꦮꦠ꧀ꦥꦔꦼꦂꦠ꦳ꦤ꧀ꦱ꧀ꦥꦶꦫꦶꦠꦸꦭ꧀ꦭꦤ꧀ꦏꦢꦩꦲꦾꦤ꧀ꦧꦠꦶꦤ꧀"
+            }
+        };
+
+        // Text untuk language switcher button
+        const languageLabels = {
+            id: "Bahasa Indonesia",
+            jv: "Basa Jawa",
+            jv_script: "ꦲꦏ꧀ꦱꦫꦗꦮ"
+        };
+
+        // DOM Elements
+        const burgerMenu = document.getElementById('burgerMenu');
+        const navbar = document.getElementById('navbar');
+        const critaBtn = document.getElementById('critaWayangBtn');
+        const critaDropdown = document.getElementById('critaWayangDropdown');
+        const tokohBtn = document.getElementById('tokohWayangBtn');
+        const tokohDropdown = document.getElementById('tokohWayangDropdown');
+        const languageBtn = document.getElementById('languageBtn');
+        const languageDropdown = document.getElementById('languageDropdown');
+        const currentLanguage = document.getElementById('currentLanguage');
+
+        // Fungsi untuk mengganti bahasa
+        function changeLanguage(lang) {
+            const elements = document.querySelectorAll('[data-i18n]');
+
+            // Reset font mode dulu
+            document.body.classList.remove('aksara-jawa-mode');
+
+            elements.forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                let text = translations[lang]?.[key];
+
+                if (text) {
+                    element.textContent = text;
+                }
+            });
+
+            // Update language button text
+            currentLanguage.textContent = languageLabels[lang];
+
+            // Apply font khusus untuk aksara Jawa
+            if (lang === 'jv_script') {
+                document.body.classList.add('aksara-jawa-mode');
+            }
+
+            // Simpan preferensi bahasa
+            localStorage.setItem('preferredLanguage', lang);
+
+            // Tutup dropdown
+            languageDropdown.classList.remove('active');
+            languageBtn.querySelector('.language-arrow').classList.remove('open');
+        }
+
+        // Event Listeners untuk navigation
+        burgerMenu.addEventListener('click', function () {
+            this.classList.toggle('active');
+            navbar.classList.toggle('active');
+        });
+
+        critaBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            critaDropdown.classList.toggle('active');
+            this.querySelector('.dropdown-arrow').classList.toggle('open');
+            tokohDropdown.classList.remove('active');
+            if (tokohBtn.querySelector('.dropdown-arrow')) {
+                tokohBtn.querySelector('.dropdown-arrow').classList.remove('open');
+            }
+        });
+
+        tokohBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            tokohDropdown.classList.toggle('active');
+            this.querySelector('.dropdown-arrow').classList.toggle('open');
+            critaDropdown.classList.remove('active');
+            if (critaBtn.querySelector('.dropdown-arrow')) {
+                critaBtn.querySelector('.dropdown-arrow').classList.remove('open');
+            }
+        });
+
+        // Event Listeners untuk language switcher
+        languageBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            languageDropdown.classList.toggle('active');
+            this.querySelector('.language-arrow').classList.toggle('open');
+        });
+
+        document.querySelectorAll('.language-option').forEach(option => {
+            option.addEventListener('click', function () {
+                const lang = this.getAttribute('data-lang');
+                changeLanguage(lang);
+            });
+        });
+
+        // Tutup dropdown ketika klik di luar
+        document.addEventListener('click', function (e) {
+            if (!e.target.closest('#containernavbar')) {
+                critaDropdown.classList.remove('active');
+                tokohDropdown.classList.remove('active');
+                languageDropdown.classList.remove('active');
+
+                if (critaBtn.querySelector('.dropdown-arrow')) {
+                    critaBtn.querySelector('.dropdown-arrow').classList.remove('open');
+                }
+                if (tokohBtn.querySelector('.dropdown-arrow')) {
+                    tokohBtn.querySelector('.dropdown-arrow').classList.remove('open');
+                }
+                if (languageBtn.querySelector('.language-arrow')) {
+                    languageBtn.querySelector('.language-arrow').classList.remove('open');
+                }
+                navbar.classList.remove('active');
+                burgerMenu.classList.remove('active');
+            }
+        });
+
+        // Load bahasa yang disimpan
+        const savedLang = localStorage.getItem('preferredLanguage') || 'id';
+        changeLanguage(savedLang);
+    </script>
+</body>
+
+</html>

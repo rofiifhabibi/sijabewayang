@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sijabe - Wayang</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Chonburi&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap');
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            width: 100%;
+            margin: 0;
+            height: 100vh;
+            background-color: rgb(22, 22, 22);
+            padding: 0;
+            overflow: hidden;
+        }
+
+        @font-face {
+            font-family: 'nyk Ngayogyan Jejeg';
+            src: local('nyk Ngayogyan Jejeg'),
+                url('./fullfolder/fontnyk/nyk Ngayogyan Jejeg.ttf') format('truetype');
+        }
+
+        /* Styles untuk Language Switcher */
+        .language-switcher {
+            position: relative;
+            display: inline-block;
+        }
+
+        .language-btn {
+            background: transparent;
+            border: 1px solid orange;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.3125rem;
+            cursor: pointer;
+            font-family: "nyk Ngayogyan Jejeg", sans-serif;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .language-btn:hover {
+            background-color: rgba(255, 165, 0, 0.1);
+        }
+
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: rgb(35, 35, 35);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.3125rem;
+            margin-top: 0.5rem;
+            min-width: 180px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            z-index: 1001;
+            display: none;
+        }
+
+        .language-dropdown.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .language-option {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: all 0.1s ease-in;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+        }
+
+        .language-option[data-lang="id"] {
+            font-family: "Chonburi", serif;
+        }
+
+        .language-option[data-lang="jv"] {
+            font-family: "Chonburi", serif;
+        }
+
+        .language-option[data-lang="jv_script"] {
+            font-family: "nyk Ngayogyan Jejeg", sans-serif;
+        }
+
+        .language-option:last-child {
+            border-bottom: none;
+        }
+
+        .language-option:hover {
+            background-color: rgb(45, 45, 45);
+            color: orange;
+            padding-left: 1.25rem;
+        }
+
+        .language-arrow {
+            font-size: 0.75rem;
+            transition: transform 0.2s ease;
+        }
+
+        .language-arrow.open {
+            transform: rotate(180deg);
+        }
+
+        #containernavbar {
+            display: flex;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+            flex-direction: row;
+            align-items: center;
+            width: 100%;
+            height: 5rem;
+            background-color: rgba(22, 22, 22, 0.95);
+            backdrop-filter: blur(10px);
+            justify-content: space-between;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        #logo {
+            font-size: 1.875rem;
+            font-family: "nyk Ngayogyan Jejeg", sans-serif;
+            color: #FFFFFF;
+            cursor: pointer;
+        }
+
+        .burger-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 0.35rem;
+        }
+
+        .burger-menu span {
+            width: 1.75rem;
+            height: 0.2rem;
+            background-color: #ee792b;
+            border-radius: 0.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .burger-menu.active span:nth-child(1) {
+            transform: rotate(45deg) translate(0.5rem, 0.5rem);
+        }
+
+        .burger-menu.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .burger-menu.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(0.5rem, -0.5rem);
+        }
+
+        #navbar {
+            width: 40%;
+            height: 2.5rem;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        .btnavbar {
+            font-family: "Chonburi", serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        #btactivenavbar {
+            padding-left: 0.625rem;
+            padding-right: 0.625rem;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            text-decoration: none;
+            color: rgb(0, 0, 0);
+            background-color: orange;
+            border-radius: 0.3125rem;
+            font-size: 0.9375rem;
+        }
+
+        .btinactivenavbar {
+            padding-left: 0.625rem;
+            padding-right: 0.625rem;
+            font-size: 0.9375rem;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+            border-radius: 0.3125rem;
+            transition: 0.1s ease-in;
+        }
+
+        .btinactivenavbar:hover {
+            background-color: rgb(35, 35, 35);
+            color: orange;
+            transition: 0.1s ease-in;
+        }
+
+        .dropdown-arrow {
+            font-size: 0.75rem;
+            transition: transform 0.2s ease;
+        }
+
+        .dropdown-arrow.open {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: rgb(35, 35, 35);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.3125rem;
+            margin-top: 0.5rem;
+            min-width: 180px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .dropdown-menu.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: white;
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: all 0.1s ease-in;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgb(45, 45, 45);
+            color: orange;
+            padding-left: 1.25rem;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: orange;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: orange;
+        }
+
+        /* Main Container untuk semua section */
+        #mainContainer {
+            width: 100%;
+            height: 100vh;
+            overflow-y: auto;
+            scroll-snap-type: y mandatory;
+        }
+
+        .section {
+            width: 100%;
+            min-height: 100vh;
+            scroll-snap-align: start;
+        }
+
+        #containerberanda {
+            display: flex;
+            flex-direction: row;
+            padding-top: 5rem;
+            width: 100%;
+            min-height: 100vh;
+            padding-left: 3rem;
+        }
+
+        #landingPagetitle {
+            width: 60%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            margin-top: 6.5rem;
+            padding-bottom: 2rem;
+            padding-left: 1rem;
+        }
+
+        .pagetitle {
+            background-image: linear-gradient(to right,
+                    #CC9900 0%,
+                    #FFCC66 50%,
+                    #FFD700 85%,
+                    #FFEB3B 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            font-family: "Chonburi", serif;
+            font-size: 4rem;
+            display: inline-block;
+        }
+
+        .subtitle {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .description {
+            font-size: 1.4rem;
+            color: rgb(156, 156, 156);
+            font-family: sans-serif;
+            margin-bottom: 2rem;
+        }
+
+        #landingPageimage {
+            width: 40%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #landingPageimage img {
+            width: 70%;
+            height: auto;
+            max-height: 80%;
+            object-fit: contain;
+            border-radius: 0.5rem;
+        }
+
+        #btsejarah {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 12rem;
+            height: 3rem;
+            background-color: orange;
+            border-radius: 10rem;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        #btsejarah:hover {
+            transform: scale(1.05);
+        }
+
+        #btsejarah a {
+            font-size: 1.1rem;
+            font-family: "EB Garamond", serif;
+            cursor: pointer;
+            text-decoration: none;
+            color: black;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        #sec2 {
+            padding-top: 5rem;
+            width: 100%;
+            min-height: 100vh;
+            border-bottom: 1px solid white;
+        }
+
+        #timelinetitle {
+            width: 100%;
+            padding: 3rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* Timeline Styles */
+        .timeline-container {
+            width: 100%;
+            padding: 3rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, orange, #FFD700);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .timeline-item.left {
+            flex-direction: row;
+        }
+
+        .timeline-item.right {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            width: 45%;
+            padding: 2rem;
+        }
+
+        .timeline-year {
+            font-family: "Chonburi", serif;
+            font-size: 2rem;
+            background-image: linear-gradient(to right, #CC9900, #FFD700);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-title {
+            font-family: "EB Garamond", serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-text {
+            font-family: sans-serif;
+            font-size: 1.1rem;
+            color: rgb(180, 180, 180);
+            line-height: 1.6;
+        }
+
+        .timeline-dot {
+            width: 20px;
+            height: 20px;
+            background-color: orange;
+            border-radius: 50%;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            box-shadow: 0 0 0 8px rgba(255, 165, 0, 0.2);
+        }
+
+        .timeline-image {
+            width: 45%;
+            padding: 1rem;
+        }
+
+        .timeline-image-box {
+            width: 100%;
+            height: 300px;
+            background-color: rgba(60, 60, 60, 0.5);
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: "EB Garamond", serif;
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 1.2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .timeline-image-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 1rem;
+        }
+
+        .timeline-spacer {
+            width: 10%;
+        }
+
+        /* Footer Styles */
+        #footer {
+            min-height: auto;
+            height: auto;
+            background-color: rgb(15, 15, 15);
+            border-top: 2px solid orange;
+            padding: 3rem 2rem;
+            scroll-snap-align: start;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 3rem;
+        }
+
+        .footer-section {
+            flex: 1;
+        }
+
+        .footer-logo {
+            font-size: 2.5rem;
+            font-family: "nyk Ngayogyan Jejeg", sans-serif;
+            color: orange;
+            margin-bottom: 1rem;
+        }
+
+        .footer-description {
+            font-family: "EB Garamond", serif;
+            font-size: 1rem;
+            color: rgb(180, 180, 180);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-descriptione {
+            font-family: "EB Garamond", serif;
+            font-size: 1rem;
+            color: rgb(180, 180, 180);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-title {
+            font-family: "Chonburi", serif;
+            font-size: 1.2rem;
+            color: orange;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-link {
+            font-family: "EB Garamond", serif;
+            font-size: 1rem;
+            color: rgb(180, 180, 180);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-link:hover {
+            color: orange;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 2rem auto 0;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            font-family: "EB Garamond", serif;
+            font-size: 0.95rem;
+            color: rgb(150, 150, 150);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            #containernavbar {
+                padding-left: 1rem;
+                padding-right: 1rem;
+                height: 4rem;
+                flex-wrap: wrap;
+            }
+
+            #logo {
+                font-size: 1.5rem;
+            }
+
+            .burger-menu {
+                display: flex;
+                order: 3;
+            }
+
+            .nav-left {
+                order: 1;
+                flex: 1;
+            }
+
+            .nav-right {
+                order: 2;
+                width: auto;
+                flex-direction: row;
+                gap: 0.5rem;
+            }
+
+            .language-switcher {
+                width: auto;
+                margin-top: 0;
+            }
+
+            .language-btn {
+                width: auto;
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
+                min-width: 120px;
+            }
+
+            .language-dropdown {
+                position: absolute;
+                top: 100%;
+                right: 0;
+                width: 180px;
+                margin-top: 0.5rem;
+                transform: none;
+                max-height: none;
+                background-color: rgb(35, 35, 35);
+            }
+
+            .language-dropdown.active {
+                max-height: none;
+            }
+
+            #navbar {
+                position: fixed;
+                top: 4rem;
+                right: -100%;
+                width: 100%;
+                height: calc(100vh - 4rem);
+                background-color: rgba(22, 22, 22, 0.98);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: stretch;
+                padding: 1.5rem 1rem;
+                gap: 0.75rem;
+                transition: right 0.3s ease;
+                overflow-y: auto;
+                order: 4;
+            }
+
+            #navbar.active {
+                right: 0;
+            }
+
+            .btnavbar {
+                width: 100%;
+                height: auto;
+                display: flex;
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            #btactivenavbar,
+            .btinactivenavbar {
+                width: 100%;
+                height: 2.5rem;
+                font-size: 1rem;
+            }
+
+            .dropdown-menu {
+                position: static;
+                margin-top: 0;
+                width: 100%;
+                margin-left: 0;
+                transform: none;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease, opacity 0.2s ease;
+                background-color: transparent;
+            }
+
+            .dropdown-menu.active {
+                display: block;
+                max-height: 300px;
+                margin-top: 0.5rem;
+            }
+
+            .dropdown-item {
+                padding: 0.75rem 1rem;
+                font-size: 0.95rem;
+            }
+
+            /* PERBAIKAN UTAMA: Landing Page untuk Android - TANPA GAMBAR */
+            #containerberanda {
+                flex-direction: column;
+                padding: 0 1rem;
+                padding-top: 4rem;
+                justify-content: center;
+                min-height: 100vh;
+                height: auto;
+                text-align: center;
+            }
+
+            #landingPagetitle {
+                width: 100%;
+                padding-left: 0;
+                padding-bottom: 1rem;
+                margin-top: 0 !important;
+                justify-content: center;
+                padding-top: 0;
+            }
+
+            .pagetitle {
+                font-size: 2rem;
+                line-height: 1.2;
+                margin-bottom: 0.5rem;
+            }
+
+            .subtitle {
+                font-size: 1.6rem;
+                margin-bottom: 1rem;
+                line-height: 1.2;
+            }
+
+            .description {
+                font-size: 1rem;
+                margin-bottom: 2rem;
+                line-height: 1.6;
+            }
+
+            #btsejarah {
+                width: 12rem;
+                height: 3rem;
+                margin-top: 1rem;
+                align-self: center;
+            }
+
+            #btsejarah a {
+                font-size: 1rem;
+            }
+
+            /* PERUBAHAN PENTING: Sembunyikan gambar di mobile */
+            #landingPageimage {
+                display: none;
+            }
+
+            #timelinetitle {
+                padding: 1.5rem 1rem;
+            }
+
+            #timelinetitle .pagetitle {
+                font-size: 1.5rem !important;
+            }
+
+            #timelinetitle .description {
+                font-size: 0.9rem !important;
+            }
+
+            /* Timeline Mobile */
+            .timeline-line {
+                left: 1.5rem;
+            }
+
+            .timeline-item {
+                flex-direction: column !important;
+                align-items: flex-start;
+                margin-left: 2rem;
+                margin-bottom: 2rem;
+            }
+
+            .timeline-item.left,
+            .timeline-item.right {
+                flex-direction: column !important;
+            }
+
+            .timeline-content {
+                width: 100%;
+                padding: 0.5rem;
+                order: 2;
+            }
+
+            .timeline-image {
+                width: 100%;
+                padding: 0.5rem;
+                order: 1;
+                margin-bottom: 0.5rem;
+            }
+
+            .timeline-image-box {
+                height: 200px;
+                font-size: 0.9rem;
+            }
+
+            .timeline-dot {
+                left: 1.5rem;
+            }
+
+            .timeline-year {
+                font-size: 1.3rem;
+            }
+
+            .timeline-title {
+                font-size: 1.2rem;
+            }
+
+            .timeline-text {
+                font-size: 0.9rem;
+            }
+
+            .timeline-spacer {
+                display: none;
+            }
+
+            /* Footer Mobile */
+            .footer-content {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .footer-logo {
+                font-size: 1.8rem;
+            }
+
+            .footer-description {
+                font-size: 0.9rem;
+            }
+
+            .footer-title {
+                font-size: 1.1rem;
+            }
+
+            #footer {
+                padding: 1.5rem 1rem;
+            }
+        }
+
+        /* Media Query khusus untuk perangkat dengan lebar sangat kecil (Android portrait) */
+        @media (max-width: 480px) {
+            #containerberanda {
+                padding: 0 0.75rem;
+                padding-top: 4rem;
+            }
+
+            #landingPagetitle {
+                padding-top: 0;
+            }
+
+            .pagetitle {
+                font-size: 1.8rem;
+            }
+
+            .subtitle {
+                font-size: 1.4rem;
+            }
+
+            .description {
+                font-size: 0.95rem;
+            }
+
+            #btsejarah {
+                width: 11rem;
+                height: 2.75rem;
+            }
+
+            #btsejarah a {
+                font-size: 0.95rem;
+            }
+
+            .timeline-image-box {
+                height: 150px;
+            }
+        }
+
+        @media (max-width: 1024px) and (min-width: 769px) {
+            #containerberanda {
+                padding-left: 2rem;
+            }
+
+            #landingPagetitle {
+                width: 55%;
+            }
+
+            .pagetitle {
+                font-size: 3rem;
+            }
+
+            .subtitle {
+                font-size: 2.5rem;
+            }
+
+            .description {
+                font-size: 1.2rem;
+            }
+
+            #landingPageimage {
+                width: 45%;
+            }
+        }
+
+        /* Mode Aksara Jawa */
+        .aksara-jawa-mode .pagetitle,
+        .aksara-jawa-mode .subtitle,
+        .aksara-jawa-mode .timeline-title,
+        .aksara-jawa-mode .timeline-year,
+        .aksara-jawa-mode .btnavbar,
+        .aksara-jawa-mode .footer-title,
+        .aksara-jawa-mode #btactivenavbar,
+        .aksara-jawa-mode .btinactivenavbar,
+        .aksara-jawa-mode .dropdown-item,
+        .aksara-jawa-mode .language-btn,
+        .aksara-jawa-mode .footer-bottom,
+        .aksara-jawa-mode #logo {
+            font-family: 'nyk Ngayogyan Jejeg', sans-serif !important;
+        }
+
+        /* Untuk teks panjang biar mudah dibaca */
+        .aksara-jawa-mode .timeline-text,
+        .aksara-jawa-mode .description,
+        .aksara-jawa-mode .footer-description,
+        .aksara-jawa-mode .footer-descriptione {
+            font-family: 'nyk Ngayogyan Jejeg', sans-serif !important;
+            line-height: 2;
+        }
+
+        /* Khusus untuk button sejarah */
+        .aksara-jawa-mode #btsejarah a {
+            font-family: 'nyk Ngayogyan Jejeg', sans-serif !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="containernavbar">
+        <div class="nav-left">
+            <div id="logo">ꦱꦶꦗꦧꦺ</div>
+        </div>
+
+        <div class="nav-right">
+            <!-- Language Switcher -->
+            <div class="language-switcher">
+                <button class="language-btn" id="languageBtn">
+                    <span id="currentLanguage">Bahasa Indonesia</span>
+                    <span class="language-arrow">▼</span>
+                </button>
+                <div class="language-dropdown" id="languageDropdown">
+                    <button class="language-option" data-lang="id">Bahasa Indonesia</button>
+                    <button class="language-option" data-lang="jv">Basa Jawa</button>
+                    <button class="language-option" data-lang="jv_script">ꦲꦏ꧀ꦱꦫꦗꦮ</button>
+                </div>
+            </div>
+
+            <div class="burger-menu" id="burgerMenu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+
+        <div id="navbar">
+            <div class="btnavbar">
+                <a href="/index.html" id="btactivenavbar" data-i18n="beranda">Beranda</a>
+            </div>
+            <div class="btnavbar" id="critaWayangNav">
+                <a href="#" class="btinactivenavbar" id="critaWayangBtn">
+                    <span data-i18n="critaWayang">Crita Wayang</span>
+                    <span class="dropdown-arrow">▼</span>
+                </a>
+                <div class="dropdown-menu" id="critaWayangDropdown">
+                    <a href="/sijabewayang/critawayang/mahabharata.html" class="dropdown-item"
+                        data-i18n="mahabharata">Mahabharata</a>
+                    <a href="/sijabewayang/critawayang/ramayana.html" class="dropdown-item"
+                        data-i18n="ramayana">Ramayana</a>
+                    <a href="/sijabewayang/critawayang/dewaruci.html" class="dropdown-item" data-i18n="dewaruci">Dewa
+                        Ruci</a>
+                </div>
+            </div>
+            <div class="btnavbar" id="tokohWayangNav">
+                <a href="#" class="btinactivenavbar" id="tokohWayangBtn">
+                    <span data-i18n="tokohWayang">Tokoh Wayang</span>
+                    <span class="dropdown-arrow">▼</span>
+                </a>
+                <div class="dropdown-menu" id="tokohWayangDropdown">
+                    <a href="/sijabewayang/tokohwayang/mahabharata.html" class="dropdown-item"
+                        data-i18n="mahabharata">Mahabharata</a>
+                    <a href="/sijabewayang/tokohwayang/ramayana.html" class="dropdown-item"
+                        data-i18n="ramayana">Ramayana</a>
+                    <a href="/sijabewayang/tokohwayang/dewaruci.html" class="dropdown-item" data-i18n="dewaruci">Dewa
+                        Ruci</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="mainContainer">
+        <div id="containerberanda" class="section">
+            <div id="landingPagetitle">
+                <span class="pagetitle" data-i18n="sejarahWayang">SEJARAH WAYANG</span>
+                <span class="pagetitle subtitle" data-i18n="diNusantara">DI NUSANTARA</span>
+                <span class="description" data-i18n="landingDesc">Warisan tak benda Nusantara yang telah bertahan ribuan
+                    tahun. Sebuah media
+                    untuk
+                    menyingkap ajaran moral, menelusuri akar peradaban, dan menghidupkan kembali kisah kepahlawanan para
+                    dewa dan kesatria.</span>
+                <button id="btsejarah">
+                    <a href="#sec2" data-i18n="lihatSejarah">Lihat Sejarah</a>
+                </button>
+            </div>
+            <div id="landingPageimage">
+                <img src="landingpage.png" alt="Wayang Image" />
+            </div>
+        </div>
+
+        <div id="sec2" class="section">
+            <div id="timelinetitle">
+                <span class="pagetitle"
+                    style="font-size: 2.3rem; font-family: EB Garamond, serif;font-weight: 700;margin-bottom: 1rem;"
+                    data-i18n="jejakSejarah">JEJAK SEJARAH</span>
+                <span class="description" style="margin-bottom: 0.5rem;font-size: 1.2rem;" data-i18n="timelineSub1">
+                    Kisah warisan budaya tak benda yang diakui dunia.
+                </span>
+                <span class="description" style="margin-bottom: 0;font-size: 1.2rem;" data-i18n="timelineSub2">Dari
+                    pementasan mistis Jawa
+                    Kuno, kini wayang menjadi simbol abadi kekayaan narasi dan seni rupa Nusantara</span>
+            </div>
+
+            <div class="timeline-container">
+                <div class="timeline-line"></div>
+
+                <!-- Timeline Item 1 - Left -->
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <div class="timeline-year" data-i18n="abad1">Abad ke-1 M</div>
+                        <div class="timeline-title" data-i18n="awalMula">Awal Mula & Pengaruh Hindu</div>
+                        <div class="timeline-text" data-i18n="abad1Text">
+                            Wayang kulit diperkirakan mulai berkembang seiring masuknya pengaruh Hindu-Buddha ke
+                            Nusantara. Kisah Ramayana dan Mahabharata mulai diadaptasi.
+                        </div>
+                    </div>
+                    <div class="timeline-spacer">
+                        <div class="timeline-dot"></div>
+                    </div>
+                    <div class="timeline-image">
+                        <div class="timeline-image-box">
+                            <img src="/hindubudha.png" alt="Pengaruh Hindu Buddha" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 2 - Right -->
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <div class="timeline-year" data-i18n="abad10">Abad ke-10 M</div>
+                        <div class="timeline-title" data-i18n="prasastiBalitung">Prasasti Balitung</div>
+                        <div class="timeline-text" data-i18n="abad10Text">
+                            Catatan tertulis pertama yang menyebutkan pertunjukan 'Mawayang' untuk Hyang, menunjukkan
+                            fungsi ritual sakral wayang pada masa itu.
+                        </div>
+                    </div>
+                    <div class="timeline-spacer">
+                        <div class="timeline-dot"></div>
+                    </div>
+                    <div class="timeline-image">
+                        <div class="timeline-image-box">
+                            <img src="/balitung.png" alt="Prasasti Balitung" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 3 - Left -->
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <div class="timeline-year" data-i18n="abad15">Abad ke-15 M</div>
+                        <div class="timeline-title" data-i18n="eraIslam">Era Kesultanan Islam</div>
+                        <div class="timeline-text" data-i18n="abad15Text">
+                            Para wali songo menggunakan wayang sebagai media dakwah Islam. Lakon wayang berkembang
+                            dengan nilai-nilai Islam tetap mempertahankan esensi budaya Jawa.
+                        </div>
+                    </div>
+                    <div class="timeline-spacer">
+                        <div class="timeline-dot"></div>
+                    </div>
+                    <div class="timeline-image">
+                        <div class="timeline-image-box">
+                            <img src="/i.png" alt="Era Kesultanan Islam" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 4 - Right -->
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <div class="timeline-year" data-i18n="abad18">Abad ke-18-19 M</div>
+                        <div class="timeline-title" data-i18n="masaKeemasan">Masa Keemasan Keraton</div>
+                        <div class="timeline-text" data-i18n="abad18Text">
+                            Wayang berkembang pesat di keraton-keraton Jawa. Standarisasi pakem, gamelan, dan tokoh
+                            wayang disempurnakan oleh para empu keraton.
+                        </div>
+                    </div>
+                    <div class="timeline-spacer">
+                        <div class="timeline-dot"></div>
+                    </div>
+                    <div class="timeline-image">
+                        <div class="timeline-image-box">
+                            <img src="keraton.png" alt="Masa Keemasan Keraton" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 5 - Left -->
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <div class="timeline-year" data-i18n="tahun2003">7 November 2003</div>
+                        <div class="timeline-title" data-i18n="unesco">Pengakuan UNESCO</div>
+                        <div class="timeline-text" data-i18n="tahun2003Text">
+                            UNESCO menetapkan wayang kulit Indonesia sebagai "Masterpiece of Oral and Intangible
+                            Heritage of Humanity", mengakui nilai universal wayang.
+                        </div>
+                    </div>
+                    <div class="timeline-spacer">
+                        <div class="timeline-dot"></div>
+                    </div>
+                    <div class="timeline-image">
+                        <div class="timeline-image-box">
+                            <img src="unesco.png" alt="Pengakuan UNESCO" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Section -->
+        <div id="footer" class="section">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo" style="font-family: nyk Ngayogyan Jejeg, sans-serif">ꦱꦶꦗꦧꦺ</div>
+                    <p class="footer-description" data-i18n="dibuatOleh">
+                        Dibuat Oleh:
+                    </p>
+                    <p class="footer-descriptione">
+                        7.Mayta Kamaya
+                    </p>
+                    <p class="footer-descriptione">
+                        13.Muhammad Rofiif Arifian
+                    </p>
+                    <p class="footer-descriptione">
+                        19.Qishra Ali Javierre Nugraha
+                    </p>
+                    <p class="footer-descriptione">
+                        24.Reyhan Fahri Hartono Putra
+                    </p>
+                    <p class="footer-descriptione">
+                        26.Rizal Nurrendi
+                    </p>
+                    <p class="footer-descriptione">
+                        30.Syafiq Rizqi Sya'bani
+                    </p>
+                </div>
+
+                <div class="footer-bottom">
+                    <p data-i18n="hakCipta">&copy; 2025 Sijabe - Wayang Indonesia. Seluruh hak cipta dilindungi.</p>
+                    <p style="margin-top: 0.5rem; font-size: 0.9rem; color: rgb(130, 130, 130);font-family: nyk Ngayogyan Jejeg, sans-serif;"
+                        data-i18n="semboyan">
+                        ꦠꦸꦲꦤ꧀ꦧꦼꦂꦱꦩ ꦱꦶꦱ꧀ꦮ ꦱ꧀ꦠꦺꦩ꧀ꦧꦪꦺꦴ
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Data terjemahan
+            const translations = {
+                id: {
+                    // Navbar
+                    beranda: "Beranda",
+                    critaWayang: "Crita Wayang",
+                    tokohWayang: "Tokoh Wayang",
+                    mahabharata: "Mahabharata",
+                    ramayana: "Ramayana",
+                    dewaruci: "Dewa Ruci",
+
+                    // Landing Page
+                    sejarahWayang: "SEJARAH WAYANG",
+                    diNusantara: "DI NUSANTARA",
+                    landingDesc: "Warisan tak benda Nusantara yang telah bertahan ribuan tahun. Sebuah media untuk menyingkap ajaran moral, menelusuri akar peradaban, dan menghidupkan kembali kisah kepahlawanan para dewa dan kesatria.",
+                    lihatSejarah: "Lihat Sejarah",
+
+                    // Timeline
+                    jejakSejarah: "JEJAK SEJARAH",
+                    timelineSub1: "Kisah warisan budaya tak benda yang diakui dunia.",
+                    timelineSub2: "Dari pementasan mistis Jawa Kuno, kini wayang menjadi simbol abadi kekayaan narasi dan seni rupa Nusantara",
+
+                    // Timeline items
+                    abad1: "Abad ke-1 Masehi",
+                    awalMula: "Awal Mula & Pengaruh Hindu",
+                    abad1Text: "Wayang kulit diperkirakan mulai berkembang seiring masuknya pengaruh Hindu-Buddha ke Nusantara. Kisah Ramayana dan Mahabharata mulai diadaptasi.",
+
+                    abad10: "Abad ke-10 Masehi",
+                    prasastiBalitung: "Prasasti Balitung",
+                    abad10Text: "Catatan tertulis pertama yang menyebutkan pertunjukan 'Mawayang' untuk Hyang, menunjukkan fungsi ritual sakral wayang pada masa itu.",
+
+                    abad15: "Abad ke-15 Masehi",
+                    eraIslam: "Era Kesultanan Islam",
+                    abad15Text: "Para wali songo menggunakan wayang sebagai media dakwah Islam. Lakon wayang berkembang dengan nilai-nilai Islam tetap mempertahankan esensi budaya Jawa.",
+
+                    abad18: "Abad ke-18-19 Masehi",
+                    masaKeemasan: "Masa Keemasan Keraton",
+                    abad18Text: "Wayang berkembang pesat di keraton-keraton Jawa. Standarisasi pakem, gamelan, dan tokoh wayang disempurnakan oleh para empu keraton.",
+
+                    tahun2003: "7 November 2003",
+                    unesco: "Pengakuan UNESCO",
+                    tahun2003Text: "UNESCO menetapkan wayang kulit Indonesia sebagai \"Masterpiece of Oral and Intangible Heritage of Humanity\", mengakui nilai universal wayang.",
+
+                    // Footer
+                    dibuatOleh: "Dibuat Oleh:",
+                    hakCipta: "© 2025 Sijabe - Wayang Indonesia. Seluruh hak cipta dilindungi.",
+                    semboyan: "ꦠꦸꦲꦤ꧀ꦧꦼꦂꦱꦩ ꦱꦶꦱ꧀ꦮ ꦱ꧀ꦠꦺꦩ꧀ꦧꦪꦺꦴ"
+                },
+
+                jv: {
+                    // Navbar
+                    beranda: "Beranda",
+                    critaWayang: "Crita Wayang",
+                    tokohWayang: "Tokoh Wayang",
+                    mahabharata: "Mahabharata",
+                    ramayana: "Ramayana",
+                    dewaruci: "Dewa Ruci",
+
+                    // Landing Page
+                    sejarahWayang: "SEJARAH WAYANG",
+                    diNusantara: "ING NUSANTARA",
+                    landingDesc: "Warisan tanpa wujud Nusantara sing wis tahan nganyut taun. Media kanggo mbukak ajaran moral, njelajah oyot peradaban, lan nguripake maneh kisah kepahlawanan para dewa lan kesatria.",
+                    lihatSejarah: "Deleng Sejarah",
+
+                    // Timeline
+                    jejakSejarah: "LAKUNE SEJARAH",
+                    timelineSub1: "Kisah warisan budaya tanpa wujud sing diakoni donya.",
+                    timelineSub2: "Saka pementasan mistis Jawa Kuna, saiki wayang dadi simbol langgeng kakayaan narasi lan seni rupa Nusantara",
+
+                    // Timeline items - DIPERBAIKI
+                    abad1: "Abad kaping 1 Masehi",
+                    awalMula: "Wiwitan & Pengaruh Hindu",
+                    abad1Text: "Wayang kulit dikira-kira wiwit berkembang bareng karo mlebune pengaruh Hindu-Buddha menyang Nusantara. Kisah Ramayana lan Mahabharata wiwit diadaptasi.",
+
+                    abad10: "Abad kaping 10 Masehi",
+                    prasastiBalitung: "Prasasti Balitung",
+                    abad10Text: "Cathetan tinulis kapisan sing nyebutake pertunjukan 'Mawayang' kanggo Hyang, nuduhake fungsi ritual suci wayang ing jaman semana.",
+
+                    abad15: "Abad kaping 15 Masehi",
+                    eraIslam: "Jaman Kasultanan Islam",
+                    abad15Text: "Para wali songo nggunakake wayang minangka media dakwah Islam. Lakon wayang berkembang kanthi nilai-nilai Islam tetep njaga inti budaya Jawa.",
+
+                    abad18: "Abad kaping 18-19 Masehi",
+                    masaKeemasan: "Jaman Keemasan Keraton",
+                    abad18Text: "Wayang berkembang pesat ing keraton-keraton Jawa. Standarisasi pakem, gamelan, lan tokoh wayang disampurnakake dening para empu keraton.",
+
+                    tahun2003: "7 November 2003",
+                    unesco: "Pengakuan UNESCO",
+                    tahun2003Text: "UNESCO netepake wayang kulit Indonesia minangka \"Masterpiece of Oral and Intangible Heritage of Humanity\", ngakoni nilai universal wayang.",
+
+                    // Footer
+                    dibuatOleh: "Digawe Dening:",
+                    hakCipta: "© 2025 Sijabe - Wayang Indonesia. Kabeh hak cipta dilindhungi.",
+                    semboyan: "ꦠꦸꦲꦤ꧀ꦧꦼꦂꦱꦩ ꦱꦶꦱ꧀ꦮ ꦱ꧀ꦠꦺꦩ꧀ꦧꦪꦺꦴ"
+                },
+
+                jv_script: {
+                    // Navbar
+                    beranda: "ꦧꦼꦫꦤ꧀ꦢ",
+                    critaWayang: "ꦕꦿꦶꦠꦮꦪꦁ",
+                    tokohWayang: "ꦠꦺꦴꦏꦺꦴꦲ꧀ꦮꦪꦁ",
+                    mahabharata: "ꦩꦲꦧꦿꦠ",
+                    ramayana: "ꦫꦩꦪꦤ",
+                    dewaruci: "ꦢꦺꦮꦫꦸꦕꦶ",
+
+                    // Landing Page
+                    sejarahWayang: "ꦱꦼꦗꦫꦃꦮꦪꦁ",
+                    diNusantara: "ꦲꦶꦁ ꦤꦸꦱꦤ꧀ꦠꦫ",
+                    landingDesc: "ꦮꦫꦶꦱꦤ꧀ꦠꦏ꧀ꦧꦼꦤ꧀ꦢꦟꦸꦱꦤ꧀ꦠꦫꦠ꦳ꦭꦃꦧꦼꦂꦠꦃꦤ꧀ꦫꦶꦧꦸꦠꦤ꧀ꦠꦲꦸꦤ꧀ꦱꦼꦧꦸꦃꦩꦺꦢꦶꦲꦸꦠꦸꦏ꧀ꦩꦺꦤ꧀ꦲꦶꦁꦏꦥ꧀ꦲꦗꦫꦤ꧀ꦩꦺꦴꦫꦭ꧀ꦩꦺꦤꦼꦭꦸꦱꦸꦫꦶꦲꦏꦂꦥꦼꦫꦢꦧꦤ꧀ꦭꦤ꧀ꦔꦸꦫꦶꦥꦏꦺꦲꦤꦺꦃꦏꦶꦱꦃꦏꦺꦥꦲꦭꦮꦤꦤ꧀ꦥꦫꦢꦺꦮꦭꦤ꧀ꦏꦼꦱꦠꦿꦶꦲꦺ",
+                    lihatSejarah: "ꦭꦶꦲꦠ꧀ꦱꦼꦗꦫꦃ",
+
+                    // Timeline
+                    jejakSejarah: "ꦭꦏꦸꦤꦺ ꦱꦼꦗꦫꦃ",
+                    timelineSub1: "ꦏꦶꦱꦃꦮꦫꦶꦱꦤ꧀ꦧꦸꦢꦪꦠꦏ꧀ꦧꦼꦤ꧀ꦢꦲꦺꦠ꦳ꦢꦶꦲꦏꦸꦤꦶꦢꦸꦤꦾ",
+                    timelineSub2: "ꦢꦫꦶꦥꦼꦩꦺꦤ꧀ꦠꦱꦤ꧀ꦩꦶꦱ꧀ꦠꦶꦱ꧀ꦗꦮꦏꦸꦤꦲꦶꦤꦶꦮꦪꦁꦢꦢꦶꦱꦶꦩ꧀ꦧꦺꦭ꧀ꦲꦧꦢꦶꦏꦏꦪꦤ꧀ꦤꦫꦱꦶꦭꦤ꧀ꦱꦼꦤꦶꦫꦸꦥꦟꦸꦱꦤ꧀ꦠꦫ",
+
+                    // Timeline items
+                    abad1: "ꦲꦧꦢ꧀ꦏꦼ ꧑ ꦩꦱꦱꦺꦲꦶ",
+                    awalMula: "ꦲꦮꦭ꧀ꦩꦸꦭꦺꦄꦤ꧀ꦢꦺꦴꦁꦥꦼꦔꦫꦸꦃꦲꦶꦤ꧀ꦢꦸ",
+                    abad1Text: "ꦮꦪꦁꦏꦸꦭꦶꦠ꧀ꦢꦶꦥꦼꦫꦾꦫꦤ꧀ꦩꦸꦭꦲꦶꦧꦼꦂꦏꦼꦩ꧀ꦧꦁꦱꦺꦫꦶꦁꦩꦱꦸꦏ꧀ꦤꦾꦥꦼꦔꦫꦸꦃꦲꦶꦤ꧀ꦢꦸꦧꦸꦢ꧀ꦢꦲꦺꦠ꦳ꦏꦺꦤꦸꦱꦤ꧀ꦠꦫꦠꦶꦱꦏꦶꦱꦃꦫꦩꦪꦤꦭꦤ꧀ꦩꦲꦧꦿꦠꦩꦸꦭꦲꦶꦢꦶꦲꦢꦥ꧀ꦠꦱꦶ",
+
+                    abad10: "ꦲꦧꦢ꧀ꦏꦼ ꧑꧐ ꦩꦱꦺꦲꦶ",
+                    prasastiBalitung: "ꦥꦿꦱꦱ꧀ꦠꦶꦧꦭꦶꦠꦸꦁ",
+                    abad10Text: "ꦕꦠꦠꦤ꧀ꦠꦼꦂꦠꦸꦭꦶꦱ꧀ꦥꦼꦂꦠꦩꦺꦴꦤꦺꦁꦩꦺꦤꦾꦺꦧꦸꦠ꧀ꦏꦤ꧀ꦥꦼꦂꦠꦸꦤ꧀ꦗꦸꦤ꧀ꦩꦮꦪꦁꦏꦁꦒꦺꦲꦾꦁꦚꦺꦔꦼꦱꦼꦏꦏꦺꦤ꧀ꦥꦸꦁꦱꦶꦫꦶꦠꦸꦭ꧀ꦱꦏꦿꦭ꧀ꦮꦪꦁꦥꦢꦩꦱꦠꦶꦠꦸ",
+
+                    abad15: "ꦲꦧꦢ꧀ꦏꦼ ꧑꧕ ꦩꦱꦺꦲꦶ",
+                    eraIslam: "ꦌꦫꦏꦼꦱꦸꦭ꧀ꦠꦤꦤ꧀ꦆꦱ꧀ꦭꦩ꧀",
+                    abad15Text: "ꦥꦫꦮꦭꦶꦱꦺꦴꦔꦺꦴꦔꦸꦤꦏꦏ꧀ꦮꦪꦁꦢꦢꦶꦩꦺꦢꦶꦲꦢꦏꦮꦲꦶꦱ꧀ꦭꦩ꧀ꦭꦏꦺꦴꦤ꧀ꦮꦪꦁꦧꦼꦂꦏꦼꦩ꧀ꦧꦁꦢꦺꦁꦤꦶꦭꦲꦶꦤ꧀ꦢꦺꦴꦤꦺꦱꦶꦱ꧀ꦭꦩ꧀ꦠꦼꦠꦺꦥ꧀ꦩꦺꦤ꧀ꦥꦺꦂꦠꦲꦤ꧀ꦲꦼꦱꦺꦤ꧀ꦱꦶꦧꦸꦢꦪꦗꦮ",
+
+                    abad18: "ꦲꦧꦢ꧀ꦏꦼ ꧑꧘​​-꧑꧙ ꦩꦱꦺꦲꦶ",
+                    masaKeemasan: "ꦩꦱꦏꦼꦌꦩꦱꦤ꧀ꦏꦼꦫꦠꦺꦴꦤ꧀",
+                    abad18Text: "ꦮꦪꦁꦧꦼꦂꦏꦼꦩ꧀ꦧꦁꦥꦺꦱꦠ꧀ꦢꦶꦏꦼꦫꦠꦺꦴꦤ꧀ꦏꦼꦫꦠꦺꦴꦤ꧀ꦗꦮꦱ꧀ꦠꦤ꧀ꦢꦫꦶꦱꦱꦶꦥꦏꦺꦩ꧀ꦒꦩꦼꦭꦤ꧀ꦭꦤ꧀ꦠꦺꦴꦏꦺꦴꦲ꧀ꦮꦪꦁꦢꦶꦱꦺꦩ꧀ꦥꦸꦂꦤꦏꦏ꧀ꦢꦺꦴꦭꦶꦥꦫꦺꦩꦸꦏꦼꦫꦠꦺꦴꦤ꧀",
+
+                    tahun2003: "꧗ ꦤꦺꦴꦥꦺꦩ꧀ꦧꦼꦂ ꧒꧐꧐꧓",
+                    unesco: "ꦥꦼꦔꦏꦸꦮꦤ꧀ꦈꦤꦼꦱ꧀ꦕꦺꦴ",
+                    tahun2003Text: "ꦈꦤꦼꦱ꧀ꦕꦺꦴꦤꦼꦠꦼꦥ꧀ꦏꦤ꧀ꦮꦪꦁꦏꦸꦭꦶꦠ꧀ꦆꦤ꧀ꦢꦺꦴꦤꦺꦱꦶꦲꦱꦺꦧꦒꦲꦶꦩꦱ꧀ꦠꦼꦂꦥꦾꦺꦱꦺꦴꦦꦺꦴꦫꦭ꧀ꦄꦤ꧀ꦢ꧀ꦆꦤ꧀ꦠꦔꦶꦧꦼꦭ꧀ꦲꦺꦫꦶꦠꦺꦴꦓꦲꦸꦩꦤꦶꦠꦶꦩꦺꦔꦏꦸꦤꦶꦤꦶꦭꦲꦶꦪꦸꦤꦶꦮꦼꦂꦱꦭ꧀ꦮꦪꦁ",
+
+                    // Footer
+                    dibuatOleh: "ꦢꦶꦧꦸꦲꦠ꧀ꦎꦭꦺꦃ:",
+                    hakCipta: "© 2025 ꦱꦶꦗꦧꦺ - ꦮꦪꦁꦆꦤ꧀ꦢꦺꦴꦤꦺꦱꦶꦲꦺꦱꦼꦭꦸꦫꦸꦃꦲꦏ꧀ꦕꦶꦥ꧀ꦠꦢꦶꦭꦶꦁꦣꦸꦁꦒꦶ",
+                    semboyan: "ꦠꦸꦲꦤ꧀ꦧꦼꦂꦱꦩ ꦱꦶꦱ꧀ꦮ ꦱ꧀ꦠꦺꦩ꧀ꦧꦪꦺꦴ"
+                }
+            };
+
+            // Text untuk language switcher button
+            const languageLabels = {
+                id: "Bahasa Indonesia",
+                jv: "Basa Jawa",
+                jv_script: "ꦲꦏ꧀ꦱꦫꦗꦮ"
+            };
+
+            // DOM Elements
+            const burgerMenu = document.getElementById('burgerMenu');
+            const navbar = document.getElementById('navbar');
+            const critaBtn = document.getElementById('critaWayangBtn');
+            const critaDropdown = document.getElementById('critaWayangDropdown');
+            const tokohBtn = document.getElementById('tokohWayangBtn');
+            const tokohDropdown = document.getElementById('tokohWayangDropdown');
+            const btsejarah = document.getElementById('btsejarah');
+            const languageBtn = document.getElementById('languageBtn');
+            const languageDropdown = document.getElementById('languageDropdown');
+            const currentLanguage = document.getElementById('currentLanguage');
+
+            // Fungsi untuk mengganti bahasa - HANYA SATU KALI
+            function changeLanguage(lang) {
+                const elements = document.querySelectorAll('[data-i18n]');
+
+                // Reset font mode dulu
+                document.body.classList.remove('aksara-jawa-mode');
+
+                elements.forEach(element => {
+                    const key = element.getAttribute('data-i18n');
+                    let text = translations[lang]?.[key];
+
+                    if (text) {
+                        element.textContent = text;
+                    }
+                });
+
+                // Update language button text
+                currentLanguage.textContent = languageLabels[lang];
+
+                // Apply font khusus untuk aksara Jawa
+                if (lang === 'jv_script') {
+                    document.body.classList.add('aksara-jawa-mode');
+                }
+
+                // Simpan preferensi bahasa
+                localStorage.setItem('preferredLanguage', lang);
+
+                // Tutup dropdown
+                languageDropdown.classList.remove('active');
+                languageBtn.querySelector('.language-arrow').classList.remove('open');
+            }
+
+            // Event Listeners untuk navigation
+            burgerMenu.addEventListener('click', function () {
+                this.classList.toggle('active');
+                navbar.classList.toggle('active');
+            });
+
+            critaBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                critaDropdown.classList.toggle('active');
+                this.querySelector('.dropdown-arrow').classList.toggle('open');
+                tokohDropdown.classList.remove('active');
+                if (tokohBtn.querySelector('.dropdown-arrow')) {
+                    tokohBtn.querySelector('.dropdown-arrow').classList.remove('open');
+                }
+            });
+
+            tokohBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                tokohDropdown.classList.toggle('active');
+                this.querySelector('.dropdown-arrow').classList.toggle('open');
+                critaDropdown.classList.remove('active');
+                if (critaBtn.querySelector('.dropdown-arrow')) {
+                    critaBtn.querySelector('.dropdown-arrow').classList.remove('open');
+                }
+            });
+
+            // Event Listeners untuk language switcher
+            languageBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                languageDropdown.classList.toggle('active');
+                this.querySelector('.language-arrow').classList.toggle('open');
+            });
+
+            document.querySelectorAll('.language-option').forEach(option => {
+                option.addEventListener('click', function () {
+                    const lang = this.getAttribute('data-lang');
+                    changeLanguage(lang);
+                });
+            });
+
+            // Smooth scroll
+            btsejarah.addEventListener('click', function (e) {
+                e.preventDefault();
+                const sec2 = document.getElementById('sec2');
+                const mainContainer = document.getElementById('mainContainer');
+
+                mainContainer.scrollTo({
+                    top: sec2.offsetTop,
+                    behavior: 'smooth'
+                });
+            });
+
+            // Tutup dropdown ketika klik di luar
+            document.addEventListener('click', function (e) {
+                if (!e.target.closest('#containernavbar')) {
+                    critaDropdown.classList.remove('active');
+                    tokohDropdown.classList.remove('active');
+                    languageDropdown.classList.remove('active');
+
+                    if (critaBtn.querySelector('.dropdown-arrow')) {
+                        critaBtn.querySelector('.dropdown-arrow').classList.remove('open');
+                    }
+                    if (tokohBtn.querySelector('.dropdown-arrow')) {
+                        tokohBtn.querySelector('.dropdown-arrow').classList.remove('open');
+                    }
+                    if (languageBtn.querySelector('.language-arrow')) {
+                        languageBtn.querySelector('.language-arrow').classList.remove('open');
+                    }
+                    navbar.classList.remove('active');
+                    burgerMenu.classList.remove('active');
+                }
+            });
+
+            // Load bahasa yang disimpan
+            const savedLang = localStorage.getItem('preferredLanguage') || 'id';
+            changeLanguage(savedLang);
+        </script>
+</body>
+
+</html>
